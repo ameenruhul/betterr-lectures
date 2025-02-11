@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -28,11 +29,17 @@ import {
   Highlighter,
   Undo,
   Redo,
-  LineHeight,
   IndentDecrease,
   IndentIncrease,
-  LucideProps,
-  Text
+  Text,
+  GraduationCap,
+  FileQuestion,
+  CheckSquare,
+  FileText,
+  Brain,
+  NotebookPen,
+  BookText,
+  Microscope
 } from "lucide-react";
 
 const CoursePanel = () => {
@@ -61,10 +68,10 @@ const CoursePanel = () => {
       {/* Left Sidebar */}
       <div className="w-64 border-r flex flex-col">
         {/* Content Upload Section */}
-        <div className="p-4 border-b flex-1">
+        <div className="p-4 border-b">
           <h3 className="font-semibold mb-4">Content Upload</h3>
           <div
-            className={`h-[calc(100%-2rem)] border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-4 transition-colors ${
+            className={`h-48 border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-4 transition-colors ${
               isDragging ? "border-primary bg-primary/10" : "border-gray-300"
             }`}
             onDragOver={handleDragOver}
@@ -87,24 +94,57 @@ const CoursePanel = () => {
           </div>
         </div>
 
-        {/* Feature Buttons */}
-        <div className="p-4 border-t bg-accent/50">
-          <div className="space-y-2">
-            <Button variant="ghost" className="w-full justify-start">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Lesson Plan
+        {/* Workspace Features */}
+        <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-accent/50">
+          <h3 className="font-semibold mb-2 text-sm text-muted-foreground">WORKSPACE TOOLS</h3>
+          
+          <div className="grid grid-cols-2 gap-2">
+            {/* Lesson Plan */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <BookOpen className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Create Lesson Plan</span>
             </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <HelpCircle className="mr-2 h-4 w-4" />
-              Create Quiz
+
+            {/* Lecture Prep */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <GraduationCap className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Lecture Preparation</span>
             </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <ClipboardList className="mr-2 h-4 w-4" />
-              Create Assignment
+
+            {/* Create Quiz */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <FileQuestion className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Create Quiz</span>
             </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <Book className="mr-2 h-4 w-4" />
-              Study Guide
+
+            {/* Quiz Solver */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <CheckSquare className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Quiz Solver</span>
+            </Button>
+
+            {/* Assignment Questions */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <FileText className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Create Assignment</span>
+            </Button>
+
+            {/* Assignment Solver */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <Brain className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Assignment Solver</span>
+            </Button>
+
+            {/* Study Guide */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <NotebookPen className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Study Guide</span>
+            </Button>
+
+            {/* Research Updates */}
+            <Button variant="outline" className="h-24 flex flex-col items-center justify-center space-y-2 bg-card hover:bg-accent">
+              <Microscope className="h-8 w-8 text-primary" />
+              <span className="text-xs text-center">Research Updates</span>
             </Button>
           </div>
         </div>
