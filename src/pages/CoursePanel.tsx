@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { 
   Upload, 
-  FolderPlus, 
-  FileText,
   BookOpen, 
   HelpCircle,
   ClipboardList,
@@ -14,37 +12,75 @@ import {
   MessageSquare,
   Bot,
   FileUp,
-  Presentation
+  Presentation,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  List,
+  ListOrdered,
+  Image,
+  Link,
+  Type
 } from "lucide-react";
 
 const CoursePanel = () => {
   const [content, setContent] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    // Handle file upload logic here
+    console.log("Dropped files:", files);
+  };
 
   return (
     <div className="flex h-screen bg-background">
       {/* Left Sidebar */}
       <div className="w-64 border-r flex flex-col">
         {/* Content Upload Section */}
-        <div className="p-4 border-b">
+        <div className="p-4 border-b flex-1">
           <h3 className="font-semibold mb-4">Content Upload</h3>
-          <div className="space-y-2">
-            <Button variant="outline" className="w-full justify-start">
-              <Upload className="mr-2 h-4 w-4" />
-              Upload File
+          <div
+            className={`h-[calc(100%-2rem)] border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-4 transition-colors ${
+              isDragging ? "border-primary bg-primary/10" : "border-gray-300"
+            }`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <Upload className="h-10 w-10 text-gray-400 mb-4" />
+            <p className="text-sm text-center text-muted-foreground mb-2">
+              Drag & drop your files here
+            </p>
+            <p className="text-xs text-center text-muted-foreground mb-4">
+              or
+            </p>
+            <Button variant="outline" className="w-full">
+              Browse Files
             </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <FolderPlus className="mr-2 h-4 w-4" />
-              New Folder
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <FileText className="mr-2 h-4 w-4" />
-              New Document
-            </Button>
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              Supports: PDF, DOCX, PPTX, TXT
+            </p>
           </div>
         </div>
 
         {/* Feature Buttons */}
-        <div className="mt-auto p-4 border-t bg-accent/50">
+        <div className="p-4 border-t bg-accent/50">
           <div className="space-y-2">
             <Button variant="ghost" className="w-full justify-start">
               <BookOpen className="mr-2 h-4 w-4" />
@@ -69,21 +105,74 @@ const CoursePanel = () => {
       {/* Main Content Area - Word Processor */}
       <div className="flex-1 flex flex-col">
         {/* Toolbar */}
-        <div className="border-b p-2 flex items-center justify-between bg-accent/50">
-          <div className="flex items-center space-x-2">
-            {/* Text formatting options would go here */}
-            <Button variant="ghost" size="sm">B</Button>
-            <Button variant="ghost" size="sm">I</Button>
-            <Button variant="ghost" size="sm">U</Button>
+        <div className="border-b flex flex-col bg-accent/50">
+          <div className="p-2 flex items-center justify-between border-b">
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="sm">
+                <Type className="h-4 w-4" />
+              </Button>
+              <select className="text-sm border rounded px-2 py-1 bg-background">
+                <option>Normal text</option>
+                <option>Heading 1</option>
+                <option>Heading 2</option>
+                <option>Heading 3</option>
+              </select>
+              <select className="text-sm border rounded px-2 py-1 bg-background">
+                <option>Arial</option>
+                <option>Times New Roman</option>
+                <option>Calibri</option>
+              </select>
+              <select className="text-sm border rounded w-16 px-2 py-1 bg-background">
+                <option>11</option>
+                <option>12</option>
+                <option>14</option>
+                <option>16</option>
+              </select>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm">
+                <FileUp className="mr-2 h-4 w-4" />
+                Export PDF
+              </Button>
+              <Button variant="outline" size="sm">
+                <Presentation className="mr-2 h-4 w-4" />
+                Export PPT
+              </Button>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <FileUp className="mr-2 h-4 w-4" />
-              Export PDF
+          <div className="p-2 flex items-center space-x-1">
+            <Button variant="ghost" size="sm">
+              <Bold className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm">
-              <Presentation className="mr-2 h-4 w-4" />
-              Export PPT
+            <Button variant="ghost" size="sm">
+              <Italic className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm">
+              <Underline className="h-4 w-4" />
+            </Button>
+            <div className="w-px h-4 bg-border mx-2" />
+            <Button variant="ghost" size="sm">
+              <AlignLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm">
+              <AlignCenter className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm">
+              <AlignRight className="h-4 w-4" />
+            </Button>
+            <div className="w-px h-4 bg-border mx-2" />
+            <Button variant="ghost" size="sm">
+              <List className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm">
+              <ListOrdered className="h-4 w-4" />
+            </Button>
+            <div className="w-px h-4 bg-border mx-2" />
+            <Button variant="ghost" size="sm">
+              <Image className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm">
+              <Link className="h-4 w-4" />
             </Button>
           </div>
         </div>
