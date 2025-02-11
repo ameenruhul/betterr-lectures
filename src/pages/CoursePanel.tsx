@@ -292,20 +292,35 @@ const CoursePanel = () => {
         </div>
       </div>
 
-      {/* Right Sidebar - AI Chat */}
+      {/* Right Sidebar - AI Assistant */}
       <div className="w-80 border-l flex flex-col bg-accent/50">
+        {/* AI Assistant Header */}
         <div className="p-4 border-b">
           <h3 className="font-semibold mb-4 flex items-center">
-            <Bot className="mr-2 h-4 w-4" />
+            <Bot className="mr-2 h-5 w-5 text-primary" />
             AI Assistant
           </h3>
-          <div className="flex flex-col space-y-2">
-            <Button variant="outline" className="w-full justify-start">
+          
+          {/* Mode Switcher */}
+          <div className="grid grid-cols-2 gap-2 p-1 rounded-lg bg-muted mb-4">
+            <Button variant="ghost" className="shadow-sm bg-background">
               <MessageSquare className="mr-2 h-4 w-4" />
-              Chat with AI
+              Chat
             </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <Download className="mr-2 h-4 w-4" />
+            <Button variant="ghost">
+              <Bot className="mr-2 h-4 w-4" />
+              Builder
+            </Button>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-2">
+            <Button variant="outline" className="w-full justify-start bg-card hover:bg-accent">
+              <MessageSquare className="mr-2 h-4 w-4 text-primary" />
+              New Chat
+            </Button>
+            <Button variant="outline" className="w-full justify-start bg-card hover:bg-accent">
+              <Download className="mr-2 h-4 w-4 text-primary" />
               Generate Content
             </Button>
           </div>
@@ -314,24 +329,52 @@ const CoursePanel = () => {
         {/* Chat Messages Area */}
         <div className="flex-1 p-4 overflow-y-auto">
           <div className="space-y-4">
-            <div className="bg-background rounded-lg p-3">
-              <p className="text-sm text-muted-foreground">
-                Hello! I'm your AI assistant. I can help you generate and edit content. How can I help you today?
-              </p>
+            {/* AI Message */}
+            <div className="flex items-start space-x-3">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <Bot className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="bg-card rounded-lg p-3 shadow-sm">
+                  <p className="text-sm">
+                    Hello! I'm your AI teaching assistant. I can help you with:
+                  </p>
+                  <ul className="text-sm mt-2 space-y-1 text-muted-foreground">
+                    <li>• Creating lecture materials</li>
+                    <li>• Generating assignments</li>
+                    <li>• Building study guides</li>
+                    <li>• Research summaries</li>
+                  </ul>
+                </div>
+                <span className="text-xs text-muted-foreground mt-1 ml-2">AI Assistant</span>
+              </div>
+            </div>
+
+            {/* Example Builder Prompt */}
+            <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+              <p className="text-sm font-medium mb-2">Quick Builder Prompts:</p>
+              <div className="space-y-2">
+                <Button variant="ghost" className="w-full justify-start text-sm h-auto py-2 text-left normal-case">
+                  "Create a lecture on Introduction to Neural Networks for today's AI class"
+                </Button>
+                <Button variant="ghost" className="w-full justify-start text-sm h-auto py-2 text-left normal-case">
+                  "Generate a study guide for Quantum Mechanics fundamentals"
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Message Input */}
-        <div className="p-4 border-t">
+        <div className="p-4 border-t bg-card">
           <div className="flex items-center space-x-2">
             <input
               type="text"
-              placeholder="Type your message..."
-              className="flex-1 rounded-md border p-2 bg-background"
+              placeholder="Ask anything or describe what to create..."
+              className="flex-1 rounded-md border p-2 bg-background text-sm"
             />
-            <Button size="icon">
-              <MessageSquare className="h-4 w-4" />
+            <Button size="icon" className="bg-primary hover:bg-primary/90">
+              <MessageSquare className="h-4 w-4 text-primary-foreground" />
             </Button>
           </div>
         </div>
