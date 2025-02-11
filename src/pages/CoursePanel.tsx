@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,7 +30,9 @@ import {
   Redo,
   LineHeight,
   IndentDecrease,
-  IndentIncrease
+  IndentIncrease,
+  LucideProps,
+  Text
 } from "lucide-react";
 
 const CoursePanel = () => {
@@ -191,7 +192,7 @@ const CoursePanel = () => {
               </Button>
               <div className="w-px h-4 bg-border mx-2" />
               <Button variant="ghost" size="sm">
-                <LineHeight className="h-4 w-4" />
+                <Text className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="sm">
                 <IndentDecrease className="h-4 w-4" />
