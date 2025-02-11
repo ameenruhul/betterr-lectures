@@ -12,7 +12,7 @@ import {
   Book,
   Download,
   MessageSquare,
-  Robot,
+  Bot,
   FileUp,
   Presentation
 } from "lucide-react";
@@ -105,7 +105,7 @@ const CoursePanel = () => {
       <div className="w-80 border-l flex flex-col bg-accent/50">
         <div className="p-4 border-b">
           <h3 className="font-semibold mb-4 flex items-center">
-            <Robot className="mr-2 h-4 w-4" />
+            <Bot className="mr-2 h-4 w-4" />
             AI Assistant
           </h3>
           <div className="flex flex-col space-y-2">
