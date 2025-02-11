@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -163,6 +162,14 @@ const CoursePanel = () => {
             <Button variant="ghost" size="sm">Format</Button>
             <Button variant="ghost" size="sm">Tools</Button>
             <div className="flex-1" />
+            <Button variant="outline" size="sm">
+              <Download className="mr-2 h-4 w-4" />
+              PDF
+            </Button>
+            <Button variant="outline" size="sm">
+              <Presentation className="mr-2 h-4 w-4" />
+              PPTX
+            </Button>
             <Button variant="outline" size="sm">
               <FileUp className="mr-2 h-4 w-4" />
               Share
