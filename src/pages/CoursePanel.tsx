@@ -23,7 +23,15 @@ import {
   ListOrdered,
   Image,
   Link,
-  Type
+  Type,
+  Table,
+  Palette,
+  Highlighter,
+  Undo,
+  Redo,
+  LineHeight,
+  IndentDecrease,
+  IndentIncrease
 } from "lucide-react";
 
 const CoursePanel = () => {
@@ -44,7 +52,6 @@ const CoursePanel = () => {
     e.preventDefault();
     setIsDragging(false);
     const files = Array.from(e.dataTransfer.files);
-    // Handle file upload logic here
     console.log("Dropped files:", files);
   };
 
@@ -104,88 +111,135 @@ const CoursePanel = () => {
 
       {/* Main Content Area - Word Processor */}
       <div className="flex-1 flex flex-col">
-        {/* Toolbar */}
-        <div className="border-b flex flex-col bg-accent/50">
-          <div className="p-2 flex items-center justify-between border-b">
+        {/* Main Toolbar */}
+        <div className="border-b bg-accent/50">
+          {/* File and Edit Options */}
+          <div className="p-2 border-b flex items-center space-x-4">
+            <Button variant="ghost" size="sm">File</Button>
+            <Button variant="ghost" size="sm">Edit</Button>
+            <Button variant="ghost" size="sm">View</Button>
+            <Button variant="ghost" size="sm">Insert</Button>
+            <Button variant="ghost" size="sm">Format</Button>
+            <Button variant="ghost" size="sm">Tools</Button>
+            <div className="flex-1" />
+            <Button variant="outline" size="sm">
+              <FileUp className="mr-2 h-4 w-4" />
+              Share
+            </Button>
+          </div>
+
+          {/* Formatting Toolbar */}
+          <div className="p-2 flex flex-col gap-2">
+            {/* Row 1: Undo/Redo, Font, Size */}
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm">
-                <Type className="h-4 w-4" />
-              </Button>
-              <select className="text-sm border rounded px-2 py-1 bg-background">
-                <option>Normal text</option>
-                <option>Heading 1</option>
-                <option>Heading 2</option>
-                <option>Heading 3</option>
-              </select>
-              <select className="text-sm border rounded px-2 py-1 bg-background">
+              <div className="flex space-x-1">
+                <Button variant="ghost" size="sm">
+                  <Undo className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <Redo className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="w-px h-4 bg-border mx-2" />
+              <select className="text-sm border rounded px-2 py-1 bg-background w-40">
                 <option>Arial</option>
                 <option>Times New Roman</option>
                 <option>Calibri</option>
+                <option>Georgia</option>
+                <option>Helvetica</option>
               </select>
-              <select className="text-sm border rounded w-16 px-2 py-1 bg-background">
+              <select className="text-sm border rounded w-20 px-2 py-1 bg-background">
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
                 <option>11</option>
                 <option>12</option>
                 <option>14</option>
                 <option>16</option>
+                <option>18</option>
+                <option>24</option>
+                <option>36</option>
               </select>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm">
-                <FileUp className="mr-2 h-4 w-4" />
-                Export PDF
+
+            {/* Row 2: Text Formatting */}
+            <div className="flex items-center space-x-1">
+              <Button variant="ghost" size="sm">
+                <Bold className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="sm">
-                <Presentation className="mr-2 h-4 w-4" />
-                Export PPT
+              <Button variant="ghost" size="sm">
+                <Italic className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Underline className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Palette className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Highlighter className="h-4 w-4" />
+              </Button>
+              <div className="w-px h-4 bg-border mx-2" />
+              <Button variant="ghost" size="sm">
+                <AlignLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <AlignCenter className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <AlignRight className="h-4 w-4" />
+              </Button>
+              <div className="w-px h-4 bg-border mx-2" />
+              <Button variant="ghost" size="sm">
+                <LineHeight className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <IndentDecrease className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <IndentIncrease className="h-4 w-4" />
+              </Button>
+              <div className="w-px h-4 bg-border mx-2" />
+              <Button variant="ghost" size="sm">
+                <List className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <ListOrdered className="h-4 w-4" />
+              </Button>
+              <div className="w-px h-4 bg-border mx-2" />
+              <Button variant="ghost" size="sm">
+                <Table className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Image className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Link className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-          <div className="p-2 flex items-center space-x-1">
-            <Button variant="ghost" size="sm">
-              <Bold className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Italic className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Underline className="h-4 w-4" />
-            </Button>
-            <div className="w-px h-4 bg-border mx-2" />
-            <Button variant="ghost" size="sm">
-              <AlignLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <AlignCenter className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <AlignRight className="h-4 w-4" />
-            </Button>
-            <div className="w-px h-4 bg-border mx-2" />
-            <Button variant="ghost" size="sm">
-              <List className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <ListOrdered className="h-4 w-4" />
-            </Button>
-            <div className="w-px h-4 bg-border mx-2" />
-            <Button variant="ghost" size="sm">
-              <Image className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Link className="h-4 w-4" />
-            </Button>
           </div>
         </div>
 
+        {/* Document Title */}
+        <div className="p-2 border-b">
+          <input
+            type="text"
+            placeholder="Untitled document"
+            className="text-lg font-medium bg-transparent border-none focus:outline-none w-full"
+          />
+        </div>
+
         {/* Content Area */}
-        <div className="flex-1 p-6">
-          <Card className="h-full p-4">
-            <textarea
-              className="w-full h-full resize-none border-none focus:outline-none bg-transparent"
-              placeholder="Start writing your content here..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
+        <div className="flex-1 p-6 bg-gray-50">
+          <Card className="max-w-[850px] h-[1100px] mx-auto shadow-lg">
+            <div className="h-full p-[60px]">
+              <textarea
+                className="w-full h-full resize-none border-none focus:outline-none bg-transparent"
+                placeholder="Type or paste your content here..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </div>
           </Card>
         </div>
       </div>
