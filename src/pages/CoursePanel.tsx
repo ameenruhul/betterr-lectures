@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -48,15 +48,28 @@ import {
   Microscope,
   Sparkles,
   Save,
-  Check
+  Check,
+  ChevronLeft,
+  Video,
+  LayoutList
 } from "lucide-react";
 
 const CoursePanel = () => {
+  const { courseId, lectureId } = useParams();
+  const navigate = useNavigate();
   const [content, setContent] = useState("");
-  const [documentTitle, setDocumentTitle] = useState("Untitled document");
+  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled document");
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("chat");
   const { toast } = useToast();
+
+  const handleBackToLectures = () => {
+    if (courseId) {
+      navigate(`/courses/${courseId}/lectures`);
+    } else {
+      navigate("/dashboard");
+    }
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -106,12 +119,31 @@ const CoursePanel = () => {
     <div className="flex h-screen bg-gray-50">
       {/* Left Sidebar */}
       <div className="w-64 border-r flex flex-col bg-white shadow-[15px_0_30px_-15px_rgba(0,0,0,0.1)]">
-        {/* Content Upload Section */}
+        {/* Navigation Header */}
         <div className="p-4 border-b">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleBackToLectures} 
+            className="mb-4 text-gray-600 hover:text-gray-900 -ml-2"
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            {lectureId ? "Back to Lectures" : "Back to Courses"}
+          </Button>
+          
+          {lectureId && (
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-primary">LECTURE {lectureId}</h3>
+              <h2 className="text-lg font-bold">{documentTitle}</h2>
+            </div>
+          )}
+          
           <h3 className="font-semibold mb-4 text-gray-700 flex items-center">
             <Upload className="h-4 w-4 mr-2 text-primary" />
             Content Upload
           </h3>
+          
+          {/* Content Upload Area */}
           <div
             className={`h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-4 transition-all duration-300 ${
               isDragging 
@@ -135,6 +167,30 @@ const CoursePanel = () => {
             </Button>
           </div>
         </div>
+
+        {/* Lecture Navigation (only show if we're in a lecture) */}
+        {lectureId && (
+          <div className="p-4 border-b">
+            <h3 className="font-semibold mb-4 text-gray-700 flex items-center">
+              <LayoutList className="h-4 w-4 mr-2 text-primary" />
+              Lecture Navigation
+            </h3>
+            <div className="space-y-2">
+              <Button variant="outline" className="w-full justify-start" size="sm">
+                <Video className="h-4 w-4 mr-2 text-primary" />
+                Video Lecture
+              </Button>
+              <Button variant="outline" className="w-full justify-start" size="sm">
+                <FileText className="h-4 w-4 mr-2 text-emerald-500" />
+                Reading Materials
+              </Button>
+              <Button variant="outline" className="w-full justify-start" size="sm">
+                <FileQuestion className="h-4 w-4 mr-2 text-amber-500" />
+                Practice Questions
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Workspace Features */}
         <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50">
@@ -449,7 +505,7 @@ const CoursePanel = () => {
         <div className="p-2 border-b bg-white">
           <Input
             type="text"
-            placeholder="Untitled document"
+            placeholder={lectureId ? `Lecture ${lectureId}` : "Untitled document"}
             value={documentTitle}
             onChange={(e) => setDocumentTitle(e.target.value)}
             className="text-lg font-medium bg-transparent border-none focus:outline-none w-full hover:bg-gray-50 transition-colors p-2 rounded-md"

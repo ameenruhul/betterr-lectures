@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import CourseCreate from "./pages/CourseCreate";
 import CoursePanel from "./pages/CoursePanel";
+import LecturesList from "./pages/LecturesList";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import { Toaster } from "./components/ui/Toaster";
@@ -16,6 +17,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/courses/create" element={<CourseCreate />} />
         <Route path="/courses/:id" element={<CoursePanel />} />
+        <Route path="/courses/:courseId/lectures" element={<LecturesList />} />
+        <Route path="/courses/:courseId/lectures/:lectureId" element={<CoursePanel />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
