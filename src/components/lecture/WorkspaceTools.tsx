@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import WorkspaceToolButton from "./WorkspaceToolButton";
 import { 
   BookOpen, 
@@ -13,41 +13,16 @@ import {
   Sparkles
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import LessonPlanAI from "./LessonPlanAI";
-import LecturePrep from "./LecturePrep";
-import QuizBuilder from "./QuizBuilder";
-import QuizSolver from "./QuizSolver";
+import { useNavigate } from "react-router-dom";
 
 const WorkspaceTools = () => {
   const { toast } = useToast();
-  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const navigate = useNavigate();
   
-  const handleToolClick = (toolName: string) => {
-    setActiveTool(toolName);
+  const handleToolClick = (path: string) => {
+    navigate(path);
   };
   
-  const handleCloseTool = () => {
-    setActiveTool(null);
-  };
-  
-  // If a tool is active, render that tool
-  if (activeTool === "Lesson Plan") {
-    return <LessonPlanAI />;
-  }
-  
-  if (activeTool === "Lecture Prep") {
-    return <LecturePrep />;
-  }
-  
-  if (activeTool === "Create Quiz") {
-    return <QuizBuilder />;
-  }
-  
-  if (activeTool === "Quiz Solver") {
-    return <QuizSolver />;
-  }
-  
-  // If no tool is active, render the tool grid
   return (
     <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50">
       <h3 className="font-semibold mb-2 text-sm text-gray-500 flex items-center">
@@ -59,22 +34,22 @@ const WorkspaceTools = () => {
         <WorkspaceToolButton 
           icon={BookOpen} 
           label="Lesson Plan" 
-          onClick={() => handleToolClick("Lesson Plan")}
+          onClick={() => handleToolClick("/lesson-plan")}
         />
         <WorkspaceToolButton 
           icon={GraduationCap} 
           label="Lecture Prep" 
-          onClick={() => handleToolClick("Lecture Prep")}
+          onClick={() => handleToolClick("/lecture-prep")}
         />
         <WorkspaceToolButton 
           icon={FileQuestion} 
           label="Create Quiz" 
-          onClick={() => handleToolClick("Create Quiz")}
+          onClick={() => handleToolClick("/quiz-builder")}
         />
         <WorkspaceToolButton 
           icon={CheckSquare} 
           label="Quiz Solver" 
-          onClick={() => handleToolClick("Quiz Solver")}
+          onClick={() => handleToolClick("/quiz-solver")}
         />
         <WorkspaceToolButton 
           icon={FileText} 
