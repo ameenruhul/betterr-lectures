@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import WorkspaceToolButton from "./WorkspaceToolButton";
 import { 
   BookOpen, 
@@ -13,17 +13,41 @@ import {
   Sparkles
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import LessonPlanAI from "./LessonPlanAI";
+import LecturePrep from "./LecturePrep";
+import QuizBuilder from "./QuizBuilder";
+import QuizSolver from "./QuizSolver";
 
 const WorkspaceTools = () => {
   const { toast } = useToast();
+  const [activeTool, setActiveTool] = useState<string | null>(null);
   
   const handleToolClick = (toolName: string) => {
-    toast({
-      title: `${toolName} tool activated`,
-      description: "This feature is coming soon!",
-    });
+    setActiveTool(toolName);
   };
   
+  const handleCloseTool = () => {
+    setActiveTool(null);
+  };
+  
+  // If a tool is active, render that tool
+  if (activeTool === "Lesson Plan") {
+    return <LessonPlanAI />;
+  }
+  
+  if (activeTool === "Lecture Prep") {
+    return <LecturePrep />;
+  }
+  
+  if (activeTool === "Create Quiz") {
+    return <QuizBuilder />;
+  }
+  
+  if (activeTool === "Quiz Solver") {
+    return <QuizSolver />;
+  }
+  
+  // If no tool is active, render the tool grid
   return (
     <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50">
       <h3 className="font-semibold mb-2 text-sm text-gray-500 flex items-center">
@@ -45,7 +69,7 @@ const WorkspaceTools = () => {
         <WorkspaceToolButton 
           icon={FileQuestion} 
           label="Create Quiz" 
-          onClick={() => handleToolClick("Quiz Creator")}
+          onClick={() => handleToolClick("Create Quiz")}
         />
         <WorkspaceToolButton 
           icon={CheckSquare} 
@@ -55,22 +79,42 @@ const WorkspaceTools = () => {
         <WorkspaceToolButton 
           icon={FileText} 
           label="Assignment" 
-          onClick={() => handleToolClick("Assignment Creator")}
+          onClick={() => {
+            toast({
+              title: "Assignment Creator",
+              description: "This feature is coming soon!",
+            });
+          }}
         />
         <WorkspaceToolButton 
           icon={Brain} 
           label="Assignment Help" 
-          onClick={() => handleToolClick("Assignment Helper")}
+          onClick={() => {
+            toast({
+              title: "Assignment Helper",
+              description: "This feature is coming soon!",
+            });
+          }}
         />
         <WorkspaceToolButton 
           icon={NotebookPen} 
           label="Study Guide" 
-          onClick={() => handleToolClick("Study Guide Creator")}
+          onClick={() => {
+            toast({
+              title: "Study Guide Creator",
+              description: "This feature is coming soon!",
+            });
+          }}
         />
         <WorkspaceToolButton 
           icon={Microscope} 
           label="Research" 
-          onClick={() => handleToolClick("Research Tool")}
+          onClick={() => {
+            toast({
+              title: "Research Tool",
+              description: "This feature is coming soon!",
+            });
+          }}
         />
       </div>
     </div>
