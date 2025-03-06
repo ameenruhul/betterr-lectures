@@ -5,6 +5,7 @@ import CourseCreate from "./pages/CourseCreate";
 import CoursePanel from "./pages/CoursePanel";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
+import { Toaster } from "./components/ui/Toaster";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/courses/:id" element={<CoursePanel />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toaster />
     </Router>
   );
 }
