@@ -143,90 +143,93 @@ const Dashboard = () => {
           {/* Tabs Section */}
           <Card className="border-none">
             <CardHeader>
-              <Tabs defaultValue="activity">
-                <TabsList>
-                  <TabsTrigger value="activity">Recent Activity</TabsTrigger>
-                  <TabsTrigger value="tasks">Upcoming Tasks</TabsTrigger>
-                </TabsList>
-              </Tabs>
+              <div>
+                <Tabs defaultValue="activity">
+                  <TabsList>
+                    <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+                    <TabsTrigger value="tasks">Upcoming Tasks</TabsTrigger>
+                  </TabsList>
+                </div>
             </CardHeader>
             <CardContent>
-              <TabsContent value="activity" className="space-y-4 m-0">
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Brain className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Generated new quiz for CS101</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>2 hours ago</span>
+              <Tabs defaultValue="activity">
+                <TabsContent value="activity" className="space-y-4 m-0">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Brain className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Generated new quiz for CS101</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>2 hours ago</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <BookOpen className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Updated course materials for MATH202</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>5 hours ago</span>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <BookOpen className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Updated course materials for MATH202</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>5 hours ago</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <GraduationCap className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Added 5 new students to PHYS101</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>Yesterday</span>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <GraduationCap className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Added 5 new students to PHYS101</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>Yesterday</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </TabsContent>
-              <TabsContent value="tasks" className="space-y-4 m-0">
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
-                    <Brain className="h-4 w-4 text-amber-600" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Review AI-generated lecture notes</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>Due in 2 days</span>
+                </TabsContent>
+                <TabsContent value="tasks" className="space-y-4 m-0">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                      <Brain className="h-4 w-4 text-amber-600" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Review AI-generated lecture notes</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>Due in 2 days</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                    <GraduationCap className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Grade midterm submissions</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>Due in 4 days</span>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                      <GraduationCap className="h-4 w-4 text-green-600" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Grade midterm submissions</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>Due in 4 days</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <BookOpen className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Prepare materials for next week</p>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>Due in 5 days</span>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <BookOpen className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Prepare materials for next week</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>Due in 5 days</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </TabsContent>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
