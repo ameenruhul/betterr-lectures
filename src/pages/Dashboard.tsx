@@ -143,13 +143,12 @@ const Dashboard = () => {
           {/* Tabs Section */}
           <Card className="border-none">
             <CardHeader>
-              <div>
-                <Tabs defaultValue="activity">
-                  <TabsList>
-                    <TabsTrigger value="activity">Recent Activity</TabsTrigger>
-                    <TabsTrigger value="tasks">Upcoming Tasks</TabsTrigger>
-                  </TabsList>
-                </div>
+              <Tabs defaultValue="activity">
+                <TabsList>
+                  <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+                  <TabsTrigger value="tasks">Upcoming Tasks</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="activity">
