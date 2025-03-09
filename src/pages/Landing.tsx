@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { 
   ArrowRight, 
@@ -14,13 +14,31 @@ import {
   FileText, 
   Zap, 
   Star, 
-  ShieldCheck
+  ShieldCheck,
+  ClipboardCheck,
+  Lightbulb,
+  GraduationCap,
+  Clock,
+  UserPlus,
+  Building,
+  Bookmark,
+  Award,
+  Sliders,
+  Share2,
+  PenTool,
+  Eye,
+  Send,
+  Linkedin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/Logo";
 import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Landing = () => {
+  const [annualBilling, setAnnualBilling] = useState(true);
+  
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/* Navbar */}
@@ -51,21 +69,21 @@ const Landing = () => {
               <div className="space-y-8 max-w-xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-gray-200 shadow-sm text-sm text-gray-600">
                   <Sparkles className="h-4 w-4 text-ai-magenta" />
-                  <span>Revolutionizing Education with AI</span>
+                  <span>Built for Academic Excellence</span>
                 </div>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                  Transform Your Teaching with <span className="text-gradient-red-violet">AI-Powered</span> Assistance
+                  Elevate Your Teaching with <span className="text-gradient-red-violet">AI-Powered</span> Academic Tools
                 </h1>
                 <p className="text-lg text-gray-700">
-                  Better Lectures uses advanced AI to help professors create engaging materials, 
-                  generate assessments, and manage courses—all in a fraction of the time.
+                  Designed specifically for university professors and educators, Better Lectures combines cutting-edge AI 
+                  with pedagogical expertise to help you create exceptional learning experiences in less time.
                 </p>
                 <div className="flex flex-wrap gap-4 pt-4">
                   <Button size="lg" variant="gradient" className="shadow-lg">
                     <Link to="/login" className="flex items-center">Start Free Trial <ArrowRight className="ml-2 h-5 w-5" /></Link>
                   </Button>
                   <Button size="lg" variant="outline" asChild className="border-2 gradient-border">
-                    <a href="#features">Explore Features</a>
+                    <a href="#features">Explore Academic Tools</a>
                   </Button>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -76,7 +94,7 @@ const Landing = () => {
                       </div>
                     ))}
                   </div>
-                  <span>Trusted by 10,000+ educators worldwide</span>
+                  <span>Trusted by 500+ universities worldwide</span>
                 </div>
               </div>
               <div className="relative hidden md:block">
@@ -93,8 +111,8 @@ const Landing = () => {
                       <div className="flex gap-3 items-center">
                         <Brain className="h-8 w-8 text-ai-purple" />
                         <div className="text-left">
-                          <h3 className="font-semibold text-gradient-red-violet">AI Assistant</h3>
-                          <p className="text-xs text-gray-600">Generating lecture content based on your syllabus...</p>
+                          <h3 className="font-semibold text-gradient-red-violet">Academic AI Assistant</h3>
+                          <p className="text-xs text-gray-600">Generating research-backed lecture content for your course...</p>
                         </div>
                       </div>
                     </div>
@@ -112,7 +130,7 @@ const Landing = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div className="space-y-2">
                 <p className="text-3xl font-bold text-gradient-red-purple">95%</p>
-                <p className="text-gray-600 text-sm">Time Saved on Preparation</p>
+                <p className="text-gray-600 text-sm">Time Saved on Course Preparation</p>
               </div>
               <div className="space-y-2">
                 <p className="text-3xl font-bold text-gradient-red-purple">10,000+</p>
@@ -124,7 +142,7 @@ const Landing = () => {
               </div>
               <div className="space-y-2">
                 <p className="text-3xl font-bold text-gradient-red-purple">1M+</p>
-                <p className="text-gray-600 text-sm">Generated Materials</p>
+                <p className="text-gray-600 text-sm">Academic Materials Generated</p>
               </div>
             </div>
           </div>
@@ -135,66 +153,257 @@ const Landing = () => {
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-flex items-center justify-center p-1 bg-gray-100 rounded-full mb-4">
-                <span className="text-xs font-medium text-gray-800 px-3 py-1">AI-POWERED FEATURES</span>
+                <span className="text-xs font-medium text-gray-800 px-3 py-1">PEDAGOGICAL AI TOOLS</span>
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">Tools That Transform Teaching</h2>
+              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">Academic Tools That Transform Teaching</h2>
               <p className="text-gray-600">
-                Our complete suite of AI tools helps you create exceptional learning experiences in minutes instead of hours.
+                Our suite of AI tools is designed specifically for higher education, combining the latest in AI technology with proven pedagogical approaches.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard 
                 icon={<Book className="h-10 w-10 text-ai-red" />}
-                title="Intelligent Lecture Planning"
-                description="Generate comprehensive lecture plans, slides, and notes tailored to your teaching style and curriculum."
+                title="Research-Backed Lecture Planning"
+                description="Generate comprehensive lecture plans based on your syllabus and the latest academic research in your field. Integrate recent publications and scholarly sources automatically."
                 gradient="from-ai-red/10 to-ai-magenta/10"
               />
               <FeatureCard 
                 icon={<Brain className="h-10 w-10 text-ai-magenta" />}
-                title="Smart Content Creation"
-                description="Transform your ideas into fully-formed lectures with natural language requests to our AI assistant."
+                title="Academic Content Creation"
+                description="Transform curriculum outlines into fully-formed lectures with customized slides, notes, and discussion questions aligned with your teaching philosophy and course objectives."
                 gradient="from-ai-magenta/10 to-ai-purple/10"
                 highlighted={true}
               />
               <FeatureCard 
-                icon={<BarChart className="h-10 w-10 text-ai-purple" />}
-                title="Advanced Assessment Tools"
-                description="Create fair, balanced assessments that test understanding rather than memorization."
+                icon={<ClipboardCheck className="h-10 w-10 text-ai-purple" />}
+                title="Bloom's Taxonomy Assessment Tools"
+                description="Create balanced assessments across all levels of Bloom's Taxonomy, ensuring you're testing critical thinking and not just memorization. Generate rubrics automatically."
                 gradient="from-ai-purple/10 to-ai-violet/10"
               />
               <FeatureCard 
-                icon={<MessageSquare className="h-10 w-10 text-ai-red" />}
-                title="Student Engagement Analytics"
-                description="Gain insights into which parts of your lectures resonate most with students."
+                icon={<Lightbulb className="h-10 w-10 text-ai-red" />}
+                title="Adaptive Learning Pathways"
+                description="Identify knowledge gaps in student understanding and automatically generate personalized learning resources to address those specific areas."
                 gradient="from-ai-purple/10 to-ai-red/10"
               />
               <FeatureCard 
                 icon={<FileText className="h-10 w-10 text-ai-magenta" />}
-                title="Automated Study Materials"
-                description="Generate comprehensive study guides, flashcards, and practice exercises for your students."
+                title="Academic Study Materials"
+                description="Generate comprehensive study guides, concept maps, flashcards, and practice exercises tailored to your specific course content and learning objectives."
                 gradient="from-ai-magenta/10 to-ai-red/10"
               />
               <FeatureCard 
                 icon={<Zap className="h-10 w-10 text-ai-purple" />}
-                title="Research Enhancement"
-                description="Stay current with AI-powered research tools that summarize and analyze academic papers."
+                title="Scholarly Research Assistant"
+                description="Stay current with AI-powered research tools that summarize academic papers, suggest relevant sources, and help integrate cutting-edge research into your teaching."
                 gradient="from-ai-red/10 to-ai-purple/10"
               />
+            </div>
+
+            <div className="mt-16 grid md:grid-cols-2 gap-12">
+              <div className="glass-card p-8 rounded-2xl relative">
+                <div className="absolute -inset-0.5 bg-red-violet-gradient rounded-2xl opacity-20 blur-sm -z-10"></div>
+                <h3 className="text-xl font-bold mb-6 text-gradient-red-magenta flex items-center gap-2">
+                  <GraduationCap className="h-6 w-6" />
+                  For Educators
+                </h3>
+                <ul className="space-y-4">
+                  <li className="flex gap-3">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-ai-red/10 flex items-center justify-center flex-shrink-0">
+                      <Clock className="h-3.5 w-3.5 text-ai-red" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Reduce Preparation Time by 95%</h4>
+                      <p className="text-gray-600 text-sm">Focus more on student interaction and less on administrative tasks. Create a semester's worth of materials in days, not weeks.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-ai-purple/10 flex items-center justify-center flex-shrink-0">
+                      <BookOpenCheck className="h-3.5 w-3.5 text-ai-purple" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Research-Aligned Teaching</h4>
+                      <p className="text-gray-600 text-sm">Automatically incorporate the latest scholarly research into your lectures, keeping content current without hours of literature review.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-ai-magenta/10 flex items-center justify-center flex-shrink-0">
+                      <Sliders className="h-3.5 w-3.5 text-ai-magenta" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Personalized Teaching Style</h4>
+                      <p className="text-gray-600 text-sm">Our AI adapts to your teaching philosophy, whether you prefer Socratic method, case-based learning, or traditional lectures.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="glass-card p-8 rounded-2xl relative">
+                <div className="absolute -inset-0.5 bg-red-violet-gradient rounded-2xl opacity-20 blur-sm -z-10"></div>
+                <h3 className="text-xl font-bold mb-6 text-gradient-red-magenta flex items-center gap-2">
+                  <Users className="h-6 w-6" />
+                  For Students
+                </h3>
+                <ul className="space-y-4">
+                  <li className="flex gap-3">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-ai-red/10 flex items-center justify-center flex-shrink-0">
+                      <Award className="h-3.5 w-3.5 text-ai-red" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Higher Engagement & Retention</h4>
+                      <p className="text-gray-600 text-sm">Our analytics show a 40% increase in student engagement with content created through Better Lectures.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-ai-purple/10 flex items-center justify-center flex-shrink-0">
+                      <Eye className="h-3.5 w-3.5 text-ai-purple" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Clearer Learning Pathways</h4>
+                      <p className="text-gray-600 text-sm">Students benefit from better-organized course materials with clear learning objectives and targeted resources.</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <div className="mt-1 w-6 h-6 rounded-full bg-ai-magenta/10 flex items-center justify-center flex-shrink-0">
+                      <Bookmark className="h-3.5 w-3.5 text-ai-magenta" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Comprehensive Study Resources</h4>
+                      <p className="text-gray-600 text-sm">Give students access to AI-generated study guides, practice questions, and concept maps aligned with your course.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Dedicated Department & Teams Section */}
+        <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <div className="inline-flex items-center justify-center p-1 bg-gray-100 rounded-full mb-4">
+                <span className="text-xs font-medium text-gray-800 px-3 py-1">INSTITUTIONAL SOLUTIONS</span>
+              </div>
+              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">Empower Your Entire Department</h2>
+              <p className="text-gray-600">
+                Scale Better Lectures across your department, faculty, or institution with our comprehensive team solutions
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card className="border-0 overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
+                <div className="absolute inset-0 bg-gradient-to-br from-ai-red/10 to-ai-purple/10 opacity-50"></div>
+                <CardContent className="p-8 relative">
+                  <div className="mb-6 w-14 h-14 rounded-2xl bg-red-violet-gradient flex items-center justify-center text-white shadow-lg">
+                    <Building className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gradient-red-violet">Department Solutions</h3>
+                  <p className="text-gray-700 mb-6">
+                    Streamline teaching across your entire department with coordinated course development, 
+                    shared resources, and consistent quality standards.
+                  </p>
+                  
+                  <div className="space-y-6 mb-8">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-purple mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">Curriculum Alignment</h4>
+                        <p className="text-gray-600 text-sm">Ensure consistent learning outcomes across all courses in your program with AI-assisted curriculum mapping.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-purple mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">Shared Resource Library</h4>
+                        <p className="text-gray-600 text-sm">Build a departmental knowledge base of teaching materials, assessment tools, and best practices.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-purple mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">Assessment Standardization</h4>
+                        <p className="text-gray-600 text-sm">Create consistent grading rubrics and assessment strategies across multiple course sections.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-purple mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">Analytics Dashboard</h4>
+                        <p className="text-gray-600 text-sm">Track department-wide teaching effectiveness and student engagement metrics in one place.</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Button variant="gradient" size="lg" className="w-full">
+                    Schedule Department Demo
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-0 overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
+                <div className="absolute inset-0 bg-gradient-to-br from-ai-magenta/10 to-ai-violet/10 opacity-50"></div>
+                <CardContent className="p-8 relative">
+                  <div className="mb-6 w-14 h-14 rounded-2xl bg-magenta-violet-gradient flex items-center justify-center text-white shadow-lg">
+                    <UserPlus className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gradient-red-magenta">Enterprise & Institution</h3>
+                  <p className="text-gray-700 mb-6">
+                    Full-scale implementation across your institution with custom integrations, 
+                    dedicated support, and tailored training programs.
+                  </p>
+                  
+                  <div className="space-y-6 mb-8">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-magenta mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">LMS Integration</h4>
+                        <p className="text-gray-600 text-sm">Seamlessly connect with Canvas, Blackboard, Moodle, and other learning management systems.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-magenta mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">Custom AI Training</h4>
+                        <p className="text-gray-600 text-sm">Train our AI on your institution's specific academic standards, outcomes, and teaching guidelines.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-magenta mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">On-Campus Implementation</h4>
+                        <p className="text-gray-600 text-sm">On-site training and implementation support from our academic technology specialists.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-ai-magenta mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-800">Institutional Analytics</h4>
+                        <p className="text-gray-600 text-sm">Comprehensive data on teaching effectiveness across departments for accreditation and improvement.</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Button variant="gradient" size="lg" className="w-full">
+                    Request Enterprise Quote
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
         {/* How It Works */}
-        <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-flex items-center justify-center p-1 bg-gray-100 rounded-full mb-4">
-                <span className="text-xs font-medium text-gray-800 px-3 py-1">SIMPLE WORKFLOW</span>
+                <span className="text-xs font-medium text-gray-800 px-3 py-1">INTUITIVE PROCESS</span>
               </div>
               <h2 className="text-3xl font-bold mb-4 text-gradient-red-magenta">How Better Lectures Works</h2>
               <p className="text-gray-600">
-                Transform your teaching process in three simple steps
+                Transform your teaching workflow with our simple three-step process
               </p>
             </div>
 
@@ -202,54 +411,54 @@ const Landing = () => {
               <WorkflowStep 
                 number="1"
                 title="Upload Your Materials"
-                description="Add your syllabus, existing notes, or start from scratch with just a course title."
+                description="Import your existing syllabus, course objectives, reading lists, or start from scratch with just a course title and description."
                 icon={<ArrowRight className="h-5 w-5" />}
               />
               <WorkflowStep 
                 number="2"
                 title="Customize & Generate"
-                description="Use our AI tools to create perfectly tailored lectures, quizzes, and assignments."
+                description="Use our AI tools to create research-backed lectures, assessments, and study materials aligned with your teaching style and learning outcomes."
                 icon={<ArrowRight className="h-5 w-5" />}
               />
               <WorkflowStep 
                 number="3"
-                title="Teach & Improve"
-                description="Deliver engaging lectures and use analytics to continuously improve your content."
+                title="Teach & Analyze"
+                description="Deliver engaging lectures and use our analytics to measure student engagement, identify knowledge gaps, and continuously improve your teaching."
               />
             </div>
           </div>
         </section>
 
         {/* Testimonials */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-flex items-center justify-center p-1 bg-gray-100 rounded-full mb-4">
-                <span className="text-xs font-medium text-gray-800 px-3 py-1">SUCCESS STORIES</span>
+                <span className="text-xs font-medium text-gray-800 px-3 py-1">EDUCATOR EXPERIENCES</span>
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">Loved by Educators</h2>
+              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">Trusted by Academic Leaders</h2>
               <p className="text-gray-600">
-                Join thousands of professors and teaching assistants who have transformed their teaching
+                Join thousands of professors and teaching assistants who have transformed their teaching experience
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
               <TestimonialCard 
-                quote="Better Lectures has revolutionized my teaching. I can create a week's worth of content in just one hour."
+                quote="As department chair, I've seen Better Lectures transform how our faculty prepare courses. The time saved on administrative tasks has allowed us to focus more on student mentorship and research."
                 name="Dr. Sarah Johnson"
-                title="Professor of Economics, Stanford University"
+                title="Department Chair, Economics, Stanford University"
                 image="/placeholder.svg"
               />
               <TestimonialCard 
-                quote="The AI assistant understands exactly what I need and helps me create engaging materials that resonate with my students."
-                name="Michael Chen"
-                title="Teaching Assistant, MIT"
+                quote="The AI assistant understands pedagogical best practices and helps me design assessments that truly measure critical thinking rather than just memorization. My student evaluations have improved significantly."
+                name="Michael Chen, Ph.D."
+                title="Assistant Professor, Computer Science, MIT"
                 image="/placeholder.svg"
               />
               <TestimonialCard 
-                quote="My student evaluations have improved dramatically since I started using Better Lectures to prepare my materials."
-                name="Dr. David Martinez"
-                title="Associate Professor, UCLA"
+                quote="As a new faculty member, Better Lectures helped me quickly develop a comprehensive course curriculum that met our department's standards. The research integration feature is particularly valuable."
+                name="Dr. Maya Patel"
+                title="Associate Professor, Psychology, UCLA"
                 image="/placeholder.svg"
               />
             </div>
@@ -259,39 +468,54 @@ const Landing = () => {
         {/* Pricing */}
         <section id="pricing" className="py-20 bg-hero-gradient">
           <div className="container mx-auto px-4">
-            <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="text-center max-w-3xl mx-auto mb-12">
               <div className="inline-flex items-center justify-center p-1 bg-white/80 backdrop-blur-sm rounded-full mb-4">
                 <span className="text-xs font-medium text-gray-800 px-3 py-1">FLEXIBLE PRICING</span>
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-gradient-red-magenta">Plans That Fit Your Needs</h2>
-              <p className="text-gray-600">
-                Choose the right plan for your teaching requirements
+              <h2 className="text-3xl font-bold mb-4 text-gradient-red-magenta">Plans for Every Academic Need</h2>
+              <p className="text-gray-600 mb-8">
+                Choose the plan that fits your teaching requirements and institutional setting
               </p>
+              
+              <div className="flex items-center justify-center gap-3">
+                <span className={!annualBilling ? "font-semibold" : "text-gray-500"}>Monthly</span>
+                <Switch 
+                  checked={annualBilling} 
+                  onCheckedChange={setAnnualBilling} 
+                  className="data-[state=checked]:bg-red-violet-gradient"
+                />
+                <span className={annualBilling ? "font-semibold" : "text-gray-500"}>Annual</span>
+                <span className="ml-2 text-xs text-white bg-ai-red px-2 py-0.5 rounded-full">Save 20%</span>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <PricingCard 
-                title="Starter"
-                price="$19"
+                title="Educator"
+                price={annualBilling ? "$180" : "$19"}
+                period={annualBilling ? "year" : "month"}
                 description="Perfect for individual educators"
                 features={[
                   "50 AI generations per month",
                   "Basic lecture planning",
-                  "Quiz generation",
+                  "Quiz & assignment generation",
+                  "Research assistance",
                   "Email support"
                 ]}
-                buttonText="Get Started"
+                buttonText="Start Free Trial"
                 buttonVariant="outline"
               />
               <PricingCard 
-                title="Professional"
-                price="$49"
-                description="Ideal for active educators"
+                title="Department"
+                price={annualBilling ? "$470" : "$49"}
+                period={annualBilling ? "year" : "month"}
+                description="Ideal for teaching teams"
                 features={[
-                  "200 AI generations per month",
+                  "Unlimited AI generations",
                   "Advanced lecture planning",
-                  "Assignment & quiz generation",
-                  "Research assistance",
+                  "Full assessment suite",
+                  "Curriculum alignment tools",
+                  "Shared department resources",
                   "Priority support"
                 ]}
                 buttonText="Most Popular"
@@ -299,19 +523,98 @@ const Landing = () => {
                 highlighted={true}
               />
               <PricingCard 
-                title="Department"
-                price="$199"
-                description="For teaching teams"
+                title="Institution"
+                price={annualBilling ? "$1,900" : "$199"}
+                period={annualBilling ? "year" : "month"}
+                description="For entire faculties or schools"
                 features={[
-                  "Unlimited AI generations",
-                  "Full feature access",
-                  "Team collaboration",
-                  "Custom integrations",
-                  "Dedicated support"
+                  "Everything in Department",
+                  "Custom LMS integration",
+                  "Institutional analytics",
+                  "On-campus implementation",
+                  "Custom AI training",
+                  "Dedicated account manager"
                 ]}
                 buttonText="Contact Sales"
                 buttonVariant="outline"
               />
+            </div>
+            
+            <div className="mt-12 text-center">
+              <p className="text-sm text-gray-600">
+                Need a custom solution? <a href="#contact" className="text-ai-red underline hover:text-ai-purple transition-colors">Contact our education specialists</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Section */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <div className="inline-flex items-center justify-center p-1 bg-gray-100 rounded-full mb-4">
+                <span className="text-xs font-medium text-gray-800 px-3 py-1">JOIN OUR COMMUNITY</span>
+              </div>
+              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">Connect with Fellow Educators</h2>
+              <p className="text-gray-600">
+                Become part of our growing community of innovative educators sharing ideas and best practices
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all">
+                <CardContent className="p-8">
+                  <div className="mb-6 w-14 h-14 rounded-full bg-gradient-to-br from-ai-red to-ai-magenta flex items-center justify-center text-white">
+                    <Linkedin className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 text-gradient-red-violet">LinkedIn Community</h3>
+                  <p className="text-gray-600 mb-6">
+                    Join our exclusive LinkedIn group to connect with educators, share success stories, and discuss innovative teaching approaches.
+                  </p>
+                  <Button variant="outline" className="w-full border-2 gradient-border">
+                    <a href="#" className="flex items-center justify-center gap-2">
+                      Join LinkedIn Group
+                      <Share2 className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all">
+                <CardContent className="p-8">
+                  <div className="mb-6 w-14 h-14 rounded-full bg-gradient-to-br from-ai-magenta to-ai-purple flex items-center justify-center text-white">
+                    <MessageSquare className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 text-gradient-red-magenta">Feature Requests</h3>
+                  <p className="text-gray-600 mb-6">
+                    Tell us what features would improve your teaching experience. We actively incorporate educator feedback into our development roadmap.
+                  </p>
+                  <Button variant="outline" className="w-full border-2 gradient-border">
+                    <a href="#" className="flex items-center justify-center gap-2">
+                      Submit Feature Request
+                      <PenTool className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all">
+                <CardContent className="p-8">
+                  <div className="mb-6 w-14 h-14 rounded-full bg-gradient-to-br from-ai-purple to-ai-violet flex items-center justify-center text-white">
+                    <Calendar className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 text-gradient-red-purple">Webinars & Training</h3>
+                  <p className="text-gray-600 mb-6">
+                    Attend our regular webinars on AI in education, educational technology trends, and best practices for course design.
+                  </p>
+                  <Button variant="outline" className="w-full border-2 gradient-border">
+                    <a href="#" className="flex items-center justify-center gap-2">
+                      View Upcoming Events
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
@@ -324,24 +627,24 @@ const Landing = () => {
                 <Brain className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-3xl font-bold text-white mb-6">
-                Ready to Transform Your Teaching?
+                Ready to Transform Your Academic Teaching?
               </h2>
               <p className="text-white/90 mb-8 text-lg">
-                Join thousands of educators who are saving time and improving their teaching with Better Lectures.
+                Join thousands of educators who are saving time, improving student outcomes, and reinvigorating their teaching with Better Lectures.
               </p>
               <Button size="lg" className="bg-white text-ai-purple hover:bg-white/90 shadow-xl">
                 <Link to="/login" className="font-medium flex items-center">
-                  Get Started Today <ArrowRight className="ml-2 h-5 w-5" />
+                  Start Your Free Trial <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <div className="mt-8 pt-8 border-t border-white/20 grid grid-cols-2 md:grid-cols-4 gap-6 text-white text-center">
                 <div>
                   <ShieldCheck className="h-6 w-6 mx-auto mb-2" />
-                  <p className="text-sm">Secure & Private</p>
+                  <p className="text-sm">FERPA Compliant</p>
                 </div>
                 <div>
                   <Zap className="h-6 w-6 mx-auto mb-2" />
-                  <p className="text-sm">Instant Results</p>
+                  <p className="text-sm">Research-Backed</p>
                 </div>
                 <div>
                   <Star className="h-6 w-6 mx-auto mb-2" />
@@ -349,7 +652,7 @@ const Landing = () => {
                 </div>
                 <div>
                   <Users className="h-6 w-6 mx-auto mb-2" />
-                  <p className="text-sm">Growing Community</p>
+                  <p className="text-sm">Educator Community</p>
                 </div>
               </div>
             </div>
@@ -361,11 +664,11 @@ const Landing = () => {
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-flex items-center justify-center p-1 bg-gray-100 rounded-full mb-4">
-                <span className="text-xs font-medium text-gray-800 px-3 py-1">GET IN TOUCH</span>
+                <span className="text-xs font-medium text-gray-800 px-3 py-1">CONNECT WITH US</span>
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">We're Here To Help</h2>
+              <h2 className="text-3xl font-bold mb-4 text-gradient-red-violet">We're Here To Support You</h2>
               <p className="text-gray-600">
-                Have questions or need assistance? Our team is ready to support you.
+                Have questions about how Better Lectures can help your specific teaching needs? Our education specialists are ready to assist.
               </p>
             </div>
 
@@ -381,8 +684,8 @@ const Landing = () => {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Email Us At</p>
-                      <p className="font-medium">support@betterlectures.edu</p>
+                      <p className="text-sm text-gray-500">Educational Support</p>
+                      <p className="font-medium">academic@betterlectures.edu</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -392,8 +695,17 @@ const Landing = () => {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Call Us At</p>
+                      <p className="text-sm text-gray-500">Implementation Support</p>
                       <p className="font-medium">(800) 555-0123</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-ai-purple">
+                      <Building className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Department Solutions</p>
+                      <p className="font-medium">departments@betterlectures.edu</p>
                     </div>
                   </div>
                 </div>
@@ -420,7 +732,7 @@ const Landing = () => {
               
               <div className="glass-card p-8 rounded-2xl relative">
                 <div className="absolute -inset-0.5 bg-red-violet-gradient rounded-2xl opacity-20 blur-sm -z-10"></div>
-                <h3 className="text-xl font-semibold mb-6 text-gradient-red-magenta">Send Us a Message</h3>
+                <h3 className="text-xl font-semibold mb-6 text-gradient-red-magenta">Request Information</h3>
                 <form className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -443,13 +755,26 @@ const Landing = () => {
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                    <label htmlFor="institution" className="block text-sm font-medium text-gray-700 mb-1">Institution</label>
                     <input 
                       type="text" 
-                      id="subject" 
+                      id="institution" 
                       className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-ai-purple focus:border-ai-purple bg-white/70"
-                      placeholder="Message subject" 
+                      placeholder="University or institution name" 
                     />
+                  </div>
+                  <div>
+                    <label htmlFor="inquiry" className="block text-sm font-medium text-gray-700 mb-1">I'm interested in</label>
+                    <select 
+                      id="inquiry" 
+                      className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-ai-purple focus:border-ai-purple bg-white/70"
+                    >
+                      <option value="individual">Individual Educator Plan</option>
+                      <option value="department">Department Solution</option>
+                      <option value="institution">Institution-wide Implementation</option>
+                      <option value="demo">Product Demo</option>
+                      <option value="other">Other Inquiry</option>
+                    </select>
                   </div>
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
@@ -457,11 +782,12 @@ const Landing = () => {
                       id="message" 
                       rows={4} 
                       className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-ai-purple focus:border-ai-purple bg-white/70"
-                      placeholder="Your message" 
+                      placeholder="Tell us about your specific needs" 
                     ></textarea>
                   </div>
                   <Button type="submit" variant="gradient" className="w-full shadow-md">
-                    Send Message
+                    <Send className="mr-2 h-4 w-4" />
+                    Send Request
                   </Button>
                 </form>
               </div>
@@ -477,14 +803,14 @@ const Landing = () => {
             <div>
               <Logo variant="default" className="text-white mb-4" />
               <p className="text-gray-400">
-                Empowering educators with AI-powered tools to create exceptional learning experiences.
+                Empowering higher education with AI-powered tools designed specifically for university teaching and learning.
               </p>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4 text-white">Features</h4>
+              <h4 className="text-lg font-semibold mb-4 text-white">Academic Tools</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Lecture Preparation</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Assessment Creation</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Lecture Creation</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Assessment Design</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Research Assistant</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Study Guide Generation</a></li>
               </ul>
@@ -492,10 +818,10 @@ const Landing = () => {
             <div>
               <h4 className="text-lg font-semibold mb-4 text-white">Resources</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Community</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Support</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Academic Blog</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Teaching Resources</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Educator Community</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Implementation Guide</a></li>
               </ul>
             </div>
             <div>
@@ -503,7 +829,7 @@ const Landing = () => {
               <ul className="space-y-2">
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy & FERPA</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
               </ul>
             </div>
@@ -536,7 +862,7 @@ const Landing = () => {
   );
 };
 
-// Helper Components
+// Helper Components for Landing Page
 const FeatureCard = ({ icon, title, description, gradient, highlighted = false }: { 
   icon: React.ReactNode; 
   title: string; 
@@ -613,6 +939,7 @@ const TestimonialCard = ({ quote, name, title, image }: {
 const PricingCard = ({ 
   title, 
   price, 
+  period = "month",
   description, 
   features, 
   buttonText, 
@@ -621,6 +948,7 @@ const PricingCard = ({
 }: {
   title: string;
   price: string;
+  period?: string;
   description: string;
   features: string[];
   buttonText: string;
@@ -639,7 +967,7 @@ const PricingCard = ({
         <h3 className="text-xl font-bold mb-2 text-gradient-red-violet">{title}</h3>
         <div className="flex items-baseline mb-4">
           <span className="text-3xl font-bold">{price}</span>
-          <span className="text-gray-500 ml-1">/month</span>
+          <span className="text-gray-500 ml-1">/{period}</span>
         </div>
         <p className="text-gray-600 mb-6">{description}</p>
         <ul className="space-y-3 mb-8">
@@ -661,4 +989,27 @@ const PricingCard = ({
   );
 };
 
+// Add missing components
+const BookOpenCheck = ({ className }: { className?: string }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 3H2v15h7c1.7 0 3 1.3 3 3V7c0-2.2-1.8-4-4-4Z" />
+      <path d="m16 12 2 2 4-4" />
+      <path d="M22 6V3h-6c-2.2 0-4 1.8-4 4v14c0-1.7 1.3-3 3-3h7V6Z" />
+    </svg>
+  );
+};
+
 export default Landing;
+
