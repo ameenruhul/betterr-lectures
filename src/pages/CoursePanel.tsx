@@ -2,11 +2,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import ContentUploader from "@/components/lecture/ContentUploader";
-import LectureNavigation from "@/components/lecture/LectureNavigation";
-import WorkspaceTools from "@/components/lecture/WorkspaceTools";
 import TextEditor from "@/components/lecture/TextEditor";
 import AIAssistant from "@/components/lecture/AIAssistant";
+import SharedCourseSidebar from "@/components/lecture/SharedCourseSidebar";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -30,7 +28,6 @@ const LecturesPanel = () => {
   const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
 
   // Refs for onboarding
-  const workspaceToolsRef = useRef<HTMLDivElement>(null);
   const aiAssistantRef = useRef<HTMLDivElement>(null);
 
   // Fixed default panel sizes to avoid warnings
@@ -40,21 +37,11 @@ const LecturesPanel = () => {
   // Scroll to the relevant element when step changes
   useEffect(() => {
     if (isFirstTime) {
-      if (currentStep === 'workspace-tools' && workspaceToolsRef.current) {
-        workspaceToolsRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else if (currentStep === 'ai-assistant' && aiAssistantRef.current) {
+      if (currentStep === 'ai-assistant' && aiAssistantRef.current) {
         aiAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   }, [currentStep, isFirstTime]);
-
-  const handleBackToLectures = () => {
-    if (courseId) {
-      navigate(`/courses/${courseId}/lectures`);
-    } else {
-      navigate("/dashboard");
-    }
-  };
 
   const handleSave = () => {
     toast({
@@ -95,13 +82,6 @@ const LecturesPanel = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // For workspace tools onboarding step
-  const handleWorkspaceToolClick = () => {
-    if (isFirstTime && currentStep === 'workspace-tools') {
-      nextStep();
-    }
-  };
-
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
       {/* Mobile Toggle Button */}
@@ -125,43 +105,14 @@ const LecturesPanel = () => {
       )}
 
       <div className="flex h-full w-full">
-        {/* Sidebar */}
+        {/* Sidebar - using SharedCourseSidebar instead of the custom implementation */}
         <div 
           className={cn(
             "bg-white border-r transition-all duration-300 z-20 md:static fixed h-full",
             sidebarOpen ? "w-64" : "w-0 -ml-64 md:w-0 md:ml-0"
           )}
         >
-          <div className="h-full flex flex-col overflow-hidden">
-            <ContentUploader 
-              courseId={courseId} 
-              lectureId={lectureId} 
-              documentTitle={documentTitle}
-              onBackClick={handleBackToLectures}
-            />
-
-            <LectureNavigation 
-              lectureId={lectureId} 
-              onCloseSidebar={() => setSidebarOpen(false)}
-            />
-
-            <div ref={workspaceToolsRef}>
-              <Spotlight active={isFirstTime && currentStep === 'workspace-tools'}>
-                <WorkspaceTools onToolClick={handleWorkspaceToolClick} />
-                
-                {/* Onboarding for Workspace Tools */}
-                {isFirstTime && currentStep === 'workspace-tools' && (
-                  <CoachMark
-                    title="Explore Powerful Tools"
-                    description="Discover specialized tools for lecture preparation, quiz building, and more to enhance your teaching materials."
-                    position="right"
-                    onNext={() => nextStep()}
-                    onSkip={skipOnboarding}
-                  />
-                )}
-              </Spotlight>
-            </div>
-          </div>
+          <SharedCourseSidebar onCloseSidebar={() => setSidebarOpen(false)} />
         </div>
 
         {/* Content Area */}
