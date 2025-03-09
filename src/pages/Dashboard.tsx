@@ -20,7 +20,9 @@ import {
   MessageSquare,
   CalendarIcon,
   BellRing,
-  ExternalLink
+  ExternalLink,
+  CreditCard,
+  User
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -57,6 +59,12 @@ const Dashboard = () => {
         <div className="p-6 space-y-6 overflow-auto">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Teacher's Workbench</h1>
+            <Link to="/account">
+              <Button variant="outline" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Account & Billing
+              </Button>
+            </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

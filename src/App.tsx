@@ -26,6 +26,12 @@ import LectureNotes from "./pages/tools/LectureNotes";
 import ConceptMapper from "./pages/tools/ConceptMapper";
 import ClassroomJournal from "./pages/tools/ClassroomJournal";
 
+// Account and Billing pages
+import AccountPage from "./pages/account";
+import ProfilePage from "./pages/account/profile";
+import BillingPage from "./pages/account/billing";
+import PaymentHistoryPage from "./pages/account/payment-history";
+
 function App() {
   useEffect(() => {
     // Update the document title
@@ -60,7 +66,15 @@ function App() {
           <Route path="/research" element={<Research />} />
           <Route path="/lectures-panel" element={<LecturesPanel />} />
           
-          {/* New Tool Routes */}
+          {/* Account and Billing Routes */}
+          <Route path="/account" element={<AccountPage />}>
+            <Route path="/account/profile" element={<ProfilePage />} />
+            <Route path="/account/billing" element={<BillingPage />} />
+            <Route path="/account/payment-history" element={<PaymentHistoryPage />} />
+            <Route index element={<ProfilePage />} />
+          </Route>
+          
+          {/* Tool Routes */}
           <Route path="/tools/reminders" element={<Reminders />} />
           <Route path="/tools/mind-maps" element={<MindMaps />} />
           <Route path="/tools/sticky-notes" element={<StickyNotes />} />
