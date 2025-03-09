@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
-  ArrowLeft,
   Menu,
   X,
   ChevronLeft,
@@ -11,14 +10,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import SharedCourseSidebar from "../lecture/SharedCourseSidebar";
+import BackNavigation from "./BackNavigation";
 
 interface PageLayoutProps {
   children: React.ReactNode;
   title: string;
   actionButtons?: React.ReactNode;
+  isLoading?: boolean;
 }
 
-const PageLayout = ({ children, title, actionButtons }: PageLayoutProps) => {
+const PageLayout = ({ 
+  children, 
+  title, 
+  actionButtons, 
+  isLoading = false 
+}: PageLayoutProps) => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   
@@ -83,7 +89,14 @@ const PageLayout = ({ children, title, actionButtons }: PageLayoutProps) => {
         
         {/* Content */}
         <div className="flex-1 overflow-auto p-6 bg-gray-50/30">
-          {children}
+          {isLoading ? (
+            <div className="h-full flex flex-col items-center justify-center">
+              <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+              <p className="mt-4 text-gray-500">Loading content...</p>
+            </div>
+          ) : (
+            children
+          )}
         </div>
       </div>
     </div>

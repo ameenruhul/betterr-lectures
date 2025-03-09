@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { 
   BookOpen, 
   GraduationCap, 
@@ -13,9 +13,9 @@ import {
   Microscope,
   Sparkles,
   ChevronDown,
+  ChevronUp,
   Library,
   PanelLeft,
-  ChevronUp,
   Home
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,7 @@ interface SharedCourseSidebarProps {
 
 const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [toolsExpanded, setToolsExpanded] = useState(true);
   
@@ -103,6 +104,22 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
     }
   ];
 
+  // Group tools by category for better organization
+  const toolCategories = [
+    {
+      title: "PLANNING",
+      tools: [toolItems[0], toolItems[1], toolItems[2]]
+    },
+    {
+      title: "ASSESSMENT",
+      tools: [toolItems[3], toolItems[4], toolItems[5], toolItems[6]]
+    },
+    {
+      title: "RESEARCH & STUDY",
+      tools: [toolItems[7], toolItems[8]]
+    }
+  ];
+
   return (
     <div className="h-full flex flex-col bg-gray-50/60 overflow-hidden">
       {/* Header section with brand and back button */}
@@ -137,7 +154,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
         onCloseSidebar={onCloseSidebar}
       />
       
-      {/* Workspace Tools Section */}
+      {/* AI Teaching Tools Section */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <div 
           className="flex items-center justify-between p-4 border-b cursor-pointer bg-white hover:bg-gray-50 transition-colors"
@@ -155,23 +172,31 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
         </div>
 
         {toolsExpanded && (
-          <div className="p-3 space-y-3 overflow-y-auto bg-gray-50/30">
-            <div className="grid grid-cols-2 gap-3">
-              {toolItems.map((tool) => (
-                <WorkspaceToolButton
-                  key={tool.label}
-                  icon={tool.icon}
-                  label={tool.label}
-                  onClick={() => handleToolClick(tool.path)}
-                  path={tool.path}
-                  className={cn(
-                    "transition-transform hover:translate-y-[-2px]",
-                    window.location.pathname === tool.path && "ring-2 ring-primary/20 bg-primary/5"
-                  )}
-                  iconClassName={tool.color}
-                />
-              ))}
-            </div>
+          <div className="p-3 space-y-4 overflow-y-auto bg-gray-50/30">
+            {toolCategories.map((category, index) => (
+              <div key={category.title} className="space-y-3">
+                <h4 className="text-xs font-medium text-gray-500 pl-2">{category.title}</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {category.tools.map((tool) => (
+                    <WorkspaceToolButton
+                      key={tool.label}
+                      icon={tool.icon}
+                      label={tool.label}
+                      onClick={() => handleToolClick(tool.path)}
+                      path={tool.path}
+                      className={cn(
+                        "transition-transform hover:translate-y-[-2px]",
+                        location.pathname === tool.path && "ring-2 ring-primary/20 bg-primary/5"
+                      )}
+                      iconClassName={tool.color}
+                    />
+                  ))}
+                </div>
+                {index < toolCategories.length - 1 && (
+                  <Separator className="my-2" />
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>

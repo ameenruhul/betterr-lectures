@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 
-const CoursePanel = () => {
+const LecturesPanel = () => {
   const { courseId, lectureId } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
@@ -25,9 +25,9 @@ const CoursePanel = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedText, setSelectedText] = useState("");
 
-  const [leftPanelSize, setLeftPanelSize] = useState(20);
-  const [middlePanelSize, setMiddlePanelSize] = useState(60);
-  const [rightPanelSize, setRightPanelSize] = useState(20);
+  // Fixed default panel sizes to avoid warnings
+  const [middlePanelSize, setMiddlePanelSize] = useState(70);
+  const [rightPanelSize, setRightPanelSize] = useState(30);
 
   const handleBackToLectures = () => {
     if (courseId) {
@@ -61,9 +61,10 @@ const CoursePanel = () => {
   };
 
   const handlePanelResize = (sizes: number[]) => {
-    setLeftPanelSize(sizes[0]);
-    setMiddlePanelSize(sizes[1]);
-    setRightPanelSize(sizes[2]);
+    if (sizes.length === 2) {
+      setMiddlePanelSize(sizes[0]);
+      setRightPanelSize(sizes[1]);
+    }
   };
 
   const toggleSidebar = () => {
@@ -157,7 +158,7 @@ const CoursePanel = () => {
 
               <ResizablePanel 
                 defaultSize={rightPanelSize} 
-                minSize={15} 
+                minSize={20} 
                 maxSize={40}
                 className="bg-white border-l"
               >
@@ -184,4 +185,4 @@ const CoursePanel = () => {
   );
 };
 
-export default CoursePanel;
+export default LecturesPanel;

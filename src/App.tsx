@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import CourseCreate from "./pages/CourseCreate";
-import CoursePanel from "./pages/CoursePanel";
+import LecturesPanel from "./pages/CoursePanel";
 import LecturesList from "./pages/LecturesList";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
@@ -30,9 +30,9 @@ function App() {
         <Route path="/login" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/courses/create" element={<CourseCreate />} />
-        <Route path="/courses/:id" element={<CoursePanel />} />
+        <Route path="/courses/:id" element={<LecturesPanel />} />
         <Route path="/courses/:courseId/lectures" element={<LecturesList />} />
-        <Route path="/courses/:courseId/lectures/:lectureId" element={<CoursePanel />} />
+        <Route path="/courses/:courseId/lectures/:lectureId" element={<LecturesPanel />} />
         <Route path="/lesson-plan" element={<LessonPlan />} />
         <Route path="/lecture-prep" element={<LecturePrep />} />
         <Route path="/quiz-builder" element={<QuizBuilder />} />
@@ -41,7 +41,7 @@ function App() {
         <Route path="/assignment-solver" element={<AssignmentSolver />} />
         <Route path="/study-guide" element={<StudyGuide />} />
         <Route path="/research" element={<Research />} />
-        <Route path="/lectures-panel" element={<CoursePanel />} />
+        <Route path="/lectures-panel" element={<LecturesPanel />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
