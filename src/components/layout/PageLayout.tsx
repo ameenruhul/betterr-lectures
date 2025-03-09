@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   Menu,
@@ -28,6 +28,11 @@ const PageLayout = ({
 }: PageLayoutProps) => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarWidth, setSidebarWidth] = useState(256); // Default width (64 * 4 = 256px)
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startWidthRef = useRef(0);
   
   // Set sidebar closed by default on mobile
   useEffect(() => {
@@ -39,17 +44,57 @@ const PageLayout = ({
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  const handleDragStart = (e: React.MouseEvent | MouseEvent) => {
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX;
+    if (sidebarRef.current) {
+      startWidthRef.current = sidebarRef.current.offsetWidth;
+      document.body.style.cursor = 'ew-resize';
+      document.addEventListener('mousemove', handleDragMove);
+      document.addEventListener('mouseup', handleDragEnd);
+    }
+  };
+
+  const handleDragMove = (e: MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    
+    const deltaX = e.clientX - startXRef.current;
+    const newWidth = Math.max(200, Math.min(450, startWidthRef.current + deltaX));
+    
+    setSidebarWidth(newWidth);
+  };
+
+  const handleDragEnd = () => {
+    isDraggingRef.current = false;
+    document.body.style.cursor = '';
+    document.removeEventListener('mousemove', handleDragMove);
+    document.removeEventListener('mouseup', handleDragEnd);
+  };
+  
+  // Clean up event listeners when component unmounts
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleDragMove);
+      document.removeEventListener('mouseup', handleDragEnd);
+    };
+  }, []);
   
   return (
     <div className="min-h-screen bg-white flex">
       {/* Sidebar with transition */}
       <div 
+        ref={sidebarRef}
+        style={{ width: sidebarOpen ? `${sidebarWidth}px` : 0 }}
         className={cn(
           "border-r transition-all duration-300 z-10 fixed md:static h-full",
-          sidebarOpen ? "w-64" : "w-0 -ml-64 md:w-0 md:ml-0"
+          !sidebarOpen && "w-0 -ml-64 md:w-0 md:ml-0"
         )}
       >
-        <SharedCourseSidebar onCloseSidebar={() => setSidebarOpen(false)} />
+        <SharedCourseSidebar 
+          onCloseSidebar={() => setSidebarOpen(false)} 
+          onDragHandleMouseDown={handleDragStart}
+        />
       </div>
       
       {/* Mobile sidebar overlay */}

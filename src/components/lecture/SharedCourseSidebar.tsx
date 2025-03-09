@@ -27,9 +27,13 @@ import { cn } from "@/lib/utils";
 
 interface SharedCourseSidebarProps {
   onCloseSidebar?: () => void;
+  onDragHandleMouseDown?: (e: React.MouseEvent) => void;
 }
 
-const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
+const SharedCourseSidebar = ({ 
+  onCloseSidebar,
+  onDragHandleMouseDown 
+}: SharedCourseSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [toolsExpanded, setToolsExpanded] = useState(true);
@@ -104,7 +108,10 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
             <h2 className="text-lg font-bold text-gray-800">Better Lectures</h2>
           </div>
           <div className="flex items-center">
-            <GripVertical className="h-4 w-4 text-gray-400 cursor-move drag-handle" />
+            <GripVertical 
+              className="h-4 w-4 text-gray-400 cursor-move drag-handle" 
+              onMouseDown={onDragHandleMouseDown}
+            />
           </div>
         </div>
         
