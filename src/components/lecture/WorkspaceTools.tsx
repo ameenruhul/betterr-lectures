@@ -18,12 +18,20 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
-const WorkspaceTools = () => {
+interface WorkspaceToolsProps {
+  onToolClick?: () => void;
+}
+
+const WorkspaceTools = ({ onToolClick }: WorkspaceToolsProps = {}) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
   const handleToolClick = (path: string) => {
     navigate(path);
+    // Call the onToolClick prop if provided (for onboarding)
+    if (onToolClick) {
+      onToolClick();
+    }
   };
   
   return (
