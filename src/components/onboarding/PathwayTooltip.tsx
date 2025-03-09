@@ -12,6 +12,7 @@ interface PathwayTooltipProps {
   showArrow?: boolean;
   step?: number;
   forceShow?: boolean;
+  nextStep?: string;
 }
 
 const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
@@ -21,9 +22,10 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
   className,
   showArrow = true,
   step,
-  forceShow = false
+  forceShow = false,
+  nextStep
 }) => {
-  const { isGuidedMode } = useOnboarding();
+  const { isGuidedMode, setCurrentStep } = useOnboarding();
 
   if (!isGuidedMode && !forceShow) {
     return <>{children}</>;
@@ -36,6 +38,12 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
     'left': 'right-full mr-2 top-1/2 -translate-y-1/2',
   };
 
+  const handleTooltipClick = () => {
+    if (nextStep) {
+      setCurrentStep(nextStep as any);
+    }
+  };
+
   return (
     <div className="group relative">
       {children}
@@ -44,8 +52,10 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
           'absolute z-50 group-hover:block p-3 bg-white text-gray-800 text-sm rounded-lg shadow-lg max-w-xs border border-primary/20',
           positionClasses[position],
           forceShow ? 'block' : 'hidden',
+          nextStep && 'cursor-pointer hover:border-primary',
           className
         )}
+        onClick={nextStep ? handleTooltipClick : undefined}
       >
         <div className="flex items-center gap-2">
           {step && (

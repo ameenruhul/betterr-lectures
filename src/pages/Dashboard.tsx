@@ -42,33 +42,26 @@ const Dashboard = () => {
           
           <Spotlight active={isSpotlightActive('create-course')} className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <PathwayTooltip 
-                content="Start by creating a new course or lecture. This is where your teaching journey begins." 
-                position="bottom"
-                step={1}
-                forceShow={isGuidedMode}
-                className="w-72"
-              >
-                <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg font-medium">Create Better Lectures</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-blue-100 mb-4">Prepare engaging materials with AI assistance</p>
-                    <Link to="/lectures-panel">
-                      <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                        Start Creating <ArrowUpRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </PathwayTooltip>
+              <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg font-medium">Create Better Lectures</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-blue-100 mb-4">Prepare engaging materials with AI assistance</p>
+                  <Link to="/lectures-panel">
+                    <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                      Start Creating <ArrowUpRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
               
               <PathwayTooltip 
                 content="After creating your course, you'll want to develop assessments to measure student understanding."
                 position="bottom"
                 step={4}
                 className="w-72"
+                nextStep="lecture-list"
               >
                 <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
                   <CardHeader className="pb-3">
@@ -115,6 +108,7 @@ const Dashboard = () => {
                 position="top"
                 step={2}
                 className="w-72"
+                nextStep="course-details"
               >
                 <Link to="/lesson-plan">
                   <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
@@ -134,6 +128,7 @@ const Dashboard = () => {
                 position="top"
                 step={3}
                 className="w-72"
+                nextStep="upload-syllabus"
               >
                 <Link to="/lecture-prep">
                   <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
@@ -148,24 +143,17 @@ const Dashboard = () => {
                 </Link>
               </PathwayTooltip>
 
-              <PathwayTooltip 
-                content="Generate knowledge-testing questions and quizzes to assess student understanding."
-                position="top"
-                step={4}
-                className="w-72"
-              >
-                <Link to="/quiz-builder">
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
-                    <CardContent className="p-6 flex flex-col items-center text-center">
-                      <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center mb-4">
-                        <FileQuestion className="h-6 w-6 text-amber-600" />
-                      </div>
-                      <h3 className="font-medium mb-2">Quiz Builder</h3>
-                      <p className="text-sm text-muted-foreground">Generate knowledge-testing questions</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </PathwayTooltip>
+              <Link to="/quiz-builder">
+                <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                  <CardContent className="p-6 flex flex-col items-center text-center">
+                    <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+                      <FileQuestion className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <h3 className="font-medium mb-2">Quiz Builder</h3>
+                    <p className="text-sm text-muted-foreground">Generate knowledge-testing questions</p>
+                  </CardContent>
+                </Card>
+              </Link>
 
               <Link to="/assignment-generator">
                 <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
