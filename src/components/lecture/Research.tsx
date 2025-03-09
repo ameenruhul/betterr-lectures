@@ -20,7 +20,8 @@ import {
   Lightbulb,
   Bot,
   Send,
-  Brain
+  Brain,
+  Wand
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -918,7 +919,7 @@ const Research = () => {
                   }, 2000);
                 }}
               >
-                <Wand2 className="h-4 w-4 mr-2" />
+                <Wand className="h-4 w-4 mr-2" />
                 Analyze with AI
               </Button>
             </div>
