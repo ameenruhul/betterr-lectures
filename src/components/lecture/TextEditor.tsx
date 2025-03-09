@@ -36,6 +36,7 @@ interface TextEditorProps {
   setContent: (content: string) => void;
   documentTitle: string;
   setDocumentTitle: (title: string) => void;
+  onTextSelect?: (text: string) => void;
 }
 
 interface Slide {
@@ -61,6 +62,7 @@ const TextEditor = ({
   setContent,
   documentTitle,
   setDocumentTitle,
+  onTextSelect,
 }: TextEditorProps) => {
   const { toast } = useToast();
   const [documentMode, setDocumentMode] = useState<'edit' | 'preview'>('edit');
@@ -126,6 +128,10 @@ const TextEditor = ({
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = content.substring(start, end);
+    
+    if (selectedText && onTextSelect) {
+      onTextSelect(selectedText);
+    }
     
     let newText = content;
     let newPosition = end;
@@ -933,4 +939,3 @@ const TextEditor = ({
 };
 
 export default TextEditor;
-
