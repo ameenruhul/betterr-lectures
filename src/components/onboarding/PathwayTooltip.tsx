@@ -49,10 +49,10 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
       {children}
       <div
         className={cn(
-          'absolute z-50 group-hover:block p-3 bg-white text-gray-800 text-sm rounded-lg shadow-lg max-w-xs border border-primary/20',
+          'absolute z-50 p-3 bg-white text-gray-800 text-sm rounded-lg shadow-lg max-w-xs border border-primary/20',
           positionClasses[position],
-          forceShow ? 'block' : 'hidden',
-          nextStep && 'cursor-pointer hover:border-primary',
+          forceShow ? 'block' : 'group-hover:block hidden',
+          nextStep && 'cursor-pointer hover:border-primary hover:bg-primary/5',
           className
         )}
         onClick={nextStep ? handleTooltipClick : undefined}
@@ -66,7 +66,7 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
           <div className="flex-1">
             <p className="text-gray-800 leading-tight">{content}</p>
           </div>
-          {showArrow && <ArrowRight className="h-4 w-4 text-primary flex-shrink-0" />}
+          {nextStep && showArrow && <ArrowRight className="h-4 w-4 text-primary flex-shrink-0" />}
         </div>
       </div>
     </div>

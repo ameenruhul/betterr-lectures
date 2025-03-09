@@ -40,65 +40,64 @@ const Dashboard = () => {
             <OnboardingToggle />
           </div>
           
-          <Spotlight active={isSpotlightActive('create-course')} className="w-full">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+          {/* Remove the spotlight from the Teacher's Workbench area */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-medium">Create Better Lectures</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-blue-100 mb-4">Prepare engaging materials with AI assistance</p>
+                <Link to="/lectures-panel">
+                  <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                    Start Creating <ArrowUpRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+              
+            <PathwayTooltip 
+              content="After creating your course, you'll want to develop assessments to measure student understanding."
+              position="bottom"
+              step={4}
+              className="w-72"
+              nextStep="lecture-list"
+            >
+              <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg font-medium">Create Better Lectures</CardTitle>
+                  <CardTitle className="text-lg font-medium">Generate Assessments</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-blue-100 mb-4">Prepare engaging materials with AI assistance</p>
-                  <Link to="/lectures-panel">
+                  <p className="text-purple-100 mb-4">Create effective quizzes and assignments</p>
+                  <Link to="/quiz-builder">
                     <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                      Start Creating <ArrowUpRight className="h-4 w-4 ml-2" />
+                      Build Assessments <ArrowUpRight className="h-4 w-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>
               </Card>
+            </PathwayTooltip>
               
-              <PathwayTooltip 
-                content="After creating your course, you'll want to develop assessments to measure student understanding."
-                position="bottom"
-                step={4}
-                className="w-72"
-                nextStep="lecture-list"
-              >
-                <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg font-medium">Generate Assessments</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-purple-100 mb-4">Create effective quizzes and assignments</p>
-                    <Link to="/quiz-builder">
-                      <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                        Build Assessments <ArrowUpRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </PathwayTooltip>
-              
-              <PathwayTooltip 
-                content="Enhance your teaching content with research and scholarly resources to provide depth."
-                position="bottom"
-                className="w-72"
-              >
-                <Card className="bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg font-medium">Research Assistant</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-amber-100 mb-4">Find resources and generate insights with AI</p>
-                    <Link to="/research">
-                      <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                        Research Topics <ArrowUpRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </PathwayTooltip>
-            </div>
-          </Spotlight>
+            <PathwayTooltip 
+              content="Enhance your teaching content with research and scholarly resources to provide depth."
+              position="bottom"
+              className="w-72"
+            >
+              <Card className="bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg font-medium">Research Assistant</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-amber-100 mb-4">Find resources and generate insights with AI</p>
+                  <Link to="/research">
+                    <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                      Research Topics <ArrowUpRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </PathwayTooltip>
+          </div>
 
           <h2 className="text-xl font-semibold mt-8 mb-4">Teaching Enhancement Tools</h2>
           <Spotlight active={isSpotlightActive('course-details')} className="w-full">

@@ -10,8 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import PathwayTooltip from "./onboarding/PathwayTooltip";
+import { useOnboarding } from "@/contexts/OnboardingContext";
 
 export const DashboardHeader = () => {
+  const { isGuidedMode, currentStep } = useOnboarding();
+
   return (
     <div className="border-b bg-white py-4">
       <div className="flex items-center justify-between px-6">
@@ -41,10 +45,19 @@ export const DashboardHeader = () => {
             />
           </div>
           <Link to="/courses/create" className="hidden md:flex">
-            <Button className="items-center gap-2">
-              <Plus className="h-4 w-4" />
-              New Course
-            </Button>
+            <PathwayTooltip 
+              content="Begin your teaching journey by creating a new course. This is the first step in the pathway."
+              position="bottom"
+              step={1}
+              className="w-72"
+              nextStep="create-course"
+              forceShow={currentStep === 'dashboard' && isGuidedMode}
+            >
+              <Button className="items-center gap-2">
+                <Plus className="h-4 w-4" />
+                New Course
+              </Button>
+            </PathwayTooltip>
           </Link>
           
           {/* Hamburger Menu Dropdown */}
@@ -96,10 +109,19 @@ export const DashboardHeader = () => {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="md:hidden">
-                <Link to="/courses/create" className="flex items-center w-full">
-                  <Plus className="mr-2 h-4 w-4" />
-                  <span>New Course</span>
-                </Link>
+                <PathwayTooltip 
+                  content="Begin your teaching journey by creating a new course. This is the first step in the pathway."
+                  position="right"
+                  step={1}
+                  className="w-72"
+                  nextStep="create-course"
+                  forceShow={currentStep === 'dashboard' && isGuidedMode}
+                >
+                  <Link to="/courses/create" className="flex items-center w-full">
+                    <Plus className="mr-2 h-4 w-4" />
+                    <span>New Course</span>
+                  </Link>
+                </PathwayTooltip>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
