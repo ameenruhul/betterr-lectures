@@ -1,32 +1,24 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from "@/components/DashboardHeader";
-import { Brain, BookOpen, GraduationCap, Bell, LineChart, Clock, ArrowUpRight, Lightbulb, ChevronRight } from "lucide-react";
+import { 
+  Brain, 
+  BookOpen, 
+  FileQuestion, 
+  PencilLine, 
+  FileText, 
+  Sparkles, 
+  Microscope, 
+  ClipboardList,
+  Lightbulb,
+  Presentation,
+  ArrowUpRight
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import OnboardingToggle from "@/components/onboarding/OnboardingToggle";
 import DashboardGuide from "@/components/onboarding/DashboardGuide";
-
-// Sample data for the chart
-const data = [
-  { name: 'Mon', students: 10 },
-  { name: 'Tue', students: 15 },
-  { name: 'Wed', students: 12 },
-  { name: 'Thu', students: 18 },
-  { name: 'Fri', students: 20 },
-  { name: 'Sat', students: 8 },
-  { name: 'Sun', students: 5 },
-];
-
-// Sample data for pie chart
-const courseData = [
-  { name: 'Computer Science', value: 45 },
-  { name: 'Mathematics', value: 30 },
-  { name: 'Physics', value: 25 },
-];
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
 const Dashboard = () => {
   return (
@@ -37,7 +29,7 @@ const Dashboard = () => {
         
         <div className="p-6 space-y-6 overflow-auto">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <h1 className="text-2xl font-bold">Teacher's Workbench</h1>
             <OnboardingToggle />
           </div>
           
@@ -45,13 +37,13 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-medium">Create Lecture</CardTitle>
+                <CardTitle className="text-lg font-medium">Create Better Lectures</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-blue-100 mb-4">Quickly prepare materials for your next class</p>
+                <p className="text-blue-100 mb-4">Prepare engaging materials with AI assistance</p>
                 <Link to="/lecture-prep">
                   <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                    Get Started <ChevronRight className="h-4 w-4 ml-2" />
+                    Start Creating <ArrowUpRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
               </CardContent>
@@ -59,13 +51,13 @@ const Dashboard = () => {
             
             <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-medium">Build Quiz</CardTitle>
+                <CardTitle className="text-lg font-medium">Generate Assessments</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-100 mb-4">Generate engaging quizzes for student assessment</p>
+                <p className="text-purple-100 mb-4">Create effective quizzes and assignments</p>
                 <Link to="/quiz-builder">
                   <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                    Create Quiz <ChevronRight className="h-4 w-4 ml-2" />
+                    Build Assessments <ArrowUpRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
               </CardContent>
@@ -79,277 +71,194 @@ const Dashboard = () => {
                 <p className="text-amber-100 mb-4">Find resources and generate insights with AI</p>
                 <Link to="/research">
                   <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-                    Start Research <ChevronRight className="h-4 w-4 ml-2" />
+                    Research Topics <ArrowUpRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
               </CardContent>
             </Card>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="hover:shadow-md transition-shadow border-none">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Courses</CardTitle>
-                <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <BookOpen className="h-4 w-4 text-blue-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">12</div>
-                <div className="flex items-center mt-1">
-                  <span className="text-xs text-green-500 flex items-center">
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    +2 this month
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Teaching Tools */}
+          <h2 className="text-xl font-semibold mt-8 mb-4">Teaching Enhancement Tools</h2>
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+            <Link to="/lesson-plan">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <BookOpen className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Lesson Planning</h3>
+                  <p className="text-sm text-muted-foreground">Structure engaging lessons with clear learning objectives</p>
+                </CardContent>
+              </Card>
+            </Link>
 
-            <Card className="hover:shadow-md transition-shadow border-none">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Students</CardTitle>
-                <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
-                  <GraduationCap className="h-4 w-4 text-purple-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">245</div>
-                <div className="flex items-center mt-1">
-                  <span className="text-xs text-green-500 flex items-center">
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    +18 this week
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+            <Link to="/lecture-prep">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Presentation className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Lecture Preparation</h3>
+                  <p className="text-sm text-muted-foreground">Create compelling slides and lecture materials</p>
+                </CardContent>
+              </Card>
+            </Link>
 
-            <Card className="hover:shadow-md transition-shadow border-none">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">AI Assists</CardTitle>
-                <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center">
-                  <Brain className="h-4 w-4 text-amber-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">24</div>
-                <div className="flex items-center mt-1">
-                  <span className="text-xs text-green-500 flex items-center">
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    +5 today
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+            <Link to="/quiz-builder">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+                    <FileQuestion className="h-6 w-6 text-amber-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Quiz Builder</h3>
+                  <p className="text-sm text-muted-foreground">Generate knowledge-testing questions</p>
+                </CardContent>
+              </Card>
+            </Link>
 
-            <Card className="hover:shadow-md transition-shadow border-none">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Updates</CardTitle>
-                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                  <Bell className="h-4 w-4 text-green-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">8</div>
-                <div className="flex items-center mt-1">
-                  <span className="text-xs text-green-500 flex items-center">
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    +3 yesterday
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+            <Link to="/assignment-generator">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <ClipboardList className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Assignment Generator</h3>
+                  <p className="text-sm text-muted-foreground">Create meaningful homework and projects</p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
 
-          <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
-            {/* Charts Section */}
-            <Card className="border-none lg:col-span-2">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Student Engagement</CardTitle>
-                    <CardDescription>Weekly student participation across courses</CardDescription>
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+            <Link to="/quiz-solver">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
+                    <Brain className="h-6 w-6 text-indigo-600" />
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <LineChart className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Last 7 days</span>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
-                      data={data}
-                      margin={{
-                        top: 10,
-                        right: 30,
-                        left: 0,
-                        bottom: 0,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                      <YAxis axisLine={false} tickLine={false} />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="students" stroke="#2563eb" fill="#dbeafe" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
+                  <h3 className="font-medium mb-2">Quiz Solver</h3>
+                  <p className="text-sm text-muted-foreground">Test solutions and understand potential responses</p>
+                </CardContent>
+              </Card>
+            </Link>
 
-            {/* Subject Distribution */}
-            <Card className="border-none">
-              <CardHeader>
-                <CardTitle>Subject Distribution</CardTitle>
-                <CardDescription>Active courses by department</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px] flex items-center justify-center">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={courseData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      >
-                        {courseData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
+            <Link to="/research">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-teal-100 flex items-center justify-center mb-4">
+                    <Microscope className="h-6 w-6 text-teal-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Research Assistant</h3>
+                  <p className="text-sm text-muted-foreground">Discover resources and insights for lectures</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/study-guide">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                    <FileText className="h-6 w-6 text-red-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Study Guide Creator</h3>
+                  <p className="text-sm text-muted-foreground">Build comprehensive guides for student success</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/assignment-solver">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
+                <CardContent className="p-6 flex flex-col items-center text-center">
+                  <div className="h-12 w-12 rounded-full bg-pink-100 flex items-center justify-center mb-4">
+                    <PencilLine className="h-6 w-6 text-pink-600" />
+                  </div>
+                  <h3 className="font-medium mb-2">Assignment Solver</h3>
+                  <p className="text-sm text-muted-foreground">Understand expected answers and solving approaches</p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
 
-          {/* Tabs Section */}
-          <Card className="border-none">
+          {/* Teaching Tips Section */}
+          <Card className="border-none mt-6">
             <CardHeader>
-              <Tabs defaultValue="activity">
-                <TabsList>
-                  <TabsTrigger value="activity">Recent Activity</TabsTrigger>
-                  <TabsTrigger value="tasks">Upcoming Tasks</TabsTrigger>
-                  <TabsTrigger value="tips">Teaching Tips</TabsTrigger>
-                </TabsList>
-              </Tabs>
+              <CardTitle className="flex items-center">
+                <Lightbulb className="mr-2 h-5 w-5 text-amber-500" />
+                Teaching Excellence Tips
+              </CardTitle>
+              <CardDescription>Latest insights to improve your teaching effectiveness</CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="activity">
-                <TabsContent value="activity" className="space-y-4 m-0">
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Brain className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Generated new quiz for CS101</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>2 hours ago</span>
-                      </div>
-                    </div>
+              <div className="space-y-4">
+                <div className="bg-amber-50 border border-amber-100 rounded-lg p-4">
+                  <h3 className="font-medium text-amber-800 mb-2">Active Learning Strategies</h3>
+                  <p className="text-amber-700 text-sm">Increase student engagement by incorporating think-pair-share activities, quick polls, and problem-solving exercises throughout your lectures.</p>
+                </div>
+                
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                  <h3 className="font-medium text-blue-800 mb-2">Visual Learning Enhancement</h3>
+                  <p className="text-blue-700 text-sm">Use diagrams, charts, and visual metaphors to increase retention. The brain processes visual information 60,000 times faster than text.</p>
+                </div>
+                
+                <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+                  <h3 className="font-medium text-green-800 mb-2">Effective Questioning Techniques</h3>
+                  <p className="text-green-700 text-sm">Use a mix of recall, application, and analysis questions. Begin lectures with engaging "essential questions" that spark curiosity.</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Getting Started */}
+          <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-none mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Sparkles className="mr-2 h-5 w-5 text-primary" />
+                Getting Started
+              </CardTitle>
+              <CardDescription>Quick steps to become a better educator</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="bg-white h-8 w-8 rounded-full shadow-sm flex items-center justify-center text-primary font-medium mr-4">1</div>
+                  <div>
+                    <h3 className="font-medium mb-1">Create your first lecture plan</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Start by organizing your lecture content with clear learning objectives.</p>
+                    <Link to="/lesson-plan">
+                      <Button variant="outline" size="sm">
+                        Create Lesson Plan
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <BookOpen className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Updated course materials for MATH202</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>5 hours ago</span>
-                      </div>
-                    </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-white h-8 w-8 rounded-full shadow-sm flex items-center justify-center text-primary font-medium mr-4">2</div>
+                  <div>
+                    <h3 className="font-medium mb-1">Generate engaging assessment materials</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Build quizzes that test understanding, not just memorization.</p>
+                    <Link to="/quiz-builder">
+                      <Button variant="outline" size="sm">
+                        Create Quiz
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <GraduationCap className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Added 5 new students to PHYS101</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>Yesterday</span>
-                      </div>
-                    </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-white h-8 w-8 rounded-full shadow-sm flex items-center justify-center text-primary font-medium mr-4">3</div>
+                  <div>
+                    <h3 className="font-medium mb-1">Research and enhance your content</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Find the latest research and resources to support your teaching.</p>
+                    <Link to="/research">
+                      <Button variant="outline" size="sm">
+                        Start Researching
+                      </Button>
+                    </Link>
                   </div>
-                </TabsContent>
-                <TabsContent value="tasks" className="space-y-4 m-0">
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
-                      <Brain className="h-4 w-4 text-amber-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Review AI-generated lecture notes</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>Due in 2 days</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <GraduationCap className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Grade midterm submissions</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>Due in 4 days</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                      <BookOpen className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Prepare materials for next week</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>Due in 5 days</span>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-                <TabsContent value="tips" className="space-y-4 m-0">
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                      <Lightbulb className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Use visual aids to enhance student comprehension</p>
-                      <p className="text-sm text-muted-foreground">Students retain information better when visual elements are included</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
-                      <Lightbulb className="h-4 w-4 text-purple-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Incorporate interactive elements</p>
-                      <p className="text-sm text-muted-foreground">Engagement increases when students participate actively</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
-                      <Lightbulb className="h-4 w-4 text-amber-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-medium">Use AI to personalize learning experiences</p>
-                      <p className="text-sm text-muted-foreground">Better Lectures AI can help create custom content for different learning styles</p>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
