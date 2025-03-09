@@ -15,7 +15,8 @@ import {
   ChevronUp,
   Library,
   PanelLeft,
-  LayoutDashboard
+  LayoutDashboard,
+  GripVertical
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -97,21 +98,26 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
     <div className="h-full flex flex-col bg-gray-50/60 overflow-hidden">
       {/* Header section with brand and navigation links */}
       <div className="p-4 border-b bg-white">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 pl-1">
+            <Library className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-bold text-gray-800">Better Lectures</h2>
+          </div>
+          <div className="flex items-center">
+            <GripVertical className="h-4 w-4 text-gray-400 cursor-move drag-handle" />
+          </div>
+        </div>
+        
         {/* Dashboard Button */}
         <Button 
-          variant="ghost" 
+          variant="outline" 
           size="sm" 
           onClick={handleBackToDashboard} 
-          className="flex items-center w-full text-gray-700 hover:text-primary transition-colors -ml-2 mb-2 group"
+          className="flex items-center w-full text-gray-700 hover:text-primary transition-colors mb-1 group"
         >
           <LayoutDashboard className="h-4 w-4 mr-2 text-primary group-hover:translate-x-[-2px] transition-transform" />
           <span className="font-medium">Dashboard</span>
         </Button>
-        
-        <div className="flex items-center gap-2 pl-1">
-          <Library className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-bold text-gray-800">Better Lectures</h2>
-        </div>
       </div>
 
       {/* Content Uploader Section */}

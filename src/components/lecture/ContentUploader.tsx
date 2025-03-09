@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Upload } from "lucide-react";
+import { ChevronLeft, Upload, GripVertical } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +20,7 @@ const ContentUploader = ({
 }: ContentUploaderProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -42,17 +43,31 @@ const ContentUploader = ({
     });
   };
 
+  const handleBackToLectures = () => {
+    if (courseId) {
+      navigate(`/courses/${courseId}/lectures`);
+    } else {
+      onBackClick();
+    }
+  };
+
   return (
     <div className="p-4 border-b">
-      <Button 
-        variant="ghost" 
-        size="sm" 
-        onClick={onBackClick} 
-        className="mb-4 text-gray-600 hover:text-gray-900 -ml-2 group transition-colors"
-      >
-        <ChevronLeft className="h-4 w-4 mr-2 group-hover:translate-x-[-2px] transition-transform" />
-        {lectureId ? "Back to Lectures" : "Back to Courses"}
-      </Button>
+      <div className="flex items-center justify-between mb-4">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={handleBackToLectures} 
+          className="text-gray-600 hover:text-gray-900 -ml-2 group transition-colors"
+        >
+          <ChevronLeft className="h-4 w-4 mr-2 group-hover:translate-x-[-2px] transition-transform" />
+          {lectureId ? "Back to Lectures" : "Back to Courses"}
+        </Button>
+        
+        <div className="flex items-center">
+          <GripVertical className="h-4 w-4 text-gray-400 cursor-move drag-handle" />
+        </div>
+      </div>
       
       {lectureId && (
         <div className="mb-4">
