@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -52,7 +53,7 @@ const LecturesPanel = () => {
   const handleSave = () => {
     toast({
       title: "Document saved",
-      description: "Your document has been saved successfully",
+      description: "Your teaching materials have been saved successfully",
       duration: 3000,
     });
   };
@@ -144,7 +145,7 @@ const LecturesPanel = () => {
               >
                 <div className="h-full flex flex-col overflow-hidden">
                   <PathwayTooltip 
-                    content="This is your content editor. Create your lecture materials here before using the AI assistant."
+                    content="Create your lecture materials, lesson plans, and class activities here."
                     position="bottom"
                     step={5}
                     className="w-72"
@@ -171,7 +172,7 @@ const LecturesPanel = () => {
               >
                 <div ref={aiAssistantRef}>
                   <PathwayTooltip 
-                    content="Use the AI assistant to generate content, get suggestions, and enhance your lecture materials."
+                    content="Get AI suggestions for your lesson plans, quiz questions, and teaching activities."
                     position="left"
                     step={6}
                     className="w-72"

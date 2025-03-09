@@ -7,17 +7,16 @@ import { useToast } from "@/hooks/use-toast";
 import {
   ChevronLeft,
   Plus,
-  Play,
-  BookOpen,
   FileText,
-  Video,
   Presentation,
   FolderOpen,
   Search,
   X,
   Folder,
   Grid2X2,
-  List
+  List,
+  Pencil,
+  GraduationCap
 } from "lucide-react";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import CoachMark from "@/components/onboarding/CoachMark";
@@ -32,34 +31,34 @@ const MOCK_MODULES = [
     id: 1,
     title: "Module 1: Introduction",
     lectures: [
-      { id: 1, title: "Introduction to the Course", type: "video", duration: "10:15" },
-      { id: 2, title: "Key Concepts and Terminology", type: "document", duration: "15 pages" }
+      { id: 1, title: "Introduction to the Course", type: "document", duration: "45 mins" },
+      { id: 2, title: "Key Concepts and Terminology", type: "document", duration: "45 mins" }
     ]
   },
   {
     id: 2,
     title: "Module 2: Core Principles",
     lectures: [
-      { id: 3, title: "Practical Application - Part 1", type: "video", duration: "25:40" },
-      { id: 4, title: "Understanding Core Principles", type: "presentation", duration: "20 slides" },
-      { id: 5, title: "Case Study Analysis", type: "document", duration: "12 pages" }
+      { id: 3, title: "Practical Application - Part 1", type: "presentation", duration: "45 mins" },
+      { id: 4, title: "Understanding Core Principles", type: "presentation", duration: "45 mins" },
+      { id: 5, title: "Case Study Analysis", type: "document", duration: "45 mins" }
     ]
   },
   {
     id: 3,
     title: "Module 3: Advanced Topics",
     lectures: [
-      { id: 6, title: "Advanced Techniques", type: "video", duration: "18:30" },
-      { id: 7, title: "Group Discussion Topics", type: "document", duration: "5 pages" }
+      { id: 6, title: "Advanced Techniques", type: "presentation", duration: "45 mins" },
+      { id: 7, title: "Group Discussion Topics", type: "document", duration: "45 mins" }
     ]
   },
   {
     id: 4,
     title: "Module 4: Final Review",
     lectures: [
-      { id: 8, title: "Final Review and Summary", type: "presentation", duration: "15 slides" },
-      { id: 9, title: "Examination Preparation", type: "video", duration: "30:00" },
-      { id: 10, title: "Course Conclusion", type: "video", duration: "5:45" }
+      { id: 8, title: "Final Review and Summary", type: "presentation", duration: "45 mins" },
+      { id: 9, title: "Examination Preparation", type: "document", duration: "45 mins" },
+      { id: 10, title: "Course Conclusion", type: "document", duration: "45 mins" }
     ]
   }
 ];
@@ -161,7 +160,7 @@ const LecturesList = () => {
             
             <div className="flex items-center gap-2">
               <PathwayTooltip 
-                content="Now add your first lecture to the course. This is where you'll upload your materials or create new content."
+                content="Add a new lecture to organize your teaching materials, quizzes, and class plans."
                 position="bottom"
                 step={3}
                 className="w-72"
@@ -193,8 +192,8 @@ const LecturesList = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Course Workspace</h1>
-          <p className="text-gray-600">Organize your course content into modules and lectures</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Teacher Workspace</h1>
+          <p className="text-gray-600">Organize your teaching materials, class plans, and assessments</p>
         </div>
 
         <div className="flex items-center justify-between mb-6">
@@ -309,7 +308,7 @@ const LecturesList = () => {
                         {module.lectures.map((lecture, index) => (
                           <div key={lecture.id} ref={index === 0 && module.id === 1 ? firstLectureRef : undefined}>
                             <PathwayTooltip 
-                              content="Select a lecture to open it in the editor. This is where you'll create your content."
+                              content="Edit your lecture to create materials, quizzes, and class plans for your students."
                               position="right"
                               step={4}
                               className="w-72"
@@ -329,8 +328,8 @@ const LecturesList = () => {
                             
                             {isFirstTime && currentStep === 'lecture-list' && index === 0 && module.id === 1 && (
                               <CoachMark
-                                title="Explore Your Lectures"
-                                description="Click on a lecture to open it in the editor. From there, you can create and organize content."
+                                title="Prepare Your Lectures"
+                                description="Click on a lecture to open the editor where you can create lesson plans, quizzes, and teaching materials."
                                 position="right"
                                 onNext={() => nextStep()}
                                 onSkip={skipOnboarding}
