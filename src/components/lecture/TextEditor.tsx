@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -19,6 +18,27 @@ const TextEditor = ({
   documentTitle,
   setDocumentTitle,
 }: TextEditorProps) => {
+  // Store individual slide contents when editing in slides view
+  const [slideContents, setSlideContents] = useState<string[]>(() => 
+    content ? content.split('\n\n') : [""]
+  );
+
+  // Update the main content when individual slides are edited
+  const handleSlideContentChange = (index: number, newContent: string) => {
+    const newSlideContents = [...slideContents];
+    newSlideContents[index] = newContent;
+    setSlideContents(newSlideContents);
+    
+    // Synchronize with the main content
+    setContent(newSlideContents.join('\n\n'));
+  };
+
+  // Keep slides in sync when document content changes
+  React.useEffect(() => {
+    const newSlideContents = content ? content.split('\n\n') : [""];
+    setSlideContents(newSlideContents);
+  }, [content]);
+
   return (
     <div className="flex-1 p-6 bg-gray-50 overflow-auto">
       <Tabs defaultValue="document" className="w-full">
@@ -60,30 +80,39 @@ const TextEditor = ({
         
         <TabsContent value="slides" className="mt-0">
           <div className="max-w-[850px] mx-auto">
-            {/* Convert content to slides */}
-            {content.split('\n\n').map((slideContent, index) => (
-              <Card key={index} className="mb-8 aspect-[16/9] shadow-md overflow-hidden">
-                <div className="h-full p-8 flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
-                  <div className="text-center w-full">
-                    {slideContent.split('\n').map((line, lineIndex) => {
-                      // Make first line of each slide a heading
-                      if (lineIndex === 0 && line.trim()) {
-                        return <h2 key={lineIndex} className="text-2xl font-bold mb-4">{line}</h2>;
-                      }
-                      return <p key={lineIndex} className="mb-2">{line}</p>;
-                    })}
+            {slideContents.length > 0 ? (
+              slideContents.map((slideContent, index) => (
+                <Card key={index} className="mb-8 aspect-[16/9] shadow-md overflow-hidden">
+                  <div className="h-full p-8 flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
+                    <Textarea
+                      className="w-full h-full resize-none border-none focus:outline-none focus:ring-0 bg-transparent text-center"
+                      placeholder="Edit this slide..."
+                      value={slideContent}
+                      onChange={(e) => handleSlideContentChange(index, e.target.value)}
+                    />
                   </div>
-                </div>
-              </Card>
-            ))}
-            
-            {content.trim() === '' && (
+                </Card>
+              ))
+            ) : (
               <Card className="aspect-[16/9] shadow-md overflow-hidden bg-white">
                 <div className="h-full p-8 flex items-center justify-center">
                   <p className="text-gray-400">Your slides will appear here</p>
                 </div>
               </Card>
             )}
+            
+            <div className="mt-4 flex justify-center">
+              <button 
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                onClick={() => {
+                  const newSlideContents = [...slideContents, "New slide"];
+                  setSlideContents(newSlideContents);
+                  setContent(newSlideContents.join('\n\n'));
+                }}
+              >
+                Add Slide
+              </button>
+            </div>
           </div>
         </TabsContent>
       </Tabs>
