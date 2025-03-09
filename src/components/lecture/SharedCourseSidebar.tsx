@@ -16,7 +16,8 @@ import {
   ChevronUp,
   Library,
   PanelLeft,
-  Home
+  Home,
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -122,16 +123,17 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
 
   return (
     <div className="h-full flex flex-col bg-gray-50/60 overflow-hidden">
-      {/* Header section with brand and back button */}
+      {/* Header section with brand and navigation links */}
       <div className="p-4 border-b bg-white">
+        {/* Dashboard Button */}
         <Button 
           variant="ghost" 
           size="sm" 
-          onClick={handleBackToLectures} 
+          onClick={() => navigate('/dashboard')} 
           className="flex items-center w-full text-gray-700 hover:text-primary transition-colors -ml-2 mb-2 group"
         >
-          <Home className="h-4 w-4 mr-2 text-primary group-hover:translate-x-[-2px] transition-transform" />
-          <span className="font-medium">Back to Dashboard</span>
+          <LayoutDashboard className="h-4 w-4 mr-2 text-primary group-hover:translate-x-[-2px] transition-transform" />
+          <span className="font-medium">Dashboard</span>
         </Button>
         
         <div className="flex items-center gap-2 pl-1">
