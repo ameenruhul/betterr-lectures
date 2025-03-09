@@ -43,8 +43,11 @@ const Dashboard = () => {
           <Spotlight active={isSpotlightActive('create-course')} className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <PathwayTooltip 
-                content="Step 1: Start by creating a new course or lecture" 
+                content="Start by creating a new course or lecture. This is where your teaching journey begins." 
                 position="bottom"
+                step={1}
+                forceShow={isGuidedMode}
+                className="w-72"
               >
                 <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
                   <CardHeader className="pb-3">
@@ -62,8 +65,10 @@ const Dashboard = () => {
               </PathwayTooltip>
               
               <PathwayTooltip 
-                content="Create assessments to test student understanding"
+                content="After creating your course, you'll want to develop assessments to measure student understanding."
                 position="bottom"
+                step={4}
+                className="w-72"
               >
                 <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
                   <CardHeader className="pb-3">
@@ -81,8 +86,9 @@ const Dashboard = () => {
               </PathwayTooltip>
               
               <PathwayTooltip 
-                content="Find research to enhance your teaching content"
+                content="Enhance your teaching content with research and scholarly resources to provide depth."
                 position="bottom"
+                className="w-72"
               >
                 <Card className="bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
                   <CardHeader className="pb-3">
@@ -105,8 +111,10 @@ const Dashboard = () => {
           <Spotlight active={isSpotlightActive('course-details')} className="w-full">
             <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               <PathwayTooltip 
-                content="Step 2: Create a lesson plan for your course"
+                content="Create a detailed lesson plan for your course with clear objectives and activities."
                 position="top"
+                step={2}
+                className="w-72"
               >
                 <Link to="/lesson-plan">
                   <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
@@ -122,8 +130,10 @@ const Dashboard = () => {
               </PathwayTooltip>
 
               <PathwayTooltip 
-                content="Step 3: Prepare your lecture materials"
+                content="Develop your lecture materials, slides, and presentations for effective delivery."
                 position="top"
+                step={3}
+                className="w-72"
               >
                 <Link to="/lecture-prep">
                   <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
@@ -139,8 +149,10 @@ const Dashboard = () => {
               </PathwayTooltip>
 
               <PathwayTooltip 
-                content="Step 4: Create assessments for your students"
+                content="Generate knowledge-testing questions and quizzes to assess student understanding."
                 position="top"
+                step={4}
+                className="w-72"
               >
                 <Link to="/quiz-builder">
                   <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">
@@ -194,8 +206,10 @@ const Dashboard = () => {
               </Link>
 
               <PathwayTooltip 
-                content="Step 5: Create comprehensive study materials"
+                content="Create comprehensive study materials to help students review and master the content."
                 position="bottom"
+                step={5}
+                className="w-72"
               >
                 <Link to="/study-guide">
                   <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-none">

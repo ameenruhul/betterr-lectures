@@ -10,6 +10,8 @@ interface PathwayTooltipProps {
   position?: 'top' | 'right' | 'bottom' | 'left';
   className?: string;
   showArrow?: boolean;
+  step?: number;
+  forceShow?: boolean;
 }
 
 const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
@@ -17,11 +19,13 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
   content,
   position = 'top',
   className,
-  showArrow = true
+  showArrow = true,
+  step,
+  forceShow = false
 }) => {
   const { isGuidedMode } = useOnboarding();
 
-  if (!isGuidedMode) {
+  if (!isGuidedMode && !forceShow) {
     return <>{children}</>;
   }
 
@@ -37,14 +41,22 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
       {children}
       <div
         className={cn(
-          'absolute z-50 hidden group-hover:block p-2 bg-white text-gray-800 text-xs rounded shadow-md max-w-xs border border-gray-200',
+          'absolute z-50 group-hover:block p-3 bg-white text-gray-800 text-sm rounded-lg shadow-lg max-w-xs border border-primary/20',
           positionClasses[position],
+          forceShow ? 'block' : 'hidden',
           className
         )}
       >
-        <div className="flex items-center gap-1">
-          {content}
-          {showArrow && <ArrowRight className="h-3 w-3 text-primary" />}
+        <div className="flex items-center gap-2">
+          {step && (
+            <div className="flex-shrink-0 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">
+              {step}
+            </div>
+          )}
+          <div className="flex-1">
+            <p className="text-gray-800 leading-tight">{content}</p>
+          </div>
+          {showArrow && <ArrowRight className="h-4 w-4 text-primary flex-shrink-0" />}
         </div>
       </div>
     </div>
