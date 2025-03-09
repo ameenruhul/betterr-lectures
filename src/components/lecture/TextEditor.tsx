@@ -25,7 +25,9 @@ import {
   MoveDown,
   Layout,
   PenTool,
-  Palette
+  Palette,
+  Sparkles,
+  Wand2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -43,6 +45,16 @@ interface Slide {
   notes: string;
   background: string;
 }
+
+type AIOperation = 
+  | 'improve-writing'
+  | 'summarize'
+  | 'expand'
+  | 'fix-grammar'
+  | 'generate-title'
+  | 'improve-slide'
+  | 'suggest-layout'
+  | 'create-speaking-points';
 
 const TextEditor = ({
   content,
@@ -78,6 +90,10 @@ const TextEditor = ({
   });
   
   const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+  
+  const [activeAIOperation, setActiveAIOperation] = useState<AIOperation | null>(null);
+  const [selectedText, setSelectedText] = useState("");
+  const [isAIProcessing, setIsAIProcessing] = useState(false);
   
   useEffect(() => {
     const newContent = slides.map(slide => slide.content).join('\n\n');
@@ -321,6 +337,166 @@ const TextEditor = ({
     });
   };
 
+  const handleAIAssistance = (operation: AIOperation) => {
+    if (documentEditorRef.current) {
+      const textarea = documentEditorRef.current;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      
+      const selected = content.substring(start, end);
+      
+      if (operation !== 'generate-title' && !selected) {
+        toast({
+          title: "No text selected",
+          description: "Please select some text to apply AI assistance",
+          duration: 2000,
+        });
+        return;
+      }
+      
+      setSelectedText(selected);
+      setActiveAIOperation(operation);
+      setIsAIProcessing(true);
+      
+      setTimeout(() => {
+        let result = "";
+        
+        switch (operation) {
+          case 'improve-writing':
+            result = improveText(selected);
+            break;
+          case 'summarize':
+            result = summarizeText(selected);
+            break;
+          case 'expand':
+            result = expandText(selected);
+            break;
+          case 'fix-grammar':
+            result = fixGrammar(selected);
+            break;
+          case 'generate-title':
+            const newTitle = generateTitle(content.substring(0, 500));
+            setDocumentTitle(newTitle);
+            toast({
+              title: "Title generated",
+              description: "Document title has been updated",
+              duration: 2000,
+            });
+            setIsAIProcessing(false);
+            setActiveAIOperation(null);
+            return;
+        }
+        
+        const newContent = content.substring(0, start) + result + content.substring(end);
+        setContent(newContent);
+        
+        toast({
+          title: "AI assistance applied",
+          description: "Content has been updated with AI suggestions",
+          duration: 2000,
+        });
+        
+        setIsAIProcessing(false);
+        setActiveAIOperation(null);
+      }, 1500);
+    }
+  };
+  
+  const handleSlideAIAssistance = (operation: AIOperation) => {
+    setActiveAIOperation(operation);
+    setIsAIProcessing(true);
+    
+    setTimeout(() => {
+      const currentSlide = slides[selectedSlideIndex];
+      let result = "";
+      
+      switch (operation) {
+        case 'improve-slide':
+          result = improveSlideContent(currentSlide.content);
+          break;
+        case 'suggest-layout':
+          const suggestedLayout = suggestSlideLayout(currentSlide.content);
+          updateSlideLayout(selectedSlideIndex, suggestedLayout as Slide['layout']);
+          toast({
+            title: "Layout suggestion applied",
+            description: `Slide layout changed to ${suggestedLayout}`,
+            duration: 2000,
+          });
+          setIsAIProcessing(false);
+          setActiveAIOperation(null);
+          return;
+        case 'create-speaking-points':
+          result = generateSpeakingPoints(currentSlide.content);
+          updateSlideNotes(selectedSlideIndex, result);
+          toast({
+            title: "Speaking points generated",
+            description: "Speaker notes have been updated",
+            duration: 2000,
+          });
+          setIsAIProcessing(false);
+          setActiveAIOperation(null);
+          return;
+      }
+      
+      updateSlideContent(selectedSlideIndex, result);
+      
+      toast({
+        title: "AI assistance applied",
+        description: "Slide content has been updated with AI suggestions",
+        duration: 2000,
+      });
+      
+      setIsAIProcessing(false);
+      setActiveAIOperation(null);
+    }, 1500);
+  };
+  
+  const improveText = (text: string) => {
+    return text.length > 0 
+      ? `${text} [improved with clearer language and better flow]` 
+      : text;
+  };
+  
+  const summarizeText = (text: string) => {
+    return text.length > 0 
+      ? `Summary: ${text.split(' ').slice(0, 10).join(' ')}...` 
+      : text;
+  };
+  
+  const expandText = (text: string) => {
+    return text.length > 0 
+      ? `${text} [expanded with additional details and explanations to provide more context and depth to the original content]` 
+      : text;
+  };
+  
+  const fixGrammar = (text: string) => {
+    return text.replace(/\bi\b/g, "I").replace(/\s{2,}/g, " ").trim();
+  };
+  
+  const generateTitle = (text: string) => {
+    const words = text.split(' ').filter(word => word.length > 3);
+    const randomWord = words[Math.floor(Math.random() * words.length)] || "Document";
+    return `${randomWord} - ${new Date().toLocaleDateString()}`;
+  };
+  
+  const improveSlideContent = (text: string) => {
+    return text.length > 0 
+      ? `${text} [enhanced with clearer bullet points and improved slide structure]` 
+      : text;
+  };
+  
+  const suggestSlideLayout = (text: string) => {
+    if (text.toLowerCase().includes("title") || text.length < 20) return "title";
+    if (text.toLowerCase().includes("image") || text.includes("![")) return "image";
+    if (text.length > 200) return "two-column";
+    return "content";
+  };
+  
+  const generateSpeakingPoints = (text: string) => {
+    const lines = text.split('\n').filter(line => line.trim().length > 0);
+    return lines.map(line => `• Elaborate on "${line.trim()}"`).join('\n\n');
+  };
+
   return (
     <div className="flex-1 p-6 bg-gray-50 overflow-auto">
       <Tabs defaultValue="document" className="w-full">
@@ -473,17 +649,97 @@ const TextEditor = ({
               
               <div className="flex-1"></div>
               
+              <div className="flex items-center border-l border-gray-200 pl-2">
+                <div className="flex items-center gap-1">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleAIAssistance('improve-writing')}
+                    disabled={isAIProcessing}
+                    className="flex items-center gap-1"
+                  >
+                    <Wand2 className="h-3.5 w-3.5 text-primary" />
+                    <span>Improve</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleAIAssistance('summarize')}
+                    disabled={isAIProcessing}
+                    className="flex items-center gap-1"
+                  >
+                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    <span>Summarize</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleAIAssistance('expand')}
+                    disabled={isAIProcessing}
+                    className="flex items-center gap-1"
+                  >
+                    <Plus className="h-3.5 w-3.5 text-primary" />
+                    <span>Expand</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleAIAssistance('fix-grammar')}
+                    disabled={isAIProcessing}
+                    className="flex items-center gap-1"
+                  >
+                    <Type className="h-3.5 w-3.5 text-primary" />
+                    <span>Fix Grammar</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleAIAssistance('generate-title')}
+                    disabled={isAIProcessing}
+                    className="flex items-center gap-1"
+                  >
+                    <FileText className="h-3.5 w-3.5 text-primary" />
+                    <span>Generate Title</span>
+                  </Button>
+                </div>
+              </div>
+              
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={exportDocument}
-                className="ml-auto"
+                className="ml-4"
               >
                 Export
               </Button>
             </div>
             
             <div className="h-[1100px] p-[60px] bg-white overflow-y-auto">
+              {isAIProcessing && activeAIOperation && (
+                <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50 backdrop-blur-sm">
+                  <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <div className="flex items-center justify-center mb-4">
+                      <Sparkles className="h-8 w-8 text-primary animate-pulse mr-2" />
+                      <h3 className="text-lg font-medium">AI Assistant Working</h3>
+                    </div>
+                    <p className="text-center text-gray-600 mb-4">
+                      {activeAIOperation === 'improve-writing' && "Improving your writing..."}
+                      {activeAIOperation === 'summarize' && "Summarizing your text..."}
+                      {activeAIOperation === 'expand' && "Expanding your content..."}
+                      {activeAIOperation === 'fix-grammar' && "Fixing grammar and spelling..."}
+                      {activeAIOperation === 'generate-title' && "Generating a title..."}
+                    </p>
+                    <div className="flex justify-center">
+                      <div className="flex space-x-2 items-center justify-center">
+                        <div className="w-3 h-3 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                        <div className="w-3 h-3 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                        <div className="w-3 h-3 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               <Textarea
                 ref={documentEditorRef}
                 className={`w-full h-full resize-none border-none focus:outline-none focus:ring-0 bg-transparent p-0 font-${selectedFont} text-${selectedFontSize}`}
@@ -589,6 +845,29 @@ const TextEditor = ({
               </Button>
             </div>
             
+            {isAIProcessing && activeAIOperation && (
+              <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50 backdrop-blur-sm">
+                <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+                  <div className="flex items-center justify-center mb-4">
+                    <Sparkles className="h-8 w-8 text-primary animate-pulse mr-2" />
+                    <h3 className="text-lg font-medium">AI Assistant Working</h3>
+                  </div>
+                  <p className="text-center text-gray-600 mb-4">
+                    {activeAIOperation === 'improve-slide' && "Improving slide content..."}
+                    {activeAIOperation === 'suggest-layout' && "Analyzing content and suggesting the best layout..."}
+                    {activeAIOperation === 'create-speaking-points' && "Generating speaking points for this slide..."}
+                  </p>
+                  <div className="flex justify-center">
+                    <div className="flex space-x-2 items-center justify-center">
+                      <div className="w-3 h-3 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                      <div className="w-3 h-3 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                      <div className="w-3 h-3 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div className="flex gap-4">
               <div className="w-32 flex-shrink-0">
                 <div className="space-y-2 overflow-y-auto max-h-[600px] pr-2">
@@ -654,3 +933,4 @@ const TextEditor = ({
 };
 
 export default TextEditor;
+

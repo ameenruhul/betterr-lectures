@@ -1,11 +1,9 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import ContentUploader from "@/components/lecture/ContentUploader";
 import LectureNavigation from "@/components/lecture/LectureNavigation";
 import WorkspaceTools from "@/components/lecture/WorkspaceTools";
-import EditorToolbar from "@/components/lecture/EditorToolbar";
 import TextEditor from "@/components/lecture/TextEditor";
 import AIAssistant from "@/components/lecture/AIAssistant";
 import { Menu } from "lucide-react";
@@ -23,6 +21,7 @@ const CoursePanel = () => {
   const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled document");
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selectedText, setSelectedText] = useState("");
 
   const [leftPanelSize, setLeftPanelSize] = useState(20); // 20% of the screen width
   const [middlePanelSize, setMiddlePanelSize] = useState(60); // 60% of the screen width
@@ -44,28 +43,29 @@ const CoursePanel = () => {
     });
   };
 
-  const handleDownloadPDF = () => {
-    toast({
-      title: "Downloading PDF",
-      description: "Your document is being prepared for download",
+  const handleApplyAISuggestion = (text: string) => {
+    setContent(prevContent => {
+      if (selectedText && prevContent.includes(selectedText)) {
+        return prevContent.replace(selectedText, text);
+      }
+      return prevContent + "\n\n" + text;
     });
-  };
-
-  const handleCreatePPTX = () => {
+    
     toast({
-      title: "Creating presentation",
-      description: "Your presentation is being generated",
+      title: "AI suggestion applied",
+      description: "Content has been updated with AI suggestions",
+      duration: 2000,
     });
-  };
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
   };
 
   const handlePanelResize = (sizes: number[]) => {
     setLeftPanelSize(sizes[0]);
     setMiddlePanelSize(sizes[1]);
     setRightPanelSize(sizes[2]);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   return (
@@ -141,7 +141,9 @@ const CoursePanel = () => {
             maxSize={40}
             className="bg-white border-l"
           >
-            <AIAssistant />
+            <AIAssistant 
+              onApplySuggestion={handleApplyAISuggestion}
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
