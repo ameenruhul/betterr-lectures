@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import TextEditor from "@/components/lecture/TextEditor";
 import AIAssistant from "@/components/lecture/AIAssistant";
 import SharedCourseSidebar from "@/components/lecture/SharedCourseSidebar";
+import ClassPlanCreator from "@/components/lecture/ClassPlanCreator";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -14,19 +15,18 @@ import {
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "@/contexts/OnboardingContext";
-import CoachMark from "@/components/onboarding/CoachMark";
-import Spotlight from "@/components/onboarding/Spotlight";
 import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
 
 const LecturesPanel = () => {
   const { courseId, lectureId } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
-  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled document");
+  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Teaching Material ${lectureId}` : "Untitled document");
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedText, setSelectedText] = useState("");
-  const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
+  const { currentStep, isFirstTime, nextStep } = useOnboarding();
+  const [activeTab, setActiveTab] = useState<"editor" | "classplan">("editor");
 
   const aiAssistantRef = useRef<HTMLDivElement>(null);
 
@@ -119,46 +119,71 @@ const LecturesPanel = () => {
         </div>
 
         <div className={cn("flex-1", sidebarOpen ? "md:pl-0" : "")}>
-          <div className="hidden md:flex h-full w-full">
+          <div className="bg-white border-b p-3 flex items-center justify-between">
+            {!sidebarOpen && (
+              <Button
+                variant="outline"
+                size="icon"
+                className="mr-2"
+                onClick={toggleSidebar}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            )}
+            
+            <div className="flex items-center space-x-4">
+              <Button
+                variant={activeTab === "editor" ? "default" : "outline"}
+                onClick={() => setActiveTab("editor")}
+                size="sm"
+              >
+                Document Editor
+              </Button>
+              <Button
+                variant={activeTab === "classplan" ? "default" : "outline"}
+                onClick={() => setActiveTab("classplan")}
+                size="sm"
+              >
+                Class Plan Creator
+              </Button>
+            </div>
+            
+            <Button size="sm" onClick={handleSave}>
+              Save Changes
+            </Button>
+          </div>
+          
+          <div className="hidden md:flex h-[calc(100%-56px)] w-full">
             <ResizablePanelGroup
               direction="horizontal"
               onLayout={handlePanelResize}
               className="h-full w-full"
             >
-              {!sidebarOpen && (
-                <div className="absolute top-2 left-2 z-10">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="bg-white"
-                    onClick={toggleSidebar}
-                  >
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </div>
-              )}
-              
               <ResizablePanel 
                 defaultSize={middlePanelSize} 
                 minSize={40}
                 className="bg-gray-50"
               >
                 <div className="h-full flex flex-col overflow-hidden">
-                  <PathwayTooltip 
-                    content="Create your lecture materials, lesson plans, and class activities here."
-                    position="bottom"
-                    step={5}
-                    className="w-72"
-                    nextStep="ai-assistant"
-                    forceShow={isFirstTime && currentStep === 'lecture-editor'}
-                  >
-                    <TextEditor 
-                      content={content}
-                      setContent={setContent}
-                      documentTitle={documentTitle}
-                      setDocumentTitle={setDocumentTitle}
-                    />
-                  </PathwayTooltip>
+                  {activeTab === "editor" ? (
+                    <PathwayTooltip 
+                      content="Create your teaching materials, lesson plans, and class activities here."
+                      position="bottom"
+                      step={5}
+                      className="w-72"
+                      nextStep="ai-assistant"
+                      forceShow={isFirstTime && currentStep === 'lecture-editor'}
+                    >
+                      <TextEditor 
+                        content={content}
+                        setContent={setContent}
+                        documentTitle={documentTitle}
+                        setDocumentTitle={setDocumentTitle}
+                      />
+                    </PathwayTooltip>
+                  ) : (
+                    <ClassPlanCreator />
+                  )}
                 </div>
               </ResizablePanel>
 
@@ -188,14 +213,18 @@ const LecturesPanel = () => {
             </ResizablePanelGroup>
           </div>
 
-          <div className="md:hidden flex h-full">
+          <div className="md:hidden flex h-[calc(100%-56px)]">
             <div className="flex-1 flex flex-col w-full">
-              <TextEditor 
-                content={content}
-                setContent={setContent}
-                documentTitle={documentTitle}
-                setDocumentTitle={setDocumentTitle}
-              />
+              {activeTab === "editor" ? (
+                <TextEditor 
+                  content={content}
+                  setContent={setContent}
+                  documentTitle={documentTitle}
+                  setDocumentTitle={setDocumentTitle}
+                />
+              ) : (
+                <ClassPlanCreator />
+              )}
             </div>
           </div>
         </div>

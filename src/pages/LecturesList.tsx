@@ -9,62 +9,70 @@ import {
   Plus,
   FileText,
   Presentation,
-  FolderOpen,
   Search,
   X,
   Folder,
   Grid2X2,
   List,
   Pencil,
-  GraduationCap
+  BookOpen,
+  GraduationCap,
+  Calendar,
+  ClipboardList
 } from "lucide-react";
 import { useOnboarding } from "@/contexts/OnboardingContext";
-import CoachMark from "@/components/onboarding/CoachMark";
-import Spotlight from "@/components/onboarding/Spotlight";
 import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
 import LectureFolder from "@/components/lecture/LectureFolder";
 import { cn } from "@/lib/utils";
 
-// Organizing lectures by modules (simulating folder structure)
-const MOCK_MODULES = [
+// Teacher workspace sections
+const TEACHER_WORKSPACE = [
   {
     id: 1,
-    title: "Module 1: Introduction",
+    title: "Class Preparation",
+    description: "Create lesson plans and materials for upcoming classes",
+    icon: BookOpen,
     lectures: [
-      { id: 1, title: "Introduction to the Course", type: "document", duration: "45 mins" },
-      { id: 2, title: "Key Concepts and Terminology", type: "document", duration: "45 mins" }
+      { id: 1, title: "Monday's Lesson Plan", type: "document", duration: "45 mins" },
+      { id: 2, title: "Tuesday's Discussion Topics", type: "document", duration: "45 mins" }
     ]
   },
   {
     id: 2,
-    title: "Module 2: Core Principles",
+    title: "Presentations & Materials",
+    description: "Create visual aids and handouts for class delivery",
+    icon: Presentation,
     lectures: [
-      { id: 3, title: "Practical Application - Part 1", type: "presentation", duration: "45 mins" },
-      { id: 4, title: "Understanding Core Principles", type: "presentation", duration: "45 mins" },
-      { id: 5, title: "Case Study Analysis", type: "document", duration: "45 mins" }
+      { id: 3, title: "Topic Introduction Slides", type: "presentation", duration: "45 mins" },
+      { id: 4, title: "Visual Concept Maps", type: "presentation", duration: "45 mins" },
+      { id: 5, title: "Student Handouts", type: "document", duration: "45 mins" }
     ]
   },
   {
     id: 3,
-    title: "Module 3: Advanced Topics",
+    title: "Assessment Materials",
+    description: "Create quizzes, tests and assignments for student evaluation",
+    icon: ClipboardList,
     lectures: [
-      { id: 6, title: "Advanced Techniques", type: "presentation", duration: "45 mins" },
-      { id: 7, title: "Group Discussion Topics", type: "document", duration: "45 mins" }
+      { id: 6, title: "Chapter Quiz Questions", type: "presentation", duration: "45 mins" },
+      { id: 7, title: "Group Project Guidelines", type: "document", duration: "45 mins" }
     ]
   },
   {
     id: 4,
-    title: "Module 4: Final Review",
+    title: "Class Calendar & Planning",
+    description: "Organize your semester schedule and course timeline",
+    icon: Calendar,
     lectures: [
-      { id: 8, title: "Final Review and Summary", type: "presentation", duration: "45 mins" },
-      { id: 9, title: "Examination Preparation", type: "document", duration: "45 mins" },
-      { id: 10, title: "Course Conclusion", type: "document", duration: "45 mins" }
+      { id: 8, title: "Semester Timeline", type: "presentation", duration: "45 mins" },
+      { id: 9, title: "Important Deadlines", type: "document", duration: "45 mins" },
+      { id: 10, title: "Topic Sequence Plan", type: "document", duration: "45 mins" }
     ]
   }
 ];
 
 // Flatten lectures for search functionality
-const MOCK_LECTURES = MOCK_MODULES.flatMap(module => module.lectures);
+const ALL_TEACHING_MATERIALS = TEACHER_WORKSPACE.flatMap(section => section.lectures);
 
 const LecturesList = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -73,18 +81,18 @@ const LecturesList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [expandedModules, setExpandedModules] = useState<number[]>([]);
+  const [expandedSections, setExpandedSections] = useState<number[]>([]);
   
   const addLectureButtonRef = useRef<HTMLButtonElement>(null);
   const firstLectureRef = useRef<HTMLDivElement>(null);
 
-  const filteredModules = searchQuery 
+  const filteredSections = searchQuery 
     ? [] // When searching, we'll use flattenedResults instead
-    : MOCK_MODULES;
+    : TEACHER_WORKSPACE;
 
   const flattenedResults = searchQuery
-    ? MOCK_LECTURES.filter(lecture => 
-        lecture.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ? ALL_TEACHING_MATERIALS.filter(material => 
+        material.title.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : [];
 
@@ -98,10 +106,10 @@ const LecturesList = () => {
     navigate(`/courses/${courseId}`);
   };
 
-  const handleAddLecture = () => {
+  const handleAddTeachingMaterial = () => {
     toast({
-      title: "Create new lecture",
-      description: "This would open a lecture creation dialog"
+      title: "Create new teaching material",
+      description: "Add a new lesson plan, presentation, or assessment"
     });
     
     if (isFirstTime && currentStep === 'upload-syllabus') {
@@ -109,22 +117,22 @@ const LecturesList = () => {
     }
   };
 
-  const handleAddModule = () => {
+  const handleAddSection = () => {
     toast({
-      title: "Create new module",
-      description: "This would open a module creation dialog"
+      title: "Create new workspace section",
+      description: "Organize your teaching materials into custom sections"
     });
   };
 
-  const handleDeleteLecture = (lectureId: number) => {
+  const handleDeleteMaterial = (materialId: number) => {
     toast({
-      title: "Delete lecture",
-      description: `Would delete lecture #${lectureId}`
+      title: "Delete teaching material",
+      description: `Would delete material #${materialId}`
     });
   };
 
-  const handleOpenLecture = (lectureId: number) => {
-    navigate(`/courses/${courseId}/lectures/${lectureId}`);
+  const handleOpenTeachingMaterial = (materialId: number) => {
+    navigate(`/courses/${courseId}/lectures/${materialId}`);
     
     if (isFirstTime && currentStep === 'lecture-list') {
       nextStep();
@@ -135,11 +143,11 @@ const LecturesList = () => {
     setSearchQuery("");
   };
 
-  const toggleModuleExpanded = (moduleId: number) => {
-    setExpandedModules(prev => 
-      prev.includes(moduleId) 
-        ? prev.filter(id => id !== moduleId)
-        : [...prev, moduleId]
+  const toggleSectionExpanded = (sectionId: number) => {
+    setExpandedSections(prev => 
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
+        : [...prev, sectionId]
     );
   };
 
@@ -160,7 +168,7 @@ const LecturesList = () => {
             
             <div className="flex items-center gap-2">
               <PathwayTooltip 
-                content="Add a new lecture to organize your teaching materials, quizzes, and class plans."
+                content="Create new teaching materials like lesson plans, presentations, quizzes and more."
                 position="bottom"
                 step={3}
                 className="w-72"
@@ -168,22 +176,22 @@ const LecturesList = () => {
                 forceShow={isFirstTime && currentStep === 'upload-syllabus'}
               >
                 <Button 
-                  onClick={handleAddLecture} 
+                  onClick={handleAddTeachingMaterial} 
                   ref={addLectureButtonRef}
                   size="sm"
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Lecture
+                  New Teaching Material
                 </Button>
               </PathwayTooltip>
               
               <Button 
-                onClick={handleAddModule}
+                onClick={handleAddSection}
                 variant="outline"
                 size="sm"
               >
-                <FolderOpen className="h-4 w-4 mr-2" />
-                New Module
+                <Folder className="h-4 w-4 mr-2" />
+                New Section
               </Button>
             </div>
           </div>
@@ -192,8 +200,8 @@ const LecturesList = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Teacher Workspace</h1>
-          <p className="text-gray-600">Organize your teaching materials, class plans, and assessments</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Teacher's Workspace</h1>
+          <p className="text-gray-600">Create and organize your classroom teaching materials with AI assistance</p>
         </div>
 
         <div className="flex items-center justify-between mb-6">
@@ -203,7 +211,7 @@ const LecturesList = () => {
             </div>
             <Input
               type="search"
-              placeholder="Search lectures..."
+              placeholder="Search teaching materials..."
               className="pl-10 pr-10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -245,13 +253,13 @@ const LecturesList = () => {
             viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
           )}>
             {flattenedResults.length > 0 ? (
-              flattenedResults.map((lecture, index) => (
-                <div key={lecture.id} ref={index === 0 ? firstLectureRef : undefined}>
+              flattenedResults.map((material, index) => (
+                <div key={material.id} ref={index === 0 ? firstLectureRef : undefined}>
                   <LectureFolder 
-                    lecture={lecture}
+                    lecture={material}
                     courseId={courseId || ""}
-                    onDelete={handleDeleteLecture}
-                    onOpen={handleOpenLecture}
+                    onDelete={handleDeleteMaterial}
+                    onOpen={handleOpenTeachingMaterial}
                     expanded={false}
                     isGridView={viewMode === "grid"}
                   />
@@ -259,8 +267,8 @@ const LecturesList = () => {
               ))
             ) : (
               <div className="col-span-full text-center py-10">
-                <FolderOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-1">No lectures found</h3>
+                <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-1">No teaching materials found</h3>
                 <p className="text-gray-500 mb-4">
                   Try using different search terms
                 </p>
@@ -271,26 +279,28 @@ const LecturesList = () => {
             )}
           </div>
         ) : (
-          // Regular modules and lectures view
+          // Regular sections and teaching materials view
           <div className="space-y-6">
-            {filteredModules.length > 0 ? (
-              filteredModules.map((module) => (
-                <div key={module.id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
-                  {/* Module Header */}
+            {filteredSections.length > 0 ? (
+              filteredSections.map((section) => (
+                <div key={section.id} className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+                  {/* Section Header */}
                   <div 
                     className="flex items-center justify-between p-4 border-b cursor-pointer hover:bg-gray-50"
-                    onClick={() => toggleModuleExpanded(module.id)}
+                    onClick={() => toggleSectionExpanded(section.id)}
                   >
                     <div className="flex items-center gap-3">
-                      <Folder className="h-5 w-5 text-blue-500" />
-                      <h2 className="font-semibold text-lg">{module.title}</h2>
-                      <span className="text-sm text-gray-500">({module.lectures.length} lectures)</span>
+                      <section.icon className="h-5 w-5 text-primary" />
+                      <div>
+                        <h2 className="font-semibold text-lg">{section.title}</h2>
+                        <p className="text-sm text-gray-500">{section.description}</p>
+                      </div>
                     </div>
                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={(e) => {
                       e.stopPropagation();
-                      toggleModuleExpanded(module.id);
+                      toggleSectionExpanded(section.id);
                     }}>
-                      {expandedModules.includes(module.id) ? (
+                      {expandedSections.includes(section.id) ? (
                         <ChevronLeft className="h-4 w-4 rotate-90" />
                       ) : (
                         <ChevronLeft className="h-4 w-4 -rotate-90" />
@@ -298,43 +308,33 @@ const LecturesList = () => {
                     </Button>
                   </div>
                   
-                  {/* Module Content */}
-                  {expandedModules.includes(module.id) && (
+                  {/* Section Content */}
+                  {expandedSections.includes(section.id) && (
                     <div className="p-4">
                       <div className={cn(
                         "grid gap-4",
                         viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
                       )}>
-                        {module.lectures.map((lecture, index) => (
-                          <div key={lecture.id} ref={index === 0 && module.id === 1 ? firstLectureRef : undefined}>
+                        {section.lectures.map((material, index) => (
+                          <div key={material.id} ref={index === 0 && section.id === 1 ? firstLectureRef : undefined}>
                             <PathwayTooltip 
-                              content="Edit your lecture to create materials, quizzes, and class plans for your students."
+                              content="Edit this teaching material to create content for your upcoming classes."
                               position="right"
                               step={4}
                               className="w-72"
                               nextStep="lecture-editor"
-                              navigateTo={`/courses/${courseId}/lectures/${lecture.id}`}
-                              forceShow={isFirstTime && currentStep === 'lecture-list' && index === 0 && module.id === 1}
+                              navigateTo={`/courses/${courseId}/lectures/${material.id}`}
+                              forceShow={isFirstTime && currentStep === 'lecture-list' && index === 0 && section.id === 1}
                             >
                               <LectureFolder 
-                                lecture={lecture}
+                                lecture={material}
                                 courseId={courseId || ""}
-                                onDelete={handleDeleteLecture}
-                                onOpen={handleOpenLecture}
+                                onDelete={handleDeleteMaterial}
+                                onOpen={handleOpenTeachingMaterial}
                                 expanded={false}
                                 isGridView={viewMode === "grid"}
                               />
                             </PathwayTooltip>
-                            
-                            {isFirstTime && currentStep === 'lecture-list' && index === 0 && module.id === 1 && (
-                              <CoachMark
-                                title="Prepare Your Lectures"
-                                description="Click on a lecture to open the editor where you can create lesson plans, quizzes, and teaching materials."
-                                position="right"
-                                onNext={() => nextStep()}
-                                onSkip={skipOnboarding}
-                              />
-                            )}
                           </div>
                         ))}
                       </div>
@@ -344,19 +344,19 @@ const LecturesList = () => {
               ))
             ) : (
               <div className="text-center py-10">
-                <FolderOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-1">No modules found</h3>
+                <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-1">Your workspace is empty</h3>
                 <p className="text-gray-500 mb-4">
-                  Start by creating your first module and lecture
+                  Start creating teaching materials for your upcoming classes
                 </p>
                 <div className="flex items-center justify-center gap-3">
-                  <Button onClick={handleAddModule} variant="outline">
-                    <FolderOpen className="h-4 w-4 mr-2" />
-                    Create Module
+                  <Button onClick={handleAddSection} variant="outline">
+                    <Folder className="h-4 w-4 mr-2" />
+                    Create Section
                   </Button>
-                  <Button onClick={handleAddLecture}>
+                  <Button onClick={handleAddTeachingMaterial}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Create Lecture
+                    Create Teaching Material
                   </Button>
                 </div>
               </div>
