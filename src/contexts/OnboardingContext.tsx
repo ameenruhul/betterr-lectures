@@ -16,7 +16,9 @@ interface OnboardingContextType {
   currentStep: OnboardingStep;
   isFirstTime: boolean;
   isGuidedMode: boolean;
+  isOnboardingEnabled: boolean;
   toggleGuidedMode: () => void;
+  toggleOnboarding: () => void;
   setCurrentStep: (step: OnboardingStep) => void;
   nextStep: () => void;
   skipOnboarding: () => void;
@@ -38,12 +40,13 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('dashboard');
   const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
   const [isGuidedMode, setIsGuidedMode] = useState<boolean>(true);
+  const [isOnboardingEnabled, setIsOnboardingEnabled] = useState<boolean>(true);
   
   // Load onboarding state from localStorage on initial render
   useEffect(() => {
     const savedOnboarding = localStorage.getItem('onboarding');
     if (savedOnboarding) {
-      const { step, completed, guidedMode } = JSON.parse(savedOnboarding);
+      const { step, completed, guidedMode, enabled } = JSON.parse(savedOnboarding);
       if (completed) {
         setIsFirstTime(false);
       } else {
@@ -51,6 +54,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         setIsFirstTime(true);
       }
       setIsGuidedMode(guidedMode !== undefined ? guidedMode : true);
+      setIsOnboardingEnabled(enabled !== undefined ? enabled : true);
     }
   }, []);
   
@@ -59,9 +63,10 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     localStorage.setItem('onboarding', JSON.stringify({
       step: currentStep,
       completed: !isFirstTime,
-      guidedMode: isGuidedMode
+      guidedMode: isGuidedMode,
+      enabled: isOnboardingEnabled
     }));
-  }, [currentStep, isFirstTime, isGuidedMode]);
+  }, [currentStep, isFirstTime, isGuidedMode, isOnboardingEnabled]);
   
   const nextStep = () => {
     const currentIndex = STEPS_ORDER.indexOf(currentStep);
@@ -86,6 +91,10 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const toggleGuidedMode = () => {
     setIsGuidedMode(prev => !prev);
   };
+
+  const toggleOnboarding = () => {
+    setIsOnboardingEnabled(prev => !prev);
+  };
   
   return (
     <OnboardingContext.Provider
@@ -93,7 +102,9 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         currentStep,
         isFirstTime,
         isGuidedMode,
+        isOnboardingEnabled,
         toggleGuidedMode,
+        toggleOnboarding,
         setCurrentStep,
         nextStep,
         skipOnboarding,
