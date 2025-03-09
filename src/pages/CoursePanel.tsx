@@ -88,6 +88,11 @@ const LecturesPanel = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Track selected text in the editor
+  const handleTextSelection = (text: string) => {
+    setSelectedText(text);
+  };
+
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
       <div className="md:hidden fixed top-0 left-0 z-20 p-2">
@@ -169,6 +174,7 @@ const LecturesPanel = () => {
                             setContent={setContent}
                             documentTitle={documentTitle}
                             setDocumentTitle={setDocumentTitle}
+                            onTextSelect={handleTextSelection}
                           />
                         </PathwayTooltip>
                       </div>
@@ -193,6 +199,7 @@ const LecturesPanel = () => {
                         >
                           <AIAssistant 
                             onApplySuggestion={handleApplyAISuggestion}
+                            documentContent={content}
                           />
                         </PathwayTooltip>
                       </div>
@@ -215,6 +222,7 @@ const LecturesPanel = () => {
                   setContent={setContent}
                   documentTitle={documentTitle}
                   setDocumentTitle={setDocumentTitle}
+                  onTextSelect={handleTextSelection}
                 />
               </TabsContent>
               
