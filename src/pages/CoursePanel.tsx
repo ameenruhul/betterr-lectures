@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -24,7 +23,6 @@ const CoursePanel = () => {
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Default panel sizes
   const [leftPanelSize, setLeftPanelSize] = useState(20); // 20% of the screen width
   const [middlePanelSize, setMiddlePanelSize] = useState(60); // 60% of the screen width
   const [rightPanelSize, setRightPanelSize] = useState(20); // 20% of the screen width
@@ -63,7 +61,6 @@ const CoursePanel = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // Function to handle panel resize
   const handlePanelResize = (sizes: number[]) => {
     setLeftPanelSize(sizes[0]);
     setMiddlePanelSize(sizes[1]);
@@ -72,7 +69,6 @@ const CoursePanel = () => {
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
-      {/* Mobile Sidebar Toggle */}
       <div className="md:hidden fixed top-0 left-0 z-20 p-2">
         <Button
           variant="outline"
@@ -84,7 +80,6 @@ const CoursePanel = () => {
         </Button>
       </div>
 
-      {/* Overlay when sidebar is open on mobile */}
       {sidebarOpen && (
         <div 
           className="md:hidden fixed inset-0 bg-black/20 z-10"
@@ -92,14 +87,12 @@ const CoursePanel = () => {
         ></div>
       )}
 
-      {/* Desktop Resizable Layout */}
       <div className="hidden md:flex h-full w-full">
         <ResizablePanelGroup
           direction="horizontal"
           onLayout={handlePanelResize}
           className="h-full w-full"
         >
-          {/* Left Sidebar */}
           <ResizablePanel 
             defaultSize={leftPanelSize} 
             minSize={15} 
@@ -107,7 +100,6 @@ const CoursePanel = () => {
             className="bg-white border-r"
           >
             <div className="h-full flex flex-col overflow-hidden">
-              {/* Navigation Header */}
               <ContentUploader 
                 courseId={courseId} 
                 lectureId={lectureId} 
@@ -115,34 +107,28 @@ const CoursePanel = () => {
                 onBackClick={handleBackToLectures}
               />
 
-              {/* Lecture Navigation */}
               <LectureNavigation 
                 lectureId={lectureId} 
               />
 
-              {/* Workspace Features */}
               <WorkspaceTools />
             </div>
           </ResizablePanel>
 
-          {/* Resizable Handle for Left Panel */}
           <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
 
-          {/* Main Content Area */}
           <ResizablePanel 
             defaultSize={middlePanelSize} 
             minSize={40}
             className="bg-gray-50"
           >
             <div className="h-full flex flex-col overflow-hidden">
-              {/* Editor Toolbar */}
               <EditorToolbar 
                 onSave={handleSave} 
                 onDownloadPDF={handleDownloadPDF} 
                 onCreatePPTX={handleCreatePPTX} 
               />
 
-              {/* Text Editor Area */}
               <TextEditor 
                 content={content}
                 setContent={setContent}
@@ -152,10 +138,8 @@ const CoursePanel = () => {
             </div>
           </ResizablePanel>
 
-          {/* Resizable Handle for Right Panel */}
           <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
 
-          {/* Right Sidebar - AI Assistant */}
           <ResizablePanel 
             defaultSize={rightPanelSize} 
             minSize={15} 
@@ -167,13 +151,10 @@ const CoursePanel = () => {
         </ResizablePanelGroup>
       </div>
 
-      {/* Mobile Layout (Non-resizable) */}
       <div className="md:hidden flex h-full">
-        {/* Left Sidebar */}
         <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
                         fixed z-30 w-64 h-screen border-r flex flex-col bg-white 
                         transition-transform duration-300 ease-in-out`}>
-          {/* Navigation Header */}
           <ContentUploader 
             courseId={courseId} 
             lectureId={lectureId} 
@@ -181,26 +162,21 @@ const CoursePanel = () => {
             onBackClick={handleBackToLectures}
           />
 
-          {/* Lecture Navigation */}
           <LectureNavigation 
             lectureId={lectureId} 
             onCloseSidebar={() => setSidebarOpen(false)}
           />
 
-          {/* Workspace Features */}
           <WorkspaceTools />
         </div>
 
-        {/* Main Content Area - Word Processor */}
         <div className="flex-1 flex flex-col w-full">
-          {/* Editor Toolbar */}
           <EditorToolbar 
             onSave={handleSave} 
             onDownloadPDF={handleDownloadPDF} 
             onCreatePPTX={handleCreatePPTX} 
           />
 
-          {/* Text Editor Area */}
           <TextEditor 
             content={content}
             setContent={setContent}
@@ -208,8 +184,6 @@ const CoursePanel = () => {
             setDocumentTitle={setDocumentTitle}
           />
         </div>
-
-        {/* Right Sidebar - AI Assistant (hidden on mobile) */}
       </div>
     </div>
   );
