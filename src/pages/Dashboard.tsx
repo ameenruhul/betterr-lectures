@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import OnboardingToggle from "@/components/onboarding/OnboardingToggle";
+import DashboardGuide from "@/components/onboarding/DashboardGuide";
 
 // Sample data for the chart
 const data = [
@@ -34,6 +36,11 @@ const Dashboard = () => {
         <DashboardHeader />
         
         <div className="p-6 space-y-6 overflow-auto">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <OnboardingToggle />
+          </div>
+          
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
@@ -347,6 +354,9 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
+      
+      {/* Onboarding Guide */}
+      <DashboardGuide />
     </div>
   );
 };

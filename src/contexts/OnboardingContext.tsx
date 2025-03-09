@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type OnboardingStep = 
+  | 'dashboard'
   | 'create-course'
   | 'course-details'
   | 'upload-syllabus'
@@ -14,13 +15,16 @@ type OnboardingStep =
 interface OnboardingContextType {
   currentStep: OnboardingStep;
   isFirstTime: boolean;
+  isOnboardingEnabled: boolean;
   setCurrentStep: (step: OnboardingStep) => void;
   nextStep: () => void;
   skipOnboarding: () => void;
   resetOnboarding: () => void;
+  toggleOnboarding: () => void;
 }
 
 const STEPS_ORDER: OnboardingStep[] = [
+  'dashboard',
   'create-course',
   'course-details',
   'upload-syllabus',
@@ -34,20 +38,22 @@ const STEPS_ORDER: OnboardingStep[] = [
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
 
 export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>('create-course');
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>('dashboard');
   const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
+  const [isOnboardingEnabled, setIsOnboardingEnabled] = useState<boolean>(true);
   
   // Load onboarding state from localStorage on initial render
   useEffect(() => {
     const savedOnboarding = localStorage.getItem('onboarding');
     if (savedOnboarding) {
-      const { step, completed } = JSON.parse(savedOnboarding);
+      const { step, completed, enabled } = JSON.parse(savedOnboarding);
       if (completed) {
         setIsFirstTime(false);
       } else {
         setCurrentStep(step as OnboardingStep);
         setIsFirstTime(true);
       }
+      setIsOnboardingEnabled(enabled !== undefined ? enabled : true);
     }
   }, []);
   
@@ -56,8 +62,9 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     localStorage.setItem('onboarding', JSON.stringify({
       step: currentStep,
       completed: !isFirstTime,
+      enabled: isOnboardingEnabled
     }));
-  }, [currentStep, isFirstTime]);
+  }, [currentStep, isFirstTime, isOnboardingEnabled]);
   
   const nextStep = () => {
     const currentIndex = STEPS_ORDER.indexOf(currentStep);
@@ -74,8 +81,12 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
   
   const resetOnboarding = () => {
-    setCurrentStep('create-course');
+    setCurrentStep('dashboard');
     setIsFirstTime(true);
+  };
+
+  const toggleOnboarding = () => {
+    setIsOnboardingEnabled(prev => !prev);
   };
   
   return (
@@ -83,10 +94,12 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       value={{
         currentStep,
         isFirstTime,
+        isOnboardingEnabled,
         setCurrentStep,
         nextStep,
         skipOnboarding,
-        resetOnboarding
+        resetOnboarding,
+        toggleOnboarding
       }}
     >
       {children}

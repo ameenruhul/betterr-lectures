@@ -16,7 +16,7 @@ const Spotlight: React.FC<SpotlightProps> = ({
   return (
     <div className={cn(
       'relative transition-all duration-300',
-      active && 'z-40 ring-4 ring-primary/30 ring-offset-2 rounded-lg',
+      active && 'z-40 ring-4 ring-primary/30 ring-offset-2 rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]',
       className
     )}>
       {children}

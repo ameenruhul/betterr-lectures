@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, X } from 'lucide-react';
+import { CheckCircle, X, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
 const OnboardingComplete = () => {
-  const { currentStep, isFirstTime, resetOnboarding } = useOnboarding();
+  const { currentStep, isFirstTime, resetOnboarding, toggleOnboarding, isOnboardingEnabled } = useOnboarding();
   const [visible, setVisible] = useState(false);
   
   useEffect(() => {
@@ -52,6 +52,24 @@ const OnboardingComplete = () => {
           onClick={resetOnboarding}
         >
           Restart Tour
+        </Button>
+        <Button 
+          variant={isOnboardingEnabled ? "default" : "outline"}
+          size="sm" 
+          className="text-xs mr-2" 
+          onClick={toggleOnboarding}
+        >
+          {isOnboardingEnabled ? (
+            <>
+              <X className="h-3 w-3 mr-1" />
+              Disable Tour
+            </>
+          ) : (
+            <>
+              <Info className="h-3 w-3 mr-1" />
+              Enable Tour
+            </>
+          )}
         </Button>
         <Button 
           size="sm" 
