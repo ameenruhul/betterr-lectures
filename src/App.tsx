@@ -13,6 +13,8 @@ import QuizBuilder from "./pages/QuizBuilder";
 import QuizSolver from "./pages/QuizSolver";
 import AssignmentGenerator from "./pages/AssignmentGenerator";
 import AssignmentSolver from "./pages/AssignmentSolver";
+import StudyGuide from "./pages/StudyGuide";
+import Research from "./pages/Research";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
         <Route path="/quiz-solver" element={<QuizSolver />} />
         <Route path="/assignment-generator" element={<AssignmentGenerator />} />
         <Route path="/assignment-solver" element={<AssignmentSolver />} />
+        <Route path="/study-guide" element={<StudyGuide />} />
+        <Route path="/research" element={<Research />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />

@@ -66,22 +66,12 @@ const WorkspaceTools = () => {
         <WorkspaceToolButton 
           icon={NotebookPen} 
           label="Study Guide" 
-          onClick={() => {
-            toast({
-              title: "Study Guide Creator",
-              description: "This feature is coming soon!",
-            });
-          }}
+          onClick={() => handleToolClick("/study-guide")}
         />
         <WorkspaceToolButton 
           icon={Microscope} 
           label="Research" 
-          onClick={() => {
-            toast({
-              title: "Research Tool",
-              description: "This feature is coming soon!",
-            });
-          }}
+          onClick={() => handleToolClick("/research")}
         />
       </div>
     </div>
