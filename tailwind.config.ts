@@ -116,7 +116,7 @@ export default {
         "purple-pink-gradient": "linear-gradient(90deg, #8B5CF6, #EC4899)",
         "blue-indigo-gradient": "linear-gradient(90deg, #0EA5E9, #6366f1)",
         "teal-blue-gradient": "linear-gradient(90deg, #14b8a6, #0EA5E9)",
-        "hero-gradient": "linear-gradient(to bottom right, rgba(14, 165, 233, 0.15), rgba(139, 92, 246, 0.15))",
+        "hero-gradient": "linear-gradient(to bottom right, rgba(234, 56, 76, 0.15), rgba(155, 135, 245, 0.15))",
         // New red-violet-purple gradients
         "red-violet-gradient": "linear-gradient(90deg, #ea384c, #7E69AB)",
         "violet-purple-gradient": "linear-gradient(90deg, #7E69AB, #9b87f5)",

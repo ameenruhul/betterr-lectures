@@ -24,14 +24,14 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <div className="relative">
-        <div className="absolute inset-0 bg-blue-purple-gradient rounded-full blur-lg opacity-30" style={{ 
+        <div className="absolute inset-0 bg-red-violet-gradient rounded-full blur-lg opacity-30" style={{ 
           width: iconSize * 1.5, 
           height: iconSize * 1.5, 
           top: -iconSize * 0.25, 
           left: -iconSize * 0.25 
         }}></div>
         <Presentation 
-          className="text-ai-blue relative" 
+          className="text-ai-red relative" 
           size={iconSize} 
         />
         <Brain 
@@ -49,7 +49,7 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
           fontSize, 
           className?.includes("text-white") 
             ? "text-white" 
-            : "text-transparent bg-blue-purple-gradient"
+            : "text-transparent bg-red-violet-gradient"
         )}>
           Better Lectures
         </h2>
