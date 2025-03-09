@@ -11,6 +11,8 @@ import LessonPlan from "./pages/LessonPlan";
 import LecturePrep from "./pages/LecturePrep";
 import QuizBuilder from "./pages/QuizBuilder";
 import QuizSolver from "./pages/QuizSolver";
+import AssignmentGenerator from "./pages/AssignmentGenerator";
+import AssignmentSolver from "./pages/AssignmentSolver";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/lecture-prep" element={<LecturePrep />} />
         <Route path="/quiz-builder" element={<QuizBuilder />} />
         <Route path="/quiz-solver" element={<QuizSolver />} />
+        <Route path="/assignment-generator" element={<AssignmentGenerator />} />
+        <Route path="/assignment-solver" element={<AssignmentSolver />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />

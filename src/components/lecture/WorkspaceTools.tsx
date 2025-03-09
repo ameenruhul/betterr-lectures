@@ -10,7 +10,9 @@ import {
   Brain, 
   NotebookPen, 
   Microscope,
-  Sparkles
+  Sparkles,
+  ClipboardList,
+  BookMarked
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -52,24 +54,14 @@ const WorkspaceTools = () => {
           onClick={() => handleToolClick("/quiz-solver")}
         />
         <WorkspaceToolButton 
-          icon={FileText} 
-          label="Assignment" 
-          onClick={() => {
-            toast({
-              title: "Assignment Creator",
-              description: "This feature is coming soon!",
-            });
-          }}
+          icon={ClipboardList} 
+          label="Assignment Generator" 
+          onClick={() => handleToolClick("/assignment-generator")}
         />
         <WorkspaceToolButton 
-          icon={Brain} 
-          label="Assignment Help" 
-          onClick={() => {
-            toast({
-              title: "Assignment Helper",
-              description: "This feature is coming soon!",
-            });
-          }}
+          icon={BookMarked} 
+          label="Assignment Solver" 
+          onClick={() => handleToolClick("/assignment-solver")}
         />
         <WorkspaceToolButton 
           icon={NotebookPen} 
