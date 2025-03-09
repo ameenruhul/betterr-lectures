@@ -15,6 +15,7 @@ import AssignmentGenerator from "./pages/AssignmentGenerator";
 import AssignmentSolver from "./pages/AssignmentSolver";
 import StudyGuide from "./pages/StudyGuide";
 import Research from "./pages/Research";
+import Landing from "./pages/Landing";
 import { useEffect } from "react";
 import { OnboardingProvider } from "./contexts/OnboardingContext";
 import OnboardingComplete from "./components/onboarding/OnboardingComplete";
@@ -36,7 +37,7 @@ function App() {
     <OnboardingProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Auth />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/courses/create" element={<CourseCreate />} />

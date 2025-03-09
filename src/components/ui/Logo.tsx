@@ -38,7 +38,7 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
       </div>
       
       {showText && (
-        <h2 className={cn("font-bold text-gray-800", fontSize)}>
+        <h2 className={cn("font-bold", fontSize, className?.includes("text-white") ? "text-white" : "text-gray-800")}>
           Better Lectures
         </h2>
       )}
