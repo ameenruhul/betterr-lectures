@@ -17,15 +17,35 @@ import {
   StickyNote,
   Notebook,
   Map,
-  MessageSquare
+  MessageSquare,
+  CalendarIcon,
+  BellRing
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import DashboardGuide from "@/components/onboarding/DashboardGuide";
 import { useOnboarding } from "@/contexts/OnboardingContext";
+import { Calendar } from "@/components/ui/calendar";
+import { useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 const Dashboard = () => {
   const { currentStep, isGuidedMode } = useOnboarding();
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [reminders, setReminders] = useState([
+    { id: 1, title: "Grade midterm papers", date: "2023-11-15", completed: false },
+    { id: 2, title: "Faculty meeting", date: "2023-11-16", completed: false },
+    { id: 3, title: "Submit course outline", date: "2023-11-18", completed: true },
+  ]);
+  
+  const toggleReminderStatus = (id: number) => {
+    setReminders(reminders.map(reminder => 
+      reminder.id === id ? { ...reminder, completed: !reminder.completed } : reminder
+    ));
+  };
   
   return (
     <div className="min-h-screen bg-accent/30">
@@ -77,6 +97,101 @@ const Dashboard = () => {
                     Research Topics <ArrowUpRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <Card className="col-span-2 border-none">
+              <CardHeader>
+                <CardTitle className="flex items-center text-lg font-medium">
+                  <CalendarIcon className="mr-2 h-5 w-5 text-blue-500" />
+                  Calendar
+                </CardTitle>
+                <CardDescription>Schedule your classes and important dates</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col items-center">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[280px] justify-start text-left font-normal mb-4",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+
+                  {date && (
+                    <div className="w-full mt-4">
+                      <h3 className="font-medium mb-2">Events for {format(date, "MMMM d, yyyy")}</h3>
+                      <div className="space-y-2">
+                        <div className="p-3 bg-blue-50 rounded-md border border-blue-200">
+                          <p className="font-medium">Introduction to Physics</p>
+                          <p className="text-sm text-gray-600">9:00 AM - 10:30 AM</p>
+                        </div>
+                        <div className="p-3 bg-purple-50 rounded-md border border-purple-200">
+                          <p className="font-medium">Office Hours</p>
+                          <p className="text-sm text-gray-600">1:00 PM - 3:00 PM</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none">
+              <CardHeader>
+                <CardTitle className="flex items-center text-lg font-medium">
+                  <BellRing className="mr-2 h-5 w-5 text-amber-500" />
+                  Reminders
+                </CardTitle>
+                <CardDescription>Keep track of important tasks</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {reminders.map((reminder) => (
+                    <div 
+                      key={reminder.id} 
+                      className={`p-3 rounded-md border flex justify-between items-center ${
+                        reminder.completed ? 'bg-gray-50 border-gray-200' : 'bg-amber-50 border-amber-200'
+                      }`}
+                    >
+                      <div className={reminder.completed ? 'text-gray-500 line-through' : ''}>
+                        <p className="font-medium">{reminder.title}</p>
+                        <p className="text-sm">{reminder.date}</p>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => toggleReminderStatus(reminder.id)}
+                        className={`min-w-20 ${
+                          reminder.completed ? 'border-gray-200' : 'border-amber-200'
+                        }`}
+                      >
+                        {reminder.completed ? 'Completed' : 'Mark Done'}
+                      </Button>
+                    </div>
+                  ))}
+                  <Button variant="outline" className="w-full mt-2 border-amber-200 hover:border-amber-500 hover:bg-amber-50">
+                    Add Reminder <PencilLine className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
