@@ -19,6 +19,12 @@ import Landing from "./pages/Landing";
 import { useEffect } from "react";
 import { OnboardingProvider } from "./contexts/OnboardingContext";
 import OnboardingComplete from "./components/onboarding/OnboardingComplete";
+import Reminders from "./pages/tools/Reminders";
+import MindMaps from "./pages/tools/MindMaps";
+import StickyNotes from "./pages/tools/StickyNotes";
+import LectureNotes from "./pages/tools/LectureNotes";
+import ConceptMapper from "./pages/tools/ConceptMapper";
+import ClassroomJournal from "./pages/tools/ClassroomJournal";
 
 function App() {
   useEffect(() => {
@@ -53,6 +59,15 @@ function App() {
           <Route path="/study-guide" element={<StudyGuide />} />
           <Route path="/research" element={<Research />} />
           <Route path="/lectures-panel" element={<LecturesPanel />} />
+          
+          {/* New Tool Routes */}
+          <Route path="/tools/reminders" element={<Reminders />} />
+          <Route path="/tools/mind-maps" element={<MindMaps />} />
+          <Route path="/tools/sticky-notes" element={<StickyNotes />} />
+          <Route path="/tools/lecture-notes" element={<LectureNotes />} />
+          <Route path="/tools/concept-mapper" element={<ConceptMapper />} />
+          <Route path="/tools/classroom-journal" element={<ClassroomJournal />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
