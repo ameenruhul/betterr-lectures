@@ -41,6 +41,7 @@ function App() {
         <Route path="/assignment-solver" element={<AssignmentSolver />} />
         <Route path="/study-guide" element={<StudyGuide />} />
         <Route path="/research" element={<Research />} />
+        <Route path="/lectures-panel" element={<CoursePanel />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />

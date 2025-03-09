@@ -49,8 +49,8 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
   const toolItems = [
     {
       icon: PanelLeft,
-      label: "Course Panel",
-      path: "/course-panel",
+      label: "Lectures Panel",
+      path: "/lectures-panel",
       color: "text-teal-500"
     },
     {
@@ -163,6 +163,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
                   icon={tool.icon}
                   label={tool.label}
                   onClick={() => handleToolClick(tool.path)}
+                  path={tool.path}
                   className={cn(
                     "transition-transform hover:translate-y-[-2px]",
                     window.location.pathname === tool.path && "ring-2 ring-primary/20 bg-primary/5"
