@@ -19,6 +19,11 @@ export const DashboardHeader = () => {
   const { isGuidedMode, currentStep, isFirstTime, toggleGuidedMode } = useOnboarding();
   const [showNotifications, setShowNotifications] = useState(false);
 
+  const handleToggleGuidedMode = () => {
+    console.log("Toggling guided mode from", isGuidedMode, "to", !isGuidedMode);
+    toggleGuidedMode();
+  };
+
   return (
     <div className="border-b bg-white py-4">
       <div className="flex items-center justify-between px-6">
@@ -65,7 +70,7 @@ export const DashboardHeader = () => {
                   variant="ghost" 
                   size="icon" 
                   className={`rounded-full ${isGuidedMode ? 'text-primary' : ''}`}
-                  onClick={toggleGuidedMode}
+                  onClick={handleToggleGuidedMode}
                 >
                   <HelpCircle className="h-5 w-5" />
                 </Button>

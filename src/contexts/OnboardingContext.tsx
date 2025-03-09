@@ -47,26 +47,39 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   useEffect(() => {
     const savedOnboarding = localStorage.getItem('onboarding');
     if (savedOnboarding) {
-      const { step, completed, guidedMode, enabled } = JSON.parse(savedOnboarding);
-      if (completed) {
-        setIsFirstTime(false);
-      } else {
-        setCurrentStep(step as OnboardingStep);
+      try {
+        const { step, completed, guidedMode, enabled } = JSON.parse(savedOnboarding);
+        if (completed) {
+          setIsFirstTime(false);
+        } else {
+          setCurrentStep(step as OnboardingStep);
+          setIsFirstTime(true);
+        }
+        setIsGuidedMode(guidedMode !== undefined ? guidedMode : true);
+        setIsOnboardingEnabled(enabled !== undefined ? enabled : true);
+      } catch (error) {
+        console.error("Error parsing onboarding data from localStorage:", error);
+        // Reset to defaults if there's an error
+        setCurrentStep('dashboard');
         setIsFirstTime(true);
+        setIsGuidedMode(true);
+        setIsOnboardingEnabled(true);
       }
-      setIsGuidedMode(guidedMode !== undefined ? guidedMode : true);
-      setIsOnboardingEnabled(enabled !== undefined ? enabled : true);
     }
   }, []);
   
   // Save onboarding state to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('onboarding', JSON.stringify({
-      step: currentStep,
-      completed: !isFirstTime,
-      guidedMode: isGuidedMode,
-      enabled: isOnboardingEnabled
-    }));
+    try {
+      localStorage.setItem('onboarding', JSON.stringify({
+        step: currentStep,
+        completed: !isFirstTime,
+        guidedMode: isGuidedMode,
+        enabled: isOnboardingEnabled
+      }));
+    } catch (error) {
+      console.error("Error saving onboarding data to localStorage:", error);
+    }
   }, [currentStep, isFirstTime, isGuidedMode, isOnboardingEnabled]);
   
   const nextStep = () => {
@@ -90,7 +103,8 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const toggleGuidedMode = () => {
-    setIsGuidedMode(prev => !prev);
+    console.log("ToggleGuidedMode called, current state:", isGuidedMode);
+    setIsGuidedMode(prevMode => !prevMode);
   };
 
   const toggleOnboarding = () => {

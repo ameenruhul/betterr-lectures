@@ -55,7 +55,7 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
 
   // Determine if the tooltip should be visible
   const shouldShowTooltip = forceShow || 
-    (isGuidedMode && currentStep && currentStep === nextStep);
+    (isGuidedMode && currentStep && nextStep && currentStep === nextStep);
 
   return (
     <div className="group relative">
