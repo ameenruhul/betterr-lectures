@@ -29,9 +29,6 @@ const STEPS_ORDER: OnboardingStep[] = [
   'course-details',
   'upload-syllabus',
   'lecture-list',
-  'lecture-panel',
-  'workspace-tools',
-  'ai-assistant',
   'complete'
 ];
 
@@ -73,6 +70,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     } else {
       // If we reach the end, mark onboarding as complete
       setIsFirstTime(false);
+      setCurrentStep('complete');
     }
   };
   
@@ -87,6 +85,11 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const toggleOnboarding = () => {
     setIsOnboardingEnabled(prev => !prev);
+    if (!isOnboardingEnabled && !isFirstTime) {
+      // If re-enabling after having completed it once, start from beginning
+      setCurrentStep('dashboard');
+      setIsFirstTime(true);
+    }
   };
   
   return (
