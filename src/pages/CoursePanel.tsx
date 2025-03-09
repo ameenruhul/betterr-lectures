@@ -7,6 +7,7 @@ import LectureNavigation from "@/components/lecture/LectureNavigation";
 import WorkspaceTools from "@/components/lecture/WorkspaceTools";
 import TextEditor from "@/components/lecture/TextEditor";
 import AIAssistant from "@/components/lecture/AIAssistant";
+import SharedCourseSidebar from "@/components/lecture/SharedCourseSidebar";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -16,11 +17,45 @@ import {
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 
+// Sample lecture sections with content for the text editor
+const SAMPLE_LECTURE_CONTENT = `
+# Introduction
+This is the introduction section of the lecture. It provides an overview of the main topics.
+
+# Key Concepts
+These are the key concepts that will be covered in this lecture:
+- Concept 1: Definition and explanation
+- Concept 2: Important details
+- Concept 3: Practical applications
+
+# Example Problems
+Here are some example problems to illustrate the concepts:
+1. Example problem 1
+2. Example problem 2
+3. Example problem 3
+
+# Discussion Questions
+Questions for class discussion:
+- How does concept 1 relate to real-world situations?
+- What are the limitations of concept 2?
+- How might we improve on concept 3?
+
+# Practice Quiz
+1. What is the main purpose of concept 1?
+2. How does concept 2 differ from concept 3?
+3. When would you apply concept 3 in a practical scenario?
+
+# Additional Resources
+- Recommended textbook chapters
+- Online articles
+- Additional practice problems
+`;
+
 const CoursePanel = () => {
   const { courseId, lectureId } = useParams();
   const navigate = useNavigate();
-  const [content, setContent] = useState("");
-  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled document");
+  const [content, setContent] = useState(SAMPLE_LECTURE_CONTENT);
+  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Course Content");
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedText, setSelectedText] = useState("");
@@ -70,6 +105,87 @@ const CoursePanel = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Use SharedCourseSidebar for the lectures panel route
+  if (window.location.pathname === "/lectures-panel") {
+    return (
+      <div className="h-screen flex overflow-hidden">
+        <div className={cn("w-64 flex-shrink-0", !sidebarOpen && "hidden")}>
+          <SharedCourseSidebar onCloseSidebar={() => setSidebarOpen(false)} />
+        </div>
+        
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {!sidebarOpen && (
+            <div className="p-4">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={toggleSidebar}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
+          
+          <div className="flex h-full">
+            <div className="w-64 border-r bg-gray-50">
+              <LectureNavigation 
+                lectureId={lectureId || "default"} 
+                onCloseSidebar={() => {}}
+              />
+            </div>
+            
+            <div className="flex-1 p-6">
+              <h1 className="text-2xl font-bold mb-4">Lecture Content</h1>
+              <div className="prose max-w-none">
+                <h2 id="introduction" className="scroll-mt-16">Introduction</h2>
+                <p>This is the introduction section of the lecture. It provides an overview of the main topics.</p>
+                
+                <h2 id="key-concepts" className="scroll-mt-16 mt-8">Key Concepts</h2>
+                <p>These are the key concepts that will be covered in this lecture:</p>
+                <ul>
+                  <li><strong>Concept 1:</strong> Definition and explanation</li>
+                  <li><strong>Concept 2:</strong> Important details</li>
+                  <li><strong>Concept 3:</strong> Practical applications</li>
+                </ul>
+                
+                <h2 id="examples" className="scroll-mt-16 mt-8">Example Problems</h2>
+                <p>Here are some example problems to illustrate the concepts:</p>
+                <ol>
+                  <li>Example problem 1</li>
+                  <li>Example problem 2</li>
+                  <li>Example problem 3</li>
+                </ol>
+                
+                <h2 id="discussion" className="scroll-mt-16 mt-8">Discussion Questions</h2>
+                <p>Questions for class discussion:</p>
+                <ul>
+                  <li>How does concept 1 relate to real-world situations?</li>
+                  <li>What are the limitations of concept 2?</li>
+                  <li>How might we improve on concept 3?</li>
+                </ul>
+                
+                <h2 id="quiz" className="scroll-mt-16 mt-8">Practice Quiz</h2>
+                <ol>
+                  <li>What is the main purpose of concept 1?</li>
+                  <li>How does concept 2 differ from concept 3?</li>
+                  <li>When would you apply concept 3 in a practical scenario?</li>
+                </ol>
+                
+                <h2 id="resources" className="scroll-mt-16 mt-8">Additional Resources</h2>
+                <ul>
+                  <li>Recommended textbook chapters</li>
+                  <li>Online articles</li>
+                  <li>Additional practice problems</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Original CoursePanel for other routes
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
       {/* Mobile Toggle Button */}
