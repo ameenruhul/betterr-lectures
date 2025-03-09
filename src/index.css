@@ -129,6 +129,18 @@
   .text-gradient-red-purple {
     @apply bg-red-purple-gradient bg-clip-text text-transparent;
   }
+  
+  .hover-scale {
+    @apply hover:scale-105 transition-transform;
+  }
+  
+  .hover-translate-x {
+    @apply hover:translate-x-1 transition-transform;
+  }
+  
+  .hover-translate-y {
+    @apply hover:-translate-y-1 transition-transform;
+  }
 }
 
 /* Drag handle styles */

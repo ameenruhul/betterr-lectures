@@ -23,19 +23,19 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative">
-        <div className="absolute inset-0 bg-red-violet-gradient rounded-full blur-lg opacity-30" style={{ 
+      <div className="relative group">
+        <div className="absolute inset-0 bg-violet-purple-gradient rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity" style={{ 
           width: iconSize * 1.5, 
           height: iconSize * 1.5, 
           top: -iconSize * 0.25, 
           left: -iconSize * 0.25 
         }}></div>
         <Presentation 
-          className="text-ai-red relative" 
+          className="text-ai-purple relative group-hover:scale-110 transition-transform" 
           size={iconSize} 
         />
         <Brain 
-          className="absolute text-ai-purple left-0 top-0" 
+          className="absolute text-ai-magenta left-0 top-0 group-hover:scale-110 transition-transform" 
           size={iconSize} 
           style={{
             transform: "scale(0.65) translate(30%, 30%)"

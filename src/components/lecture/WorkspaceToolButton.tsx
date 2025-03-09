@@ -38,7 +38,7 @@ const WorkspaceToolButton = ({
         className
       )}
     >
-      <Icon className={cn("h-6 w-6", iconClassName || "text-primary")} />
+      <Icon className={cn("h-6 w-6 transition-transform group-hover:scale-110", iconClassName || "text-primary")} />
       <span className="text-xs font-medium">{label}</span>
     </Button>
   );
