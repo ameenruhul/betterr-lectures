@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Brain, Presentation, ChalkboardPen } from "lucide-react";
+import { Brain, ClipboardPen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -33,7 +33,7 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
         }}></div>
         
         {/* Whiteboard/classroom element */}
-        <ChalkboardPen 
+        <ClipboardPen 
           className="text-ai-purple relative group-hover:scale-110 transition-transform" 
           size={iconSize} 
         />
