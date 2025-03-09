@@ -14,7 +14,7 @@ export const DashboardNav = () => {
         <div className="p-6 border-b">
           <div className="flex items-center space-x-2">
             <GraduationCap className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">Better Classes</span>
+            <span className="text-xl font-bold">Better Lectures</span>
           </div>
         </div>
         

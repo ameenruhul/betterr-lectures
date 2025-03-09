@@ -8,7 +8,7 @@ export const DashboardHeader = () => {
     <div className="border-b bg-white py-4">
       <div className="flex items-center justify-between px-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Welcome back, Professor</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Welcome to Better Lectures</h1>
           <p className="text-muted-foreground">
             Here's what's happening with your courses today.
           </p>

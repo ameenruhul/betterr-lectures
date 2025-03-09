@@ -15,8 +15,14 @@ import AssignmentGenerator from "./pages/AssignmentGenerator";
 import AssignmentSolver from "./pages/AssignmentSolver";
 import StudyGuide from "./pages/StudyGuide";
 import Research from "./pages/Research";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    // Update the document title
+    document.title = "Better Lectures";
+  }, []);
+
   return (
     <Router>
       <Routes>

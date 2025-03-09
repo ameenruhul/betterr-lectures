@@ -2,9 +2,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { DashboardNav } from "@/components/DashboardNav";
-import { Brain, BookOpen, GraduationCap, Bell, LineChart, Clock, ArrowUpRight } from "lucide-react";
+import { Brain, BookOpen, GraduationCap, Bell, LineChart, Clock, ArrowUpRight, Lightbulb, ChevronRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 // Sample data for the chart
 const data = [
@@ -17,6 +19,15 @@ const data = [
   { name: 'Sun', students: 5 },
 ];
 
+// Sample data for pie chart
+const courseData = [
+  { name: 'Computer Science', value: 45 },
+  { name: 'Mathematics', value: 30 },
+  { name: 'Physics', value: 25 },
+];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+
 const Dashboard = () => {
   return (
     <div className="flex min-h-screen bg-accent/30">
@@ -24,10 +35,55 @@ const Dashboard = () => {
       <DashboardNav />
       
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col">
         <DashboardHeader />
         
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-auto">
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-medium">Create Lecture</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-blue-100 mb-4">Quickly prepare materials for your next class</p>
+                <Link to="/lecture-prep">
+                  <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                    Get Started <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-medium">Build Quiz</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-purple-100 mb-4">Generate engaging quizzes for student assessment</p>
+                <Link to="/quiz-builder">
+                  <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                    Create Quiz <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg hover:shadow-xl transition-all border-none">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-medium">Research Assistant</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-amber-100 mb-4">Find resources and generate insights with AI</p>
+                <Link to="/research">
+                  <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
+                    Start Research <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Stats Cards */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <Card className="hover:shadow-md transition-shadow border-none">
@@ -103,42 +159,75 @@ const Dashboard = () => {
             </Card>
           </div>
 
-          {/* Chart Section */}
-          <Card className="border-none">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Student Engagement</CardTitle>
-                  <CardDescription>Weekly student participation across courses</CardDescription>
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+            {/* Charts Section */}
+            <Card className="border-none lg:col-span-2">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Student Engagement</CardTitle>
+                    <CardDescription>Weekly student participation across courses</CardDescription>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <LineChart className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Last 7 days</span>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <LineChart className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Last 7 days</span>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={data}
+                      margin={{
+                        top: 10,
+                        right: 30,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                      <YAxis axisLine={false} tickLine={false} />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="students" stroke="#2563eb" fill="#dbeafe" />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart
-                    data={data}
-                    margin={{
-                      top: 10,
-                      right: 30,
-                      left: 0,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                    <YAxis axisLine={false} tickLine={false} />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="students" stroke="#2563eb" fill="#dbeafe" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            {/* Subject Distribution */}
+            <Card className="border-none">
+              <CardHeader>
+                <CardTitle>Subject Distribution</CardTitle>
+                <CardDescription>Active courses by department</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px] flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={courseData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {courseData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Tabs Section */}
           <Card className="border-none">
@@ -147,6 +236,7 @@ const Dashboard = () => {
                 <TabsList>
                   <TabsTrigger value="activity">Recent Activity</TabsTrigger>
                   <TabsTrigger value="tasks">Upcoming Tasks</TabsTrigger>
+                  <TabsTrigger value="tips">Teaching Tips</TabsTrigger>
                 </TabsList>
               </Tabs>
             </CardHeader>
@@ -225,6 +315,35 @@ const Dashboard = () => {
                         <Clock className="h-3 w-3 mr-1" />
                         <span>Due in 5 days</span>
                       </div>
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="tips" className="space-y-4 m-0">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Lightbulb className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Use visual aids to enhance student comprehension</p>
+                      <p className="text-sm text-muted-foreground">Students retain information better when visual elements are included</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                      <Lightbulb className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Incorporate interactive elements</p>
+                      <p className="text-sm text-muted-foreground">Engagement increases when students participate actively</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                      <Lightbulb className="h-4 w-4 text-amber-600" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-medium">Use AI to personalize learning experiences</p>
+                      <p className="text-sm text-muted-foreground">Better Lectures AI can help create custom content for different learning styles</p>
                     </div>
                   </div>
                 </TabsContent>
