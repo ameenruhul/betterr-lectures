@@ -8,6 +8,8 @@ import WorkspaceTools from "@/components/lecture/WorkspaceTools";
 import EditorToolbar from "@/components/lecture/EditorToolbar";
 import TextEditor from "@/components/lecture/TextEditor";
 import AIAssistant from "@/components/lecture/AIAssistant";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CoursePanel = () => {
   const { courseId, lectureId } = useParams();
@@ -15,6 +17,7 @@ const CoursePanel = () => {
   const [content, setContent] = useState("");
   const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled document");
   const { toast } = useToast();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleBackToLectures = () => {
     if (courseId) {
@@ -46,10 +49,28 @@ const CoursePanel = () => {
     });
   };
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
+      {/* Mobile Sidebar Toggle */}
+      <div className="md:hidden fixed top-0 left-0 z-20 p-2">
+        <Button
+          variant="outline"
+          size="icon"
+          className="bg-white"
+          onClick={toggleSidebar}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+      </div>
+
       {/* Left Sidebar */}
-      <div className="w-64 border-r flex flex-col bg-white">
+      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+                      fixed md:relative z-10 w-64 h-screen border-r flex flex-col bg-white 
+                      transition-transform duration-300 ease-in-out md:translate-x-0`}>
         {/* Navigation Header */}
         <ContentUploader 
           courseId={courseId} 
@@ -59,14 +80,25 @@ const CoursePanel = () => {
         />
 
         {/* Lecture Navigation */}
-        <LectureNavigation lectureId={lectureId} />
+        <LectureNavigation 
+          lectureId={lectureId} 
+          onCloseSidebar={() => setSidebarOpen(false)}
+        />
 
         {/* Workspace Features */}
         <WorkspaceTools />
       </div>
 
+      {/* Overlay when sidebar is open on mobile */}
+      {sidebarOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/20 z-0"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Main Content Area - Word Processor */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col md:ml-0 w-full">
         {/* Editor Toolbar */}
         <EditorToolbar 
           onSave={handleSave} 
