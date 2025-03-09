@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -123,12 +124,6 @@ const CoursePanel = () => {
             className="bg-gray-50"
           >
             <div className="h-full flex flex-col overflow-hidden">
-              <EditorToolbar 
-                onSave={handleSave} 
-                onDownloadPDF={handleDownloadPDF} 
-                onCreatePPTX={handleCreatePPTX} 
-              />
-
               <TextEditor 
                 content={content}
                 setContent={setContent}
@@ -171,12 +166,6 @@ const CoursePanel = () => {
         </div>
 
         <div className="flex-1 flex flex-col w-full">
-          <EditorToolbar 
-            onSave={handleSave} 
-            onDownloadPDF={handleDownloadPDF} 
-            onCreatePPTX={handleCreatePPTX} 
-          />
-
           <TextEditor 
             content={content}
             setContent={setContent}
