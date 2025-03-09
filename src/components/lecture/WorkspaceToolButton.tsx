@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 interface WorkspaceToolButtonProps {
   icon: LucideIcon;
@@ -10,6 +11,7 @@ interface WorkspaceToolButtonProps {
   onClick?: () => void;
   className?: string;
   iconClassName?: string;
+  path?: string;
 }
 
 const WorkspaceToolButton = ({
@@ -18,7 +20,11 @@ const WorkspaceToolButton = ({
   onClick,
   className,
   iconClassName,
+  path,
 }: WorkspaceToolButtonProps) => {
+  const location = useLocation();
+  const isActive = path ? location.pathname === path : false;
+
   return (
     <Button
       variant="outline"
@@ -28,6 +34,7 @@ const WorkspaceToolButton = ({
         "hover:bg-primary/5 hover:text-primary hover:border-primary/20",
         "active:translate-y-0 active:scale-95",
         "shadow-sm hover:shadow-md",
+        isActive && "ring-2 ring-primary/20 bg-primary/5 text-primary border-primary/20",
         className
       )}
     >

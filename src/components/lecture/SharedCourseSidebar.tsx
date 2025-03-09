@@ -48,6 +48,12 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
 
   const toolItems = [
     {
+      icon: PanelLeft,
+      label: "Course Panel",
+      path: "/course-panel",
+      color: "text-teal-500"
+    },
+    {
       icon: BookOpen,
       label: "Lesson Plan",
       path: "/lesson-plan",

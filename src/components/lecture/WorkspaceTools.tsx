@@ -12,7 +12,8 @@ import {
   Microscope,
   Sparkles,
   ClipboardList,
-  BookMarked
+  BookMarked,
+  PanelLeft
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,12 @@ const WorkspaceTools = () => {
       </h3>
       
       <div className="grid grid-cols-2 gap-3">
+        <WorkspaceToolButton 
+          icon={PanelLeft} 
+          label="Course Panel" 
+          onClick={() => handleToolClick("/course-panel")}
+          iconClassName="text-teal-500"
+        />
         <WorkspaceToolButton 
           icon={BookOpen} 
           label="Lesson Plan" 
