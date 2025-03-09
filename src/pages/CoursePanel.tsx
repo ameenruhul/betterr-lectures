@@ -13,6 +13,7 @@ import {
   ResizablePanel, 
   ResizableHandle 
 } from "@/components/ui/resizable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
@@ -21,12 +22,11 @@ const LecturesPanel = () => {
   const { courseId, lectureId } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
-  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Teaching Material ${lectureId}` : "Untitled document");
+  const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled Lecture");
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedText, setSelectedText] = useState("");
   const { currentStep, isFirstTime, nextStep } = useOnboarding();
-  const [activeTab, setActiveTab] = useState<"editor" | "classplan">("editor");
 
   const aiAssistantRef = useRef<HTMLDivElement>(null);
 
@@ -52,8 +52,8 @@ const LecturesPanel = () => {
 
   const handleSave = () => {
     toast({
-      title: "Document saved",
-      description: "Your teaching materials have been saved successfully",
+      title: "Lecture saved",
+      description: "Your lecture materials have been saved successfully",
       duration: 3000,
     });
   };
@@ -131,101 +131,97 @@ const LecturesPanel = () => {
               </Button>
             )}
             
-            <div className="flex items-center space-x-4">
-              <Button
-                variant={activeTab === "editor" ? "default" : "outline"}
-                onClick={() => setActiveTab("editor")}
-                size="sm"
-              >
-                Document Editor
-              </Button>
-              <Button
-                variant={activeTab === "classplan" ? "default" : "outline"}
-                onClick={() => setActiveTab("classplan")}
-                size="sm"
-              >
-                Class Plan Creator
-              </Button>
-            </div>
-            
-            <Button size="sm" onClick={handleSave}>
-              Save Changes
-            </Button>
+            <Tabs defaultValue="editor" className="w-full">
+              <div className="flex items-center justify-between">
+                <TabsList>
+                  <TabsTrigger value="editor">Content Editor</TabsTrigger>
+                  <TabsTrigger value="classplan">Class Plan</TabsTrigger>
+                </TabsList>
+                
+                <Button size="sm" onClick={handleSave}>
+                  Save Lecture
+                </Button>
+              </div>
+              
+              <div className="hidden md:block h-[calc(100vh-112px)]">
+                <TabsContent value="editor" className="m-0 h-full">
+                  <ResizablePanelGroup
+                    direction="horizontal"
+                    onLayout={handlePanelResize}
+                    className="h-full w-full"
+                  >
+                    <ResizablePanel 
+                      defaultSize={middlePanelSize} 
+                      minSize={40}
+                      className="bg-gray-50"
+                    >
+                      <div className="h-full flex flex-col overflow-hidden">
+                        <PathwayTooltip 
+                          content="Create your lecture materials, slides, and class activities here."
+                          position="bottom"
+                          step={5}
+                          className="w-72"
+                          nextStep="ai-assistant"
+                          forceShow={isFirstTime && currentStep === 'lecture-editor'}
+                        >
+                          <TextEditor 
+                            content={content}
+                            setContent={setContent}
+                            documentTitle={documentTitle}
+                            setDocumentTitle={setDocumentTitle}
+                          />
+                        </PathwayTooltip>
+                      </div>
+                    </ResizablePanel>
+
+                    <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
+
+                    <ResizablePanel 
+                      defaultSize={rightPanelSize} 
+                      minSize={20} 
+                      maxSize={40}
+                      className="bg-gray-white border-l"
+                    >
+                      <div ref={aiAssistantRef}>
+                        <PathwayTooltip 
+                          content="Get AI suggestions for your lecture content, activities, and assessment materials."
+                          position="left"
+                          step={6}
+                          className="w-72"
+                          nextStep="complete"
+                          forceShow={isFirstTime && currentStep === 'ai-assistant'}
+                        >
+                          <AIAssistant 
+                            onApplySuggestion={handleApplyAISuggestion}
+                          />
+                        </PathwayTooltip>
+                      </div>
+                    </ResizablePanel>
+                  </ResizablePanelGroup>
+                </TabsContent>
+                
+                <TabsContent value="classplan" className="m-0 h-full">
+                  <ClassPlanCreator />
+                </TabsContent>
+              </div>
+            </Tabs>
           </div>
           
-          <div className="hidden md:flex h-[calc(100%-56px)] w-full">
-            <ResizablePanelGroup
-              direction="horizontal"
-              onLayout={handlePanelResize}
-              className="h-full w-full"
-            >
-              <ResizablePanel 
-                defaultSize={middlePanelSize} 
-                minSize={40}
-                className="bg-gray-50"
-              >
-                <div className="h-full flex flex-col overflow-hidden">
-                  {activeTab === "editor" ? (
-                    <PathwayTooltip 
-                      content="Create your teaching materials, lesson plans, and class activities here."
-                      position="bottom"
-                      step={5}
-                      className="w-72"
-                      nextStep="ai-assistant"
-                      forceShow={isFirstTime && currentStep === 'lecture-editor'}
-                    >
-                      <TextEditor 
-                        content={content}
-                        setContent={setContent}
-                        documentTitle={documentTitle}
-                        setDocumentTitle={setDocumentTitle}
-                      />
-                    </PathwayTooltip>
-                  ) : (
-                    <ClassPlanCreator />
-                  )}
-                </div>
-              </ResizablePanel>
-
-              <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
-
-              <ResizablePanel 
-                defaultSize={rightPanelSize} 
-                minSize={20} 
-                maxSize={40}
-                className="bg-gray-white border-l"
-              >
-                <div ref={aiAssistantRef}>
-                  <PathwayTooltip 
-                    content="Get AI suggestions for your lesson plans, quiz questions, and teaching activities."
-                    position="left"
-                    step={6}
-                    className="w-72"
-                    nextStep="complete"
-                    forceShow={isFirstTime && currentStep === 'ai-assistant'}
-                  >
-                    <AIAssistant 
-                      onApplySuggestion={handleApplyAISuggestion}
-                    />
-                  </PathwayTooltip>
-                </div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </div>
-
-          <div className="md:hidden flex h-[calc(100%-56px)]">
-            <div className="flex-1 flex flex-col w-full">
-              {activeTab === "editor" ? (
+          <div className="md:hidden h-[calc(100vh-56px)]">
+            <Tabs defaultValue="editor" className="h-full">
+              <TabsContent value="editor" className="m-0 h-full">
                 <TextEditor 
                   content={content}
                   setContent={setContent}
                   documentTitle={documentTitle}
                   setDocumentTitle={setDocumentTitle}
                 />
-              ) : (
+              </TabsContent>
+              
+              <TabsContent value="classplan" className="m-0 h-full">
                 <ClassPlanCreator />
-              )}
-            </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>

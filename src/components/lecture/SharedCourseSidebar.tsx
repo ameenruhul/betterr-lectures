@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
   BookOpen, 
-  GraduationCap, 
   FileQuestion, 
   CheckSquare, 
   FileText, 
@@ -16,7 +15,6 @@ import {
   ChevronUp,
   Library,
   PanelLeft,
-  Home,
   LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,7 +23,6 @@ import ContentUploader from "@/components/lecture/ContentUploader";
 import LectureNavigation from "@/components/lecture/LectureNavigation";
 import WorkspaceToolButton from "@/components/lecture/WorkspaceToolButton";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 
 interface SharedCourseSidebarProps {
   onCloseSidebar?: () => void;
@@ -34,10 +31,9 @@ interface SharedCourseSidebarProps {
 const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
   const [toolsExpanded, setToolsExpanded] = useState(true);
   
-  const handleBackToLectures = () => {
+  const handleBackToDashboard = () => {
     navigate("/dashboard");
   };
 
@@ -62,22 +58,10 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
       color: "text-blue-500"
     },
     {
-      icon: GraduationCap,
-      label: "Teacher Prep",
-      path: "/lecture-prep",
-      color: "text-indigo-500"
-    },
-    {
       icon: FileQuestion,
       label: "Create Quiz",
       path: "/quiz-builder",
       color: "text-purple-500"
-    },
-    {
-      icon: CheckSquare,
-      label: "Quiz Solver",
-      path: "/quiz-solver",
-      color: "text-violet-500"
     },
     {
       icon: ClipboardList,
@@ -86,38 +70,26 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
       color: "text-pink-500"
     },
     {
-      icon: BookMarked,
-      label: "Assignment Solver",
-      path: "/assignment-solver",
-      color: "text-rose-500"
-    },
-    {
-      icon: NotebookPen,
+      icon: FileText,
       label: "Study Guide",
       path: "/study-guide",
       color: "text-amber-500"
-    },
-    {
-      icon: Microscope,
-      label: "Research",
-      path: "/research",
-      color: "text-emerald-500"
     }
   ];
 
-  // Group tools by category for better organization
+  // Group tools by category
   const toolCategories = [
     {
-      title: "PLANNING",
-      tools: [toolItems[0], toolItems[1], toolItems[2]]
+      title: "LECTURE PREPARATION",
+      tools: [toolItems[0], toolItems[1]]
     },
     {
-      title: "ASSESSMENT",
-      tools: [toolItems[3], toolItems[4], toolItems[5], toolItems[6]]
+      title: "ASSESSMENT TOOLS",
+      tools: [toolItems[2], toolItems[3]]
     },
     {
-      title: "RESEARCH & STUDY",
-      tools: [toolItems[7], toolItems[8]]
+      title: "STUDENT RESOURCES",
+      tools: [toolItems[4]]
     }
   ];
 
@@ -129,7 +101,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
         <Button 
           variant="ghost" 
           size="sm" 
-          onClick={() => navigate('/dashboard')} 
+          onClick={handleBackToDashboard} 
           className="flex items-center w-full text-gray-700 hover:text-primary transition-colors -ml-2 mb-2 group"
         >
           <LayoutDashboard className="h-4 w-4 mr-2 text-primary group-hover:translate-x-[-2px] transition-transform" />
@@ -146,8 +118,8 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
       <ContentUploader 
         courseId="tools"
         lectureId="shared" 
-        documentTitle="AI Teaching Tools"
-        onBackClick={handleBackToLectures}
+        documentTitle="Current Lecture"
+        onBackClick={handleBackToDashboard}
       />
 
       {/* Lecture Navigation */}
@@ -156,7 +128,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
         onCloseSidebar={onCloseSidebar}
       />
       
-      {/* AI Teaching Tools Section */}
+      {/* Teaching Tools Section */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <div 
           className="flex items-center justify-between p-4 border-b cursor-pointer bg-white hover:bg-gray-50 transition-colors"
@@ -164,7 +136,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
         >
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />
-            <h3 className="font-semibold text-sm text-gray-700">AI TEACHING TOOLS</h3>
+            <h3 className="font-semibold text-sm text-gray-700">TEACHING TOOLS</h3>
           </div>
           {toolsExpanded ? (
             <ChevronUp className="h-4 w-4 text-gray-500" />
