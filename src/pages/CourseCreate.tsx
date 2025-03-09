@@ -1,25 +1,20 @@
+
 import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BookOpen, Calendar, List } from "lucide-react";
+import { BookOpen, Upload, FileText, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import CoachMark from "@/components/onboarding/CoachMark";
-import Spotlight from "@/components/onboarding/Spotlight";
 import { useToast } from "@/hooks/use-toast";
 import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
+import { cn } from "@/lib/utils";
 
 interface CourseFormValues {
   title: string;
-  description: string;
-  level: string;
-  startDate: string;
-  endDate: string;
 }
 
 const CourseCreate = () => {
@@ -28,14 +23,13 @@ const CourseCreate = () => {
   const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
   const courseDetailsRef = useRef<HTMLDivElement>(null);
   const titleFieldRef = useRef<HTMLDivElement>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   
   const form = useForm<CourseFormValues>({
     defaultValues: {
       title: "",
-      description: "",
-      level: "undergraduate",
-      startDate: "",
-      endDate: "",
     },
   });
 
@@ -46,21 +40,74 @@ const CourseCreate = () => {
     }
   }, [currentStep, isFirstTime]);
 
-  const onSubmit = (data: CourseFormValues) => {
-    console.log("Course data:", data);
-    toast({
-      title: "Course created",
-      description: "Your course has been created successfully",
-    });
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      setFile(files[0]);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const processSyllabus = async (courseTitle: string) => {
+    setIsProcessing(true);
     
-    // If user is in onboarding, move to next step and navigate
-    if (isFirstTime) {
-      nextStep();
+    // Simulate processing time for syllabus analysis
+    setTimeout(() => {
+      setIsProcessing(false);
+      
+      toast({
+        title: "Course created",
+        description: "Your course has been created and lectures generated from the syllabus",
+      });
+      
+      // If user is in onboarding, move to next step
+      if (isFirstTime) {
+        nextStep();
+      }
+      
+      // Navigate to the lectures list for the new course
+      // Using a dummy ID (1) since we don't have a backend
+      navigate(`/courses/1/lectures`);
+    }, 2000);
+  };
+
+  const onSubmit = (data: CourseFormValues) => {
+    if (!data.title.trim()) {
+      toast({
+        title: "Course title required",
+        description: "Please provide a title for your course",
+        variant: "destructive",
+      });
+      return;
     }
     
-    // Navigate to the lectures list for the new course
-    // Using a dummy ID (1) since we don't have a backend
-    navigate(`/courses/1/lectures`);
+    if (!file) {
+      toast({
+        title: "Syllabus required",
+        description: "Please upload a syllabus to create your course",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    processSyllabus(data.title);
   };
 
   return (
@@ -73,7 +120,7 @@ const CourseCreate = () => {
           {isFirstTime && currentStep === 'course-create' && (
             <CoachMark
               title="Create Your First Course"
-              description="Start by filling out the course details below. After creating your course, you'll be able to add lectures and upload materials."
+              description="Start by entering a course name and uploading your syllabus. We'll automatically generate lecture content based on your syllabus!"
               position="bottom-left"
               onNext={() => nextStep()}
               onSkip={skipOnboarding}
@@ -81,26 +128,30 @@ const CourseCreate = () => {
           )}
         </div>
 
-        <div className="grid gap-6">
-          <Card ref={courseDetailsRef}>
-            <CardHeader>
+        <div className="max-w-3xl mx-auto">
+          <Card ref={courseDetailsRef} className="border-none shadow-md">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-white rounded-t-lg pb-2">
               <CardTitle className="flex items-center gap-2">
                 <BookOpen className="h-5 w-5" />
-                Course Details
+                Course Creation
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                   <div ref={titleFieldRef}>
                     <FormField
                       control={form.control}
                       name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Course Title</FormLabel>
+                          <FormLabel className="text-base">Course Title</FormLabel>
                           <FormControl>
-                            <Input placeholder="Introduction to Computer Science" {...field} />
+                            <Input 
+                              placeholder="Introduction to Computer Science" 
+                              className="text-base py-6" 
+                              {...field} 
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -108,119 +159,100 @@ const CourseCreate = () => {
                     />
                   </div>
 
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Enter course description..."
-                            className="min-h-[100px]"
-                            {...field}
+                  <div className="space-y-3">
+                    <FormLabel className="text-base">Upload Course Syllabus</FormLabel>
+                    <div
+                      className={cn(
+                        "group h-40 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-4 transition-all duration-300",
+                        isDragging 
+                          ? "border-primary bg-primary/5 scale-[1.02]" 
+                          : "border-gray-200 bg-gray-50 hover:border-primary/50 hover:bg-gray-100/50"
+                      )}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                    >
+                      {file ? (
+                        <div className="flex flex-col items-center">
+                          <FileText className="h-10 w-10 text-primary mb-2" />
+                          <p className="font-medium text-gray-800">{file.name}</p>
+                          <p className="text-sm text-gray-500">
+                            {(file.size / 1024).toFixed(1)} KB
+                          </p>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => setFile(null)}
+                            className="mt-2 text-red-500 hover:text-red-700 hover:bg-red-50"
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <>
+                          <Upload className="h-10 w-10 mb-2 transition-colors duration-300 text-gray-400 group-hover:text-primary/70" />
+                          <p className="text-sm text-center text-gray-600 mb-2">
+                            Drag your syllabus here or click to browse
+                          </p>
+                          <input
+                            type="file"
+                            className="hidden"
+                            id="syllabus-upload"
+                            accept=".pdf,.doc,.docx,.txt"
+                            onChange={handleFileChange}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="level"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Course Level</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select course level" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="undergraduate">Undergraduate</SelectItem>
-                            <SelectItem value="graduate">Graduate</SelectItem>
-                            <SelectItem value="phd">PhD</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="startDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Start Date</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                          <label htmlFor="syllabus-upload">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="bg-white hover:bg-primary hover:text-white transition-all duration-300"
+                              type="button"
+                            >
+                              Browse Files
+                            </Button>
+                          </label>
+                        </>
                       )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="endDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>End Date</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
+                    </p>
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex flex-col items-center pt-4">
+                    <p className="text-sm text-gray-600 mb-6 text-center max-w-lg">
+                      Once you upload your syllabus, we'll automatically generate a lecture structure for your course. 
+                      You'll be able to edit and customize this structure in the next step.
+                    </p>
                     <PathwayTooltip 
-                      content="Click here to create your course and continue to the next step where you'll add lecture materials."
+                      content="Click here to create your course and continue to the next step where your lectures will be generated from the syllabus."
                       position="top"
                       step={2}
                       className="w-72"
                       nextStep="upload-syllabus"
                       forceShow={isFirstTime && currentStep === 'course-create'}
                     >
-                      <Button type="submit">Create Course</Button>
+                      <Button 
+                        type="submit"
+                        className="px-8 py-6 text-base"
+                        disabled={isProcessing}
+                      >
+                        {isProcessing ? (
+                          <>
+                            <div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-opacity-50 border-t-transparent rounded-full"></div>
+                            Processing Syllabus...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="mr-2 h-5 w-5" />
+                            Create Course & Generate Lectures
+                          </>
+                        )}
+                      </Button>
                     </PathwayTooltip>
                   </div>
                 </form>
               </Form>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <List className="h-5 w-5" />
-                Course Materials
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-sm text-muted-foreground">
-                You can organize your course materials after creating the course.
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                Schedule Planning
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-sm text-muted-foreground">
-                Course schedule can be set up after creating the course.
-              </div>
             </CardContent>
           </Card>
         </div>
