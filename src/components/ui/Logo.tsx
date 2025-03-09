@@ -24,12 +24,18 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <div className="relative">
+        <div className="absolute inset-0 bg-blue-purple-gradient rounded-full blur-lg opacity-30" style={{ 
+          width: iconSize * 1.5, 
+          height: iconSize * 1.5, 
+          top: -iconSize * 0.25, 
+          left: -iconSize * 0.25 
+        }}></div>
         <Presentation 
-          className="text-primary" 
+          className="text-ai-blue relative" 
           size={iconSize} 
         />
         <Brain 
-          className="absolute text-primary/80 left-0 top-0" 
+          className="absolute text-ai-purple left-0 top-0" 
           size={iconSize} 
           style={{
             transform: "scale(0.65) translate(30%, 30%)"
@@ -38,7 +44,13 @@ const Logo = ({ variant = "default", showText = true, className }: LogoProps) =>
       </div>
       
       {showText && (
-        <h2 className={cn("font-bold", fontSize, className?.includes("text-white") ? "text-white" : "text-gray-800")}>
+        <h2 className={cn(
+          "font-bold bg-clip-text",
+          fontSize, 
+          className?.includes("text-white") 
+            ? "text-white" 
+            : "text-transparent bg-blue-purple-gradient"
+        )}>
           Better Lectures
         </h2>
       )}

@@ -101,6 +101,28 @@
   }
 }
 
+@layer components {
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-sm border border-white/20 shadow-xl;
+  }
+  
+  .gradient-border {
+    @apply relative before:absolute before:inset-0 before:-z-10 before:p-[1px] before:bg-blue-purple-gradient before:rounded-[inherit];
+  }
+  
+  .feature-icon-bg {
+    @apply p-3 rounded-xl bg-gradient-to-br from-white to-gray-100 shadow-md;
+  }
+  
+  .text-gradient-blue-purple {
+    @apply bg-blue-purple-gradient bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-purple-pink {
+    @apply bg-purple-pink-gradient bg-clip-text text-transparent;
+  }
+}
+
 /* Drag handle styles */
 .drag-handle {
   cursor: grab;
