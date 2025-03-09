@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   AlertCircle,
@@ -23,20 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-
-interface QuestionOption {
-  id: string;
-  text: string;
-  isCorrect: boolean;
-}
-
-interface Question {
-  id: string;
-  text: string;
-  type: "multiple-choice" | "true-false" | "short-answer";
-  options: QuestionOption[];
-  points: number;
-}
+import AddQuestionForm, { Question, QuestionOption } from "./AddQuestionForm";
 
 const QuizBuilder = () => {
   const { toast } = useToast();
@@ -68,25 +54,17 @@ const QuizBuilder = () => {
   ]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [promptInput, setPromptInput] = useState("");
+  const [showAddQuestionForm, setShowAddQuestionForm] = useState(false);
 
-  // Add a new question
-  const handleAddQuestion = () => {
-    const newQuestion: Question = {
-      id: Date.now().toString(),
-      text: "New question",
-      type: "multiple-choice",
-      options: [
-        { id: `${Date.now()}-1`, text: "Option 1", isCorrect: false },
-        { id: `${Date.now()}-2`, text: "Option 2", isCorrect: false },
-        { id: `${Date.now()}-3`, text: "Option 3", isCorrect: false },
-        { id: `${Date.now()}-4`, text: "Option 4", isCorrect: true }
-      ],
-      points: 5
-    };
+  const handleAddQuestion = (newQuestion: Question) => {
     setQuestions([...questions, newQuestion]);
+    setShowAddQuestionForm(false);
+    toast({
+      title: "Question added",
+      description: "Your new question has been added to the quiz"
+    });
   };
 
-  // Delete a question
   const handleDeleteQuestion = (id: string) => {
     setQuestions(questions.filter(q => q.id !== id));
     toast({
@@ -95,14 +73,12 @@ const QuizBuilder = () => {
     });
   };
 
-  // Update question text
   const handleUpdateQuestionText = (id: string, newText: string) => {
     setQuestions(questions.map(q => 
       q.id === id ? { ...q, text: newText } : q
     ));
   };
 
-  // Update question type
   const handleUpdateQuestionType = (id: string, newType: "multiple-choice" | "true-false" | "short-answer") => {
     setQuestions(questions.map(q => {
       if (q.id === id) {
@@ -130,7 +106,6 @@ const QuizBuilder = () => {
     }));
   };
 
-  // Update option text
   const handleUpdateOptionText = (questionId: string, optionId: string, newText: string) => {
     setQuestions(questions.map(q => {
       if (q.id === questionId) {
@@ -143,7 +118,6 @@ const QuizBuilder = () => {
     }));
   };
 
-  // Set correct option
   const handleSetCorrectOption = (questionId: string, optionId: string) => {
     setQuestions(questions.map(q => {
       if (q.id === questionId) {
@@ -156,7 +130,6 @@ const QuizBuilder = () => {
     }));
   };
 
-  // Add option to a question
   const handleAddOption = (questionId: string) => {
     setQuestions(questions.map(q => {
       if (q.id === questionId) {
@@ -171,11 +144,9 @@ const QuizBuilder = () => {
     }));
   };
 
-  // Delete option from a question
   const handleDeleteOption = (questionId: string, optionId: string) => {
     setQuestions(questions.map(q => {
       if (q.id === questionId) {
-        // Don't delete if we only have 2 options left
         if (q.options.length <= 2) {
           toast({
             title: "Cannot remove option",
@@ -187,7 +158,6 @@ const QuizBuilder = () => {
         
         const updatedOptions = q.options.filter(opt => opt.id !== optionId);
         
-        // If we're removing the correct option, set the first remaining option as correct
         if (q.options.find(opt => opt.id === optionId)?.isCorrect) {
           updatedOptions[0].isCorrect = true;
         }
@@ -198,7 +168,6 @@ const QuizBuilder = () => {
     }));
   };
 
-  // Move question up
   const handleMoveQuestionUp = (index: number) => {
     if (index === 0) return;
     const newQuestions = [...questions];
@@ -206,7 +175,6 @@ const QuizBuilder = () => {
     setQuestions(newQuestions);
   };
 
-  // Move question down
   const handleMoveQuestionDown = (index: number) => {
     if (index === questions.length - 1) return;
     const newQuestions = [...questions];
@@ -214,7 +182,6 @@ const QuizBuilder = () => {
     setQuestions(newQuestions);
   };
 
-  // Handle printing the quiz
   const handlePrintQuiz = () => {
     toast({
       title: "Preparing quiz for printing",
@@ -222,7 +189,6 @@ const QuizBuilder = () => {
     });
   };
 
-  // Handle saving the quiz
   const handleSaveQuiz = () => {
     toast({
       title: "Quiz saved",
@@ -230,7 +196,6 @@ const QuizBuilder = () => {
     });
   };
 
-  // Generate questions with AI
   const handleGenerateQuestions = () => {
     if (!promptInput.trim()) {
       toast({
@@ -243,7 +208,6 @@ const QuizBuilder = () => {
 
     setIsGenerating(true);
     
-    // Simulate AI generation
     setTimeout(() => {
       const newQuestions: Question[] = [
         {
@@ -283,12 +247,10 @@ const QuizBuilder = () => {
     }, 2000);
   };
   
-  // Calculate total quiz points
   const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-white">
-      {/* Header */}
       <div className="p-4 border-b bg-gradient-to-r from-violet-50 to-white">
         <h2 className="text-xl font-semibold flex items-center text-primary mb-2">
           <FileQuestion className="mr-2 h-5 w-5" />
@@ -297,11 +259,8 @@ const QuizBuilder = () => {
         <p className="text-sm text-gray-500">Create interactive quizzes and assessments for your students</p>
       </div>
 
-      {/* Content Area */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Panel - Quiz Builder */}
         <div className="w-2/3 flex flex-col overflow-hidden border-r">
-          {/* Quiz Info */}
           <div className="p-4 border-b bg-gray-50">
             <div className="space-y-3">
               <div>
@@ -325,7 +284,6 @@ const QuizBuilder = () => {
             </div>
           </div>
 
-          {/* Questions List */}
           <div className="flex-1 overflow-y-auto p-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
@@ -338,7 +296,7 @@ const QuizBuilder = () => {
                 </span>
               </div>
               <Button 
-                onClick={handleAddQuestion}
+                onClick={() => setShowAddQuestionForm(true)}
                 size="sm"
                 className="bg-primary/10 hover:bg-primary/20 text-primary"
               >
@@ -347,13 +305,19 @@ const QuizBuilder = () => {
               </Button>
             </div>
 
+            {showAddQuestionForm && (
+              <AddQuestionForm 
+                onAddQuestion={handleAddQuestion} 
+                onCancel={() => setShowAddQuestionForm(false)} 
+              />
+            )}
+
             <div className="space-y-6">
               {questions.map((question, index) => (
                 <div 
                   key={question.id} 
                   className="border rounded-lg p-4 bg-white shadow-sm"
                 >
-                  {/* Question Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-3 font-medium">
@@ -422,7 +386,6 @@ const QuizBuilder = () => {
                     </div>
                   </div>
 
-                  {/* Question Text */}
                   <div className="mb-4">
                     <Textarea 
                       value={question.text}
@@ -432,7 +395,6 @@ const QuizBuilder = () => {
                     />
                   </div>
 
-                  {/* Question Options */}
                   {question.type !== "short-answer" && (
                     <div className="space-y-2">
                       {question.options.map((option) => (
@@ -508,7 +470,7 @@ const QuizBuilder = () => {
                   <p className="text-gray-400 text-sm mt-1">Add a question or generate questions with AI</p>
                   <Button 
                     className="mt-4"
-                    onClick={handleAddQuestion}
+                    onClick={() => setShowAddQuestionForm(true)}
                   >
                     <Plus className="h-4 w-4 mr-1" />
                     Add First Question
@@ -518,7 +480,6 @@ const QuizBuilder = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="p-4 border-t bg-gray-50 flex justify-between">
             <div>
               <Button 
@@ -550,9 +511,7 @@ const QuizBuilder = () => {
           </div>
         </div>
 
-        {/* Right Panel - AI Assistant & Settings */}
         <div className="w-1/3 flex flex-col overflow-hidden">
-          {/* AI Question Generator */}
           <div className="p-4 border-b">
             <h3 className="font-medium text-gray-700 mb-3 flex items-center">
               <Sparkles className="h-4 w-4 mr-2 text-primary" />
@@ -583,7 +542,6 @@ const QuizBuilder = () => {
             </Button>
           </div>
 
-          {/* Quiz Templates */}
           <div className="p-4 border-b">
             <h3 className="font-medium text-gray-700 mb-3 flex items-center">
               <LayoutList className="h-4 w-4 mr-2 text-primary" />
@@ -602,7 +560,6 @@ const QuizBuilder = () => {
             </div>
           </div>
 
-          {/* Quiz Settings */}
           <div className="p-4 flex-1 overflow-y-auto">
             <h3 className="font-medium text-gray-700 mb-3 flex items-center">
               <Settings className="h-4 w-4 mr-2 text-primary" />
