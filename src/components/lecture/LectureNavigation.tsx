@@ -25,7 +25,7 @@ const LectureNavigation = ({ lectureId, onCloseSidebar }: LectureNavigationProps
     });
     
     // If in onboarding and at the right step, move forward
-    if (isFirstTime && currentStep === 'lecture-panel') {
+    if (isFirstTime && currentStep === 'lecture-editor') {
       nextStep();
     }
   };
@@ -49,7 +49,7 @@ const LectureNavigation = ({ lectureId, onCloseSidebar }: LectureNavigationProps
         Lecture Navigation
       </h3>
       
-      <Spotlight active={isFirstTime && currentStep === 'lecture-panel'}>
+      <Spotlight active={isFirstTime && currentStep === 'lecture-editor'}>
         <div className="py-4 text-center text-gray-500 text-sm">
           <div className="p-4 border border-dashed rounded-md bg-gray-50 flex flex-col items-center">
             <p>No navigation items yet</p>
@@ -66,7 +66,7 @@ const LectureNavigation = ({ lectureId, onCloseSidebar }: LectureNavigationProps
         </div>
         
         {/* Onboarding for Lecture Panel */}
-        {isFirstTime && currentStep === 'lecture-panel' && (
+        {isFirstTime && currentStep === 'lecture-editor' && (
           <CoachMark
             title="Organize Lecture Content"
             description="Here you can organize your lecture content by adding sections, topics, and materials."
