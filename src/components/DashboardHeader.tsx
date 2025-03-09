@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Plus, Bell, Search, Menu, Settings, GraduationCap, BookOpen, Brain, LayoutDashboard } from "lucide-react";
+import { Plus, Bell, Search, Menu, Settings, GraduationCap, BookOpen, Brain, LayoutDashboard, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import PathwayTooltip from "./onboarding/PathwayTooltip";
 import { useOnboarding } from "@/contexts/OnboardingContext";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const DashboardHeader = () => {
-  const { isGuidedMode, currentStep, isFirstTime } = useOnboarding();
+  const { isGuidedMode, currentStep, isFirstTime, toggleGuidedMode } = useOnboarding();
 
   return (
     <div className="border-b bg-white py-4">
@@ -36,6 +37,26 @@ export const DashboardHeader = () => {
               <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-primary"></span>
             </Button>
           </div>
+          
+          {/* Guide Icon Toggle */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className={`rounded-full ${isGuidedMode ? 'text-primary' : ''}`}
+                  onClick={toggleGuidedMode}
+                >
+                  <HelpCircle className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isGuidedMode ? 'Disable guided mode' : 'Enable guided mode'}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
           <div className="relative md:block hidden">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input 

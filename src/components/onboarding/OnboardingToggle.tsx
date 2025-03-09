@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Info, ToggleLeft, ToggleRight } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -11,34 +11,24 @@ interface OnboardingToggleProps {
 }
 
 const OnboardingToggle: React.FC<OnboardingToggleProps> = ({ className }) => {
-  const { isGuidedMode, toggleGuidedMode, resetOnboarding } = useOnboarding();
+  const { isGuidedMode, toggleGuidedMode } = useOnboarding();
 
   return (
-    <div className={cn('flex items-center space-x-2', className)}>
+    <div className={cn('flex items-center', className)}>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
-              size="sm" 
-              variant="outline"
-              className="flex items-center"
+              size="icon" 
+              variant="ghost"
+              className={`rounded-full ${isGuidedMode ? 'text-primary' : ''}`}
               onClick={toggleGuidedMode}
             >
-              {isGuidedMode ? (
-                <>
-                  <ToggleRight className="h-4 w-4 mr-2 text-primary" />
-                  Guided Mode
-                </>
-              ) : (
-                <>
-                  <ToggleLeft className="h-4 w-4 mr-2" />
-                  Non-Guided Mode
-                </>
-              )}
+              <HelpCircle className="h-5 w-5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{isGuidedMode ? 'Disable guided tooltips' : 'Enable guided tooltips'}</p>
+            <p>{isGuidedMode ? 'Disable guided mode' : 'Enable guided mode'}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

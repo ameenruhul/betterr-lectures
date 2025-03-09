@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import OnboardingToggle from "@/components/onboarding/OnboardingToggle";
 import DashboardGuide from "@/components/onboarding/DashboardGuide";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 
@@ -30,7 +29,6 @@ const Dashboard = () => {
         <div className="p-6 space-y-6 overflow-auto">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Teacher's Workbench</h1>
-            <OnboardingToggle />
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
