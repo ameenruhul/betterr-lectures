@@ -13,9 +13,11 @@ import {
 import PathwayTooltip from "./onboarding/PathwayTooltip";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
 
 export const DashboardHeader = () => {
   const { isGuidedMode, currentStep, isFirstTime, toggleGuidedMode } = useOnboarding();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   return (
     <div className="border-b bg-white py-4">
@@ -31,12 +33,29 @@ export const DashboardHeader = () => {
         </div>
         
         <div className="flex items-center space-x-3">
-          <div className="relative">
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-primary"></span>
-            </Button>
-          </div>
+          {/* Notification Icon */}
+          <DropdownMenu open={showNotifications} onOpenChange={setShowNotifications}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-primary"></span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="p-4">
+                <div className="mb-3 p-3 bg-accent/50 rounded-md">
+                  <p className="font-medium text-sm">New AI features available</p>
+                  <p className="text-xs text-muted-foreground mt-1">Try our enhanced lecture generation tools today.</p>
+                </div>
+                <div className="p-3 bg-accent/50 rounded-md">
+                  <p className="font-medium text-sm">Course feedback available</p>
+                  <p className="text-xs text-muted-foreground mt-1">Students have reviewed your latest course materials.</p>
+                </div>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           {/* Guide Icon Toggle */}
           <TooltipProvider>
@@ -65,7 +84,7 @@ export const DashboardHeader = () => {
               className="pl-9 pr-4 py-2 rounded-full text-sm border border-input focus:outline-none focus:ring-2 focus:ring-primary/20 w-[200px]" 
             />
           </div>
-          <Link to="/courses/create" className="hidden md:flex">
+          <Link to="/courses/create">
             <PathwayTooltip 
               content="Begin your teaching journey by creating a new course. Click to start the guided tour."
               position="bottom"
@@ -75,7 +94,7 @@ export const DashboardHeader = () => {
               navigateTo="/courses/create"
               forceShow={(currentStep === 'dashboard' || currentStep === 'new-course') && isFirstTime && isGuidedMode}
             >
-              <Button className="items-center gap-2">
+              <Button className="items-center gap-2 hidden md:inline-flex">
                 <Plus className="h-4 w-4" />
                 New Course
               </Button>
@@ -131,20 +150,10 @@ export const DashboardHeader = () => {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="md:hidden">
-                <PathwayTooltip 
-                  content="Begin your teaching journey by creating a new course. Click to start the guided tour."
-                  position="right"
-                  step={1}
-                  className="w-72"
-                  nextStep="course-create"
-                  navigateTo="/courses/create"
-                  forceShow={(currentStep === 'dashboard' || currentStep === 'new-course') && isFirstTime && isGuidedMode}
-                >
-                  <Link to="/courses/create" className="flex items-center w-full">
-                    <Plus className="mr-2 h-4 w-4" />
-                    <span>New Course</span>
-                  </Link>
-                </PathwayTooltip>
+                <Link to="/courses/create" className="flex items-center w-full">
+                  <Plus className="mr-2 h-4 w-4" />
+                  <span>New Course</span>
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
