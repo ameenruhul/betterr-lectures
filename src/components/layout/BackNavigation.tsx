@@ -17,9 +17,9 @@ const BackNavigation = ({ previousPage = 'Dashboard', previousPagePath = '/dashb
       variant="ghost" 
       size="sm" 
       onClick={() => navigate(previousPagePath)} 
-      className="flex items-center text-gray-700 hover:text-primary transition-colors -ml-2 mb-2 group"
+      className="flex items-center text-gray-700 hover:text-ai-magenta transition-colors -ml-2 mb-2 group"
     >
-      <ChevronLeft className="h-4 w-4 mr-1 text-primary group-hover:translate-x-[-2px] transition-transform" />
+      <ChevronLeft className="h-4 w-4 mr-1 text-ai-magenta group-hover:translate-x-[-2px] transition-transform" />
       <span className="font-medium">Back to {previousPage}</span>
     </Button>
   );

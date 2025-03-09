@@ -31,14 +31,14 @@ const WorkspaceToolButton = ({
       onClick={onClick}
       className={cn(
         "flex flex-col gap-2 items-center justify-center p-4 h-auto w-full bg-white text-gray-700 border-gray-100 rounded-xl transition-all duration-300",
-        "hover:bg-primary/5 hover:text-primary hover:border-primary/20",
+        "hover:bg-red-violet-gradient/5 hover:text-ai-magenta hover:border-ai-magenta/20",
         "active:translate-y-0 active:scale-95",
         "shadow-sm hover:shadow-md",
-        isActive && "ring-2 ring-primary/20 bg-primary/5 text-primary border-primary/20",
+        isActive && "ring-2 ring-ai-magenta/20 bg-red-violet-gradient/5 text-ai-magenta border-ai-magenta/20",
         className
       )}
     >
-      <Icon className={cn("h-6 w-6 transition-transform group-hover:scale-110", iconClassName || "text-primary")} />
+      <Icon className={cn("h-6 w-6 transition-transform group-hover:scale-110", iconClassName || "text-ai-violet")} />
       <span className="text-xs font-medium">{label}</span>
     </Button>
   );

@@ -45,7 +45,7 @@ const LectureNavigation = ({ lectureId, onCloseSidebar }: LectureNavigationProps
       )}
       
       <h3 className="font-semibold mb-4 text-gray-700 flex items-center">
-        <LayoutList className="h-4 w-4 mr-2 text-primary" />
+        <LayoutList className="h-4 w-4 mr-2 text-ai-magenta" />
         Lecture Navigation
       </h3>
       
@@ -56,7 +56,7 @@ const LectureNavigation = ({ lectureId, onCloseSidebar }: LectureNavigationProps
             <Button 
               variant="ghost" 
               size="sm" 
-              className="mt-2 text-primary"
+              className="mt-2 text-ai-magenta"
               onClick={handleAddContent}
             >
               <Plus className="h-4 w-4 mr-1" />

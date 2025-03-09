@@ -32,11 +32,11 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-background to-accent p-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-white p-4">
       <div className="w-full max-w-md animate-fade-up">
-        <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm bg-card/80">
+        <Card className="border shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm bg-white">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-3xl font-bold tracking-tight">
+            <CardTitle className="text-3xl font-bold tracking-tight text-gradient-red-violet">
               {isLogin ? "Welcome back" : "Create an account"}
             </CardTitle>
             <CardDescription>
@@ -51,11 +51,11 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                    <User className="absolute left-3 top-3 h-5 w-5 text-ai-violet" />
                     <Input
                       id="name"
                       placeholder="John Doe"
-                      className="pl-10"
+                      className="pl-10 border-ai-violet/20 focus-visible:ring-ai-magenta/30"
                       required
                     />
                   </div>
@@ -65,12 +65,12 @@ const Auth = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-ai-violet" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="name@example.com"
-                    className="pl-10"
+                    className="pl-10 border-ai-violet/20 focus-visible:ring-ai-magenta/30"
                     required
                   />
                 </div>
@@ -82,25 +82,25 @@ const Auth = () => {
                   {isLogin && (
                     <Link
                       to="/forgot-password"
-                      className="text-sm text-primary hover:underline"
+                      className="text-sm text-ai-magenta hover:text-ai-purple hover:underline"
                     >
                       Forgot password?
                     </Link>
                   )}
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-ai-violet" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 border-ai-violet/20 focus-visible:ring-ai-magenta/30"
                     placeholder="••••••••"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-3 text-ai-violet hover:text-ai-magenta"
                   >
                     {showPassword ? (
                       <EyeOffIcon className="h-5 w-5" />
@@ -111,7 +111,7 @@ const Auth = () => {
                 </div>
               </div>
               
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full bg-red-violet-gradient">
                 {isLogin ? "Sign in" : "Create account"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -119,17 +119,17 @@ const Auth = () => {
             
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border"></div>
+                <div className="w-full border-t border-ai-violet/20"></div>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-white px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
             
             <Button
               variant="outline"
               type="button"
-              className="w-full font-medium"
+              className="w-full font-medium border-ai-violet/20 hover:bg-ai-violet/5 hover:text-ai-magenta"
               onClick={handleGoogleSignIn}
             >
               <svg
@@ -163,7 +163,7 @@ const Auth = () => {
               {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-primary font-medium hover:underline"
+                className="text-ai-magenta font-medium hover:underline"
               >
                 {isLogin ? "Sign up" : "Sign in"}
               </button>

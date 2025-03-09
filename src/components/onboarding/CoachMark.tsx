@@ -36,13 +36,13 @@ const CoachMark: React.FC<CoachMarkProps> = ({
 
   return (
     <div className={cn(
-      'absolute z-50 w-64 bg-white rounded-lg shadow-lg border border-primary/10 p-4',
+      'absolute z-50 w-64 bg-white rounded-lg shadow-lg border border-ai-magenta/10 p-4',
       positionClasses[position],
       className
     )}>
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center">
-          <Info className="h-4 w-4 text-primary mr-2" />
+          <Info className="h-4 w-4 text-ai-magenta mr-2" />
           <h3 className="font-semibold text-sm text-gray-900">{title}</h3>
         </div>
         {onSkip && (
@@ -57,7 +57,7 @@ const CoachMark: React.FC<CoachMarkProps> = ({
           <Button 
             variant="ghost" 
             size="sm" 
-            className="text-xs mr-2 h-7"
+            className="text-xs mr-2 h-7 hover:text-ai-magenta"
             onClick={onSkip}
           >
             Skip tour
@@ -66,7 +66,7 @@ const CoachMark: React.FC<CoachMarkProps> = ({
         {onNext && (
           <Button 
             size="sm" 
-            className="text-xs h-7"
+            className="text-xs h-7 bg-red-violet-gradient"
             onClick={onNext}
           >
             {isLastStep ? 'Finish' : 'Next'}
