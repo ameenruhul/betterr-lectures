@@ -1,7 +1,5 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from "@/components/DashboardHeader";
-import { DashboardNav } from "@/components/DashboardNav";
 import { Brain, BookOpen, GraduationCap, Bell, LineChart, Clock, ArrowUpRight, Lightbulb, ChevronRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -30,10 +28,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
 const Dashboard = () => {
   return (
-    <div className="flex min-h-screen bg-accent/30">
-      {/* Sidebar Navigation */}
-      <DashboardNav />
-      
+    <div className="min-h-screen bg-accent/30">
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <DashboardHeader />
