@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
@@ -13,10 +12,9 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
-  Library,
+  GripVertical,
   PanelLeft,
-  LayoutDashboard,
-  GripVertical
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -24,6 +22,7 @@ import ContentUploader from "@/components/lecture/ContentUploader";
 import LectureNavigation from "@/components/lecture/LectureNavigation";
 import WorkspaceToolButton from "@/components/lecture/WorkspaceToolButton";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/ui/Logo";
 
 interface SharedCourseSidebarProps {
   onCloseSidebar?: () => void;
@@ -82,7 +81,6 @@ const SharedCourseSidebar = ({
     }
   ];
 
-  // Group tools by category
   const toolCategories = [
     {
       title: "LECTURE PREPARATION",
@@ -100,13 +98,9 @@ const SharedCourseSidebar = ({
 
   return (
     <div className="h-full flex flex-col bg-gray-50/60 overflow-hidden">
-      {/* Header section with brand and navigation links */}
       <div className="p-4 border-b bg-white">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 pl-1">
-            <Library className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-bold text-gray-800">Better Lectures</h2>
-          </div>
+          <Logo variant="default" />
           <div className="flex items-center">
             <GripVertical 
               className="h-4 w-4 text-gray-400 cursor-move drag-handle" 
@@ -115,7 +109,6 @@ const SharedCourseSidebar = ({
           </div>
         </div>
         
-        {/* Dashboard Button */}
         <Button 
           variant="outline" 
           size="sm" 
@@ -127,7 +120,6 @@ const SharedCourseSidebar = ({
         </Button>
       </div>
 
-      {/* Content Uploader Section */}
       <ContentUploader 
         courseId="tools"
         lectureId="shared" 
@@ -135,13 +127,11 @@ const SharedCourseSidebar = ({
         onBackClick={handleBackToDashboard}
       />
 
-      {/* Lecture Navigation */}
       <LectureNavigation 
         lectureId="shared"
         onCloseSidebar={onCloseSidebar}
       />
       
-      {/* Teaching Tools Section */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <div 
           className="flex items-center justify-between p-4 border-b cursor-pointer bg-white hover:bg-gray-50 transition-colors"

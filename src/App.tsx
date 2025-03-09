@@ -23,6 +23,13 @@ function App() {
   useEffect(() => {
     // Update the document title
     document.title = "Better Lectures";
+    
+    // Try to update favicon dynamically
+    const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+    if (link) {
+      // You can replace this with a direct path to your favicon if you add one
+      link.href = "/favicon.ico";
+    }
   }, []);
 
   return (

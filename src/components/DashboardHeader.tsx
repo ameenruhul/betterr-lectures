@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Plus, Bell, Search, Menu, Settings, GraduationCap, BookOpen, Brain, LayoutDashboard, HelpCircle } from "lucide-react";
+import { Bell, Search, Menu, Settings, BookOpen, Brain, LayoutDashboard, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import PathwayTooltip from "./onboarding/PathwayTooltip";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
+import Logo from "./ui/Logo";
 
 export const DashboardHeader = () => {
   const { isGuidedMode, currentStep, isFirstTime, toggleGuidedMode } = useOnboarding();
@@ -27,10 +28,10 @@ export const DashboardHeader = () => {
   return (
     <div className="border-b bg-white py-4">
       <div className="flex items-center justify-between px-6">
-        <div className="flex items-center space-x-2">
-          <GraduationCap className="h-8 w-8 text-primary" />
+        <div className="flex items-center space-x-4">
+          <Logo variant="large" />
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Welcome to Better Lectures</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Welcome</h1>
             <p className="text-muted-foreground">
               Here's what's happening with your courses today.
             </p>
@@ -167,3 +168,6 @@ export const DashboardHeader = () => {
     </div>
   );
 };
+
+// Fix: Add missing import
+import { Plus } from "lucide-react";
