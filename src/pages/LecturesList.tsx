@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,22 +13,15 @@ import {
   FileText,
   Video,
   Presentation,
-  MoreVertical,
-  Trash2,
-  Edit,
-  Copy
+  FolderOpen,
+  Search,
+  X
 } from "lucide-react";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import CoachMark from "@/components/onboarding/CoachMark";
 import Spotlight from "@/components/onboarding/Spotlight";
 import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
+import LectureFolder from "@/components/lecture/LectureFolder";
 
 const MOCK_LECTURES = [
   { id: 1, title: "Introduction to the Course", type: "video", duration: "10:15" },
@@ -41,19 +35,6 @@ const MOCK_LECTURES = [
   { id: 9, title: "Examination Preparation", type: "video", duration: "30:00" },
   { id: 10, title: "Course Conclusion", type: "video", duration: "5:45" }
 ];
-
-const LectureTypeIcon = ({ type }: { type: string }) => {
-  switch (type) {
-    case "video":
-      return <Video className="h-4 w-4 text-primary" />;
-    case "document":
-      return <FileText className="h-4 w-4 text-emerald-500" />;
-    case "presentation":
-      return <Presentation className="h-4 w-4 text-amber-500" />;
-    default:
-      return <BookOpen className="h-4 w-4 text-gray-500" />;
-  }
-};
 
 const LecturesList = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -105,6 +86,10 @@ const LecturesList = () => {
     }
   };
 
+  const handleClearSearch = () => {
+    setSearchQuery("");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b">
@@ -146,109 +131,81 @@ const LecturesList = () => {
           <p className="text-gray-600">Manage and organize your course lectures</p>
         </div>
 
-        <div className="mb-6">
+        <div className="relative mb-6 max-w-md">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-4 w-4 text-gray-400" />
+          </div>
           <Input
             type="search"
             placeholder="Search lectures..."
-            className="max-w-md"
+            className="pl-10 pr-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          {searchQuery && (
+            <button 
+              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              onClick={handleClearSearch}
+            >
+              <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+            </button>
+          )}
         </div>
 
-        <Card className="shadow-sm border-none">
-          <CardHeader className="bg-gray-50 rounded-t-lg pb-2">
-            <CardTitle className="text-lg font-medium">All Lectures</CardTitle>
-            <CardDescription>
-              {filteredLectures.length} lecture{filteredLectures.length !== 1 ? 's' : ''} in this course
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y">
-              {filteredLectures.map((lecture, index) => (
-                <div 
-                  key={lecture.id}
-                  ref={index === 0 ? firstLectureRef : null}
-                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+        <div className="grid grid-cols-1 gap-2">
+          {filteredLectures.length > 0 ? (
+            filteredLectures.map((lecture, index) => (
+              <div key={lecture.id} ref={index === 0 ? firstLectureRef : undefined}>
+                <PathwayTooltip 
+                  content="Select a lecture to open it in the editor. This is where you'll create your content."
+                  position="right"
+                  step={4}
+                  className="w-72"
+                  nextStep="lecture-editor"
+                  navigateTo={`/courses/${courseId}/lectures/${lecture.id}`}
+                  forceShow={isFirstTime && currentStep === 'lecture-list' && index === 0}
                 >
-                  <PathwayTooltip 
-                    content="Select a lecture to open it in the editor. This is where you'll create your content."
+                  <LectureFolder 
+                    lecture={lecture}
+                    courseId={courseId || ""}
+                    onDelete={handleDeleteLecture}
+                    onOpen={handleOpenLecture}
+                  />
+                </PathwayTooltip>
+                
+                {isFirstTime && currentStep === 'lecture-list' && index === 0 && (
+                  <CoachMark
+                    title="Explore Your Lectures"
+                    description="Click on a lecture to open it in the editor. From there, you can create and organize content."
                     position="right"
-                    step={4}
-                    className="w-72"
-                    nextStep="lecture-editor"
-                    navigateTo={`/courses/${courseId}/lectures/${lecture.id}`}
-                    forceShow={isFirstTime && currentStep === 'lecture-list' && index === 0}
-                  >
-                    <div
-                      className="flex-1 flex items-center space-x-4 group cursor-pointer"
-                      onClick={() => handleOpenLecture(lecture.id)}
-                    >
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                        <LectureTypeIcon type={lecture.type} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-base font-medium text-gray-900 group-hover:text-primary transition-colors">
-                          {lecture.title}
-                        </h3>
-                        <div className="flex items-center text-sm text-gray-500 space-x-2">
-                          <span className="capitalize">{lecture.type}</span>
-                          <span>•</span>
-                          <span>{lecture.duration}</span>
-                        </div>
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Play className="h-4 w-4 mr-1 text-primary" />
-                        Open
-                      </Button>
-                    </div>
-                    <div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4 text-gray-500" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Copy className="h-4 w-4 mr-2" />
-                            Duplicate
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem 
-                            className="text-red-600" 
-                            onClick={() => handleDeleteLecture(lecture.id)}
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </PathwayTooltip>
-                  
-                  {isFirstTime && currentStep === 'lecture-list' && index === 0 && (
-                    <CoachMark
-                      title="Explore Your Lectures"
-                      description="Click on a lecture to open it in the editor. From there, you can create and organize content."
-                      position="right"
-                      onNext={() => nextStep()}
-                      onSkip={skipOnboarding}
-                    />
-                  )}
-                </div>
-              ))}
+                    onNext={() => nextStep()}
+                    onSkip={skipOnboarding}
+                  />
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-10">
+              <FolderOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-1">No lectures found</h3>
+              <p className="text-gray-500 mb-4">
+                {searchQuery 
+                  ? "Try using different search terms" 
+                  : "You haven't created any lectures yet"}
+              </p>
+              {searchQuery ? (
+                <Button variant="outline" onClick={handleClearSearch}>
+                  Clear search
+                </Button>
+              ) : (
+                <Button onClick={handleAddLecture}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create your first lecture
+                </Button>
+              )}
             </div>
-          </CardContent>
-        </Card>
+          )}
+        </div>
       </div>
     </div>
   );
