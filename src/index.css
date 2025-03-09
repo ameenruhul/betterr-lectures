@@ -107,7 +107,7 @@
   }
   
   .gradient-border {
-    @apply relative before:absolute before:inset-0 before:-z-10 before:p-[1px] before:bg-blue-purple-gradient before:rounded-[inherit];
+    @apply relative before:absolute before:inset-0 before:-z-10 before:p-[1px] before:bg-red-violet-gradient before:rounded-[inherit];
   }
   
   .feature-icon-bg {
@@ -115,11 +115,19 @@
   }
   
   .text-gradient-blue-purple {
-    @apply bg-blue-purple-gradient bg-clip-text text-transparent;
+    @apply bg-violet-purple-gradient bg-clip-text text-transparent;
   }
   
   .text-gradient-purple-pink {
-    @apply bg-purple-pink-gradient bg-clip-text text-transparent;
+    @apply bg-red-magenta-gradient bg-clip-text text-transparent;
+  }
+
+  .text-gradient-red-violet {
+    @apply bg-red-violet-gradient bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-red-purple {
+    @apply bg-red-purple-gradient bg-clip-text text-transparent;
   }
 }
 

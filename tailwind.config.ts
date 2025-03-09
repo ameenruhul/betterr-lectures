@@ -29,11 +29,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#2563eb",
+          DEFAULT: "#9b87f5",
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#64748b",
+          DEFAULT: "#7E69AB",
           foreground: "#ffffff",
         },
         destructive: {
@@ -52,13 +52,13 @@ export default {
           DEFAULT: "#ffffff",
           foreground: "#0f172a",
         },
-        // New AI-themed gradient colors
+        // New AI-themed gradient colors with red-violet-purple scheme
         ai: {
-          blue: "#0EA5E9",
-          purple: "#8B5CF6",
-          pink: "#EC4899",
-          teal: "#14b8a6",
-          indigo: "#6366f1",
+          red: "#ea384c",
+          pink: "#D946EF",
+          purple: "#9b87f5",
+          violet: "#7E69AB",
+          magenta: "#D946EF",
         },
       },
       borderRadius: {
@@ -117,6 +117,12 @@ export default {
         "blue-indigo-gradient": "linear-gradient(90deg, #0EA5E9, #6366f1)",
         "teal-blue-gradient": "linear-gradient(90deg, #14b8a6, #0EA5E9)",
         "hero-gradient": "linear-gradient(to bottom right, rgba(14, 165, 233, 0.15), rgba(139, 92, 246, 0.15))",
+        // New red-violet-purple gradients
+        "red-violet-gradient": "linear-gradient(90deg, #ea384c, #7E69AB)",
+        "violet-purple-gradient": "linear-gradient(90deg, #7E69AB, #9b87f5)",
+        "red-purple-gradient": "linear-gradient(90deg, #ea384c, #9b87f5)",
+        "magenta-violet-gradient": "linear-gradient(90deg, #D946EF, #7E69AB)",
+        "red-magenta-gradient": "linear-gradient(90deg, #ea384c, #D946EF)",
       },
     },
   },
