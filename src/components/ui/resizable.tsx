@@ -17,7 +17,18 @@ const ResizablePanelGroup = ({
   />
 )
 
-const ResizablePanel = ResizablePrimitive.Panel
+const ResizablePanel = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof ResizablePrimitive.Panel>) => (
+  <ResizablePrimitive.Panel
+    className={cn(
+      "flex h-full w-full flex-col",
+      className
+    )}
+    {...props}
+  />
+)
 
 const ResizableHandle = ({
   withHandle,
@@ -34,7 +45,7 @@ const ResizableHandle = ({
     {...props}
   >
     {withHandle && (
-      <div className="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border">
+      <div className="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border hover:bg-primary/50 transition-colors">
         <GripVertical className="h-2.5 w-2.5" />
       </div>
     )}

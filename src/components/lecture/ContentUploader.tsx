@@ -1,7 +1,7 @@
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Upload, GripVertical } from "lucide-react";
+import { ChevronLeft, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -19,10 +19,6 @@ const ContentUploader = ({
   onBackClick 
 }: ContentUploaderProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [isBeingDragged, setIsBeingDragged] = useState(false);
-  const dragStartY = useRef(0);
-  const elementStartY = useRef(0);
-  const uploaderRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -54,57 +50,9 @@ const ContentUploader = ({
       onBackClick();
     }
   };
-  
-  const handleGripMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsBeingDragged(true);
-    dragStartY.current = e.clientY;
-    
-    if (uploaderRef.current) {
-      elementStartY.current = uploaderRef.current.getBoundingClientRect().top;
-      
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    }
-  };
-  
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isBeingDragged || !uploaderRef.current) return;
-    
-    const deltaY = e.clientY - dragStartY.current;
-    const newPositionY = elementStartY.current + deltaY;
-    
-    // Limit dragging to a reasonable area within the sidebar
-    const maxY = window.innerHeight - 200; // Don't let it go too far off screen
-    const minY = 100; // Keep it somewhat visible at the top
-    
-    if (newPositionY > minY && newPositionY < maxY) {
-      uploaderRef.current.style.transform = `translateY(${deltaY}px)`;
-    }
-  };
-  
-  const handleMouseUp = () => {
-    setIsBeingDragged(false);
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-    
-    // Reset transform to let it snap back to normal flow
-    // Here we could save the position if we wanted persistent positioning
-    if (uploaderRef.current) {
-      uploaderRef.current.style.transition = 'transform 0.3s ease';
-      uploaderRef.current.style.transform = ''; // Reset transform
-      
-      // Remove the transition after it completes
-      setTimeout(() => {
-        if (uploaderRef.current) {
-          uploaderRef.current.style.transition = '';
-        }
-      }, 300);
-    }
-  };
 
   return (
-    <div ref={uploaderRef} className="p-4 border-b relative">
+    <div className="p-4 border-b relative">
       <div className="flex items-center justify-between mb-4">
         <Button 
           variant="ghost" 
@@ -115,13 +63,6 @@ const ContentUploader = ({
           <ChevronLeft className="h-4 w-4 mr-2 group-hover:translate-x-[-2px] transition-transform" />
           {lectureId ? "Back to Lectures" : "Back to Courses"}
         </Button>
-        
-        <div className="flex items-center">
-          <GripVertical 
-            className="h-4 w-4 text-gray-400 cursor-move drag-handle" 
-            onMouseDown={handleGripMouseDown}
-          />
-        </div>
       </div>
       
       {lectureId && (

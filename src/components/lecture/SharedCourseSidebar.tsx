@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
@@ -12,7 +13,6 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
-  GripVertical,
   PanelLeft,
   LayoutDashboard
 } from "lucide-react";
@@ -26,12 +26,10 @@ import Logo from "@/components/ui/Logo";
 
 interface SharedCourseSidebarProps {
   onCloseSidebar?: () => void;
-  onDragHandleMouseDown?: (e: React.MouseEvent) => void;
 }
 
 const SharedCourseSidebar = ({ 
-  onCloseSidebar,
-  onDragHandleMouseDown 
+  onCloseSidebar
 }: SharedCourseSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -101,12 +99,6 @@ const SharedCourseSidebar = ({
       <div className="p-4 border-b bg-white">
         <div className="flex items-center justify-between mb-4">
           <Logo variant="default" />
-          <div className="flex items-center">
-            <GripVertical 
-              className="h-4 w-4 text-gray-400 cursor-move drag-handle" 
-              onMouseDown={onDragHandleMouseDown}
-            />
-          </div>
         </div>
         
         <Button 
