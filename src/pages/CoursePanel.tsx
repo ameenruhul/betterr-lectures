@@ -10,6 +10,11 @@ import TextEditor from "@/components/lecture/TextEditor";
 import AIAssistant from "@/components/lecture/AIAssistant";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { 
+  ResizablePanelGroup, 
+  ResizablePanel, 
+  ResizableHandle 
+} from "@/components/ui/resizable";
 
 const CoursePanel = () => {
   const { courseId, lectureId } = useParams();
@@ -18,6 +23,11 @@ const CoursePanel = () => {
   const [documentTitle, setDocumentTitle] = useState(lectureId ? `Lecture ${lectureId}` : "Untitled document");
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Default panel sizes
+  const [leftPanelSize, setLeftPanelSize] = useState(20); // 20% of the screen width
+  const [middlePanelSize, setMiddlePanelSize] = useState(60); // 60% of the screen width
+  const [rightPanelSize, setRightPanelSize] = useState(20); // 20% of the screen width
 
   const handleBackToLectures = () => {
     if (courseId) {
@@ -53,8 +63,15 @@ const CoursePanel = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Function to handle panel resize
+  const handlePanelResize = (sizes: number[]) => {
+    setLeftPanelSize(sizes[0]);
+    setMiddlePanelSize(sizes[1]);
+    setRightPanelSize(sizes[2]);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="h-screen bg-gray-50 overflow-hidden">
       {/* Mobile Sidebar Toggle */}
       <div className="md:hidden fixed top-0 left-0 z-20 p-2">
         <Button
@@ -67,56 +84,133 @@ const CoursePanel = () => {
         </Button>
       </div>
 
-      {/* Left Sidebar */}
-      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-                      fixed md:relative z-10 w-64 h-screen border-r flex flex-col bg-white 
-                      transition-transform duration-300 ease-in-out md:translate-x-0`}>
-        {/* Navigation Header */}
-        <ContentUploader 
-          courseId={courseId} 
-          lectureId={lectureId} 
-          documentTitle={documentTitle}
-          onBackClick={handleBackToLectures}
-        />
-
-        {/* Lecture Navigation */}
-        <LectureNavigation 
-          lectureId={lectureId} 
-          onCloseSidebar={() => setSidebarOpen(false)}
-        />
-
-        {/* Workspace Features */}
-        <WorkspaceTools />
-      </div>
-
       {/* Overlay when sidebar is open on mobile */}
       {sidebarOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/20 z-0"
+          className="md:hidden fixed inset-0 bg-black/20 z-10"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
 
-      {/* Main Content Area - Word Processor */}
-      <div className="flex-1 flex flex-col md:ml-0 w-full">
-        {/* Editor Toolbar */}
-        <EditorToolbar 
-          onSave={handleSave} 
-          onDownloadPDF={handleDownloadPDF} 
-          onCreatePPTX={handleCreatePPTX} 
-        />
+      {/* Desktop Resizable Layout */}
+      <div className="hidden md:flex h-full w-full">
+        <ResizablePanelGroup
+          direction="horizontal"
+          onLayout={handlePanelResize}
+          className="h-full w-full"
+        >
+          {/* Left Sidebar */}
+          <ResizablePanel 
+            defaultSize={leftPanelSize} 
+            minSize={15} 
+            maxSize={30}
+            className="bg-white border-r"
+          >
+            <div className="h-full flex flex-col overflow-hidden">
+              {/* Navigation Header */}
+              <ContentUploader 
+                courseId={courseId} 
+                lectureId={lectureId} 
+                documentTitle={documentTitle}
+                onBackClick={handleBackToLectures}
+              />
 
-        {/* Text Editor Area */}
-        <TextEditor 
-          content={content}
-          setContent={setContent}
-          documentTitle={documentTitle}
-          setDocumentTitle={setDocumentTitle}
-        />
+              {/* Lecture Navigation */}
+              <LectureNavigation 
+                lectureId={lectureId} 
+              />
+
+              {/* Workspace Features */}
+              <WorkspaceTools />
+            </div>
+          </ResizablePanel>
+
+          {/* Resizable Handle for Left Panel */}
+          <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
+
+          {/* Main Content Area */}
+          <ResizablePanel 
+            defaultSize={middlePanelSize} 
+            minSize={40}
+            className="bg-gray-50"
+          >
+            <div className="h-full flex flex-col overflow-hidden">
+              {/* Editor Toolbar */}
+              <EditorToolbar 
+                onSave={handleSave} 
+                onDownloadPDF={handleDownloadPDF} 
+                onCreatePPTX={handleCreatePPTX} 
+              />
+
+              {/* Text Editor Area */}
+              <TextEditor 
+                content={content}
+                setContent={setContent}
+                documentTitle={documentTitle}
+                setDocumentTitle={setDocumentTitle}
+              />
+            </div>
+          </ResizablePanel>
+
+          {/* Resizable Handle for Right Panel */}
+          <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
+
+          {/* Right Sidebar - AI Assistant */}
+          <ResizablePanel 
+            defaultSize={rightPanelSize} 
+            minSize={15} 
+            maxSize={40}
+            className="bg-white border-l"
+          >
+            <AIAssistant />
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
 
-      {/* Right Sidebar - AI Assistant */}
-      <AIAssistant />
+      {/* Mobile Layout (Non-resizable) */}
+      <div className="md:hidden flex h-full">
+        {/* Left Sidebar */}
+        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+                        fixed z-30 w-64 h-screen border-r flex flex-col bg-white 
+                        transition-transform duration-300 ease-in-out`}>
+          {/* Navigation Header */}
+          <ContentUploader 
+            courseId={courseId} 
+            lectureId={lectureId} 
+            documentTitle={documentTitle}
+            onBackClick={handleBackToLectures}
+          />
+
+          {/* Lecture Navigation */}
+          <LectureNavigation 
+            lectureId={lectureId} 
+            onCloseSidebar={() => setSidebarOpen(false)}
+          />
+
+          {/* Workspace Features */}
+          <WorkspaceTools />
+        </div>
+
+        {/* Main Content Area - Word Processor */}
+        <div className="flex-1 flex flex-col w-full">
+          {/* Editor Toolbar */}
+          <EditorToolbar 
+            onSave={handleSave} 
+            onDownloadPDF={handleDownloadPDF} 
+            onCreatePPTX={handleCreatePPTX} 
+          />
+
+          {/* Text Editor Area */}
+          <TextEditor 
+            content={content}
+            setContent={setContent}
+            documentTitle={documentTitle}
+            setDocumentTitle={setDocumentTitle}
+          />
+        </div>
+
+        {/* Right Sidebar - AI Assistant (hidden on mobile) */}
+      </div>
     </div>
   );
 };

@@ -28,7 +28,7 @@ const TextEditor = ({
           className="text-lg font-medium bg-transparent border-none focus:outline-none w-full hover:bg-gray-50 transition-colors p-2 rounded-md"
         />
       </div>
-      <Card className="max-w-[850px] h-[1100px] mx-auto rounded-t-none shadow-md overflow-hidden">
+      <Card className="max-w-[850px] h-[1100px] mx-auto rounded-t-none shadow-md overflow-y-auto">
         <div className="h-full p-[60px] bg-white">
           <Textarea
             className="w-full h-full resize-none border-none focus:outline-none focus:ring-0 bg-transparent p-0"
