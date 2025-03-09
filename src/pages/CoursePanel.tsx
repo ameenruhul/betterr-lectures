@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -13,6 +14,7 @@ import {
   ResizablePanel, 
   ResizableHandle 
 } from "@/components/ui/resizable";
+import { cn } from "@/lib/utils";
 
 const CoursePanel = () => {
   const { courseId, lectureId } = useParams();
@@ -23,9 +25,9 @@ const CoursePanel = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedText, setSelectedText] = useState("");
 
-  const [leftPanelSize, setLeftPanelSize] = useState(20); // 20% of the screen width
-  const [middlePanelSize, setMiddlePanelSize] = useState(60); // 60% of the screen width
-  const [rightPanelSize, setRightPanelSize] = useState(20); // 20% of the screen width
+  const [leftPanelSize, setLeftPanelSize] = useState(20);
+  const [middlePanelSize, setMiddlePanelSize] = useState(60);
+  const [rightPanelSize, setRightPanelSize] = useState(20);
 
   const handleBackToLectures = () => {
     if (courseId) {
@@ -70,6 +72,7 @@ const CoursePanel = () => {
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
+      {/* Mobile Toggle Button */}
       <div className="md:hidden fixed top-0 left-0 z-20 p-2">
         <Button
           variant="outline"
@@ -81,6 +84,7 @@ const CoursePanel = () => {
         </Button>
       </div>
 
+      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
           className="md:hidden fixed inset-0 bg-black/20 z-10"
@@ -88,42 +92,84 @@ const CoursePanel = () => {
         ></div>
       )}
 
-      <div className="hidden md:flex h-full w-full">
-        <ResizablePanelGroup
-          direction="horizontal"
-          onLayout={handlePanelResize}
-          className="h-full w-full"
+      <div className="flex h-full w-full">
+        {/* Sidebar */}
+        <div 
+          className={cn(
+            "bg-white border-r transition-all duration-300 z-20 md:static fixed h-full",
+            sidebarOpen ? "w-64" : "w-0 -ml-64 md:w-0 md:ml-0"
+          )}
         >
-          <ResizablePanel 
-            defaultSize={leftPanelSize} 
-            minSize={15} 
-            maxSize={30}
-            className="bg-white border-r"
-          >
-            <div className="h-full flex flex-col overflow-hidden">
-              <ContentUploader 
-                courseId={courseId} 
-                lectureId={lectureId} 
-                documentTitle={documentTitle}
-                onBackClick={handleBackToLectures}
-              />
+          <div className="h-full flex flex-col overflow-hidden">
+            <ContentUploader 
+              courseId={courseId} 
+              lectureId={lectureId} 
+              documentTitle={documentTitle}
+              onBackClick={handleBackToLectures}
+            />
 
-              <LectureNavigation 
-                lectureId={lectureId} 
-              />
+            <LectureNavigation 
+              lectureId={lectureId} 
+              onCloseSidebar={() => setSidebarOpen(false)}
+            />
 
-              <WorkspaceTools />
-            </div>
-          </ResizablePanel>
+            <WorkspaceTools />
+          </div>
+        </div>
 
-          <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
+        {/* Content Area */}
+        <div className={cn("flex-1", sidebarOpen ? "md:pl-0" : "")}>
+          <div className="hidden md:flex h-full w-full">
+            <ResizablePanelGroup
+              direction="horizontal"
+              onLayout={handlePanelResize}
+              className="h-full w-full"
+            >
+              {!sidebarOpen && (
+                <div className="absolute top-2 left-2 z-10">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-white"
+                    onClick={toggleSidebar}
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </div>
+              )}
+              
+              <ResizablePanel 
+                defaultSize={middlePanelSize} 
+                minSize={40}
+                className="bg-gray-50"
+              >
+                <div className="h-full flex flex-col overflow-hidden">
+                  <TextEditor 
+                    content={content}
+                    setContent={setContent}
+                    documentTitle={documentTitle}
+                    setDocumentTitle={setDocumentTitle}
+                  />
+                </div>
+              </ResizablePanel>
 
-          <ResizablePanel 
-            defaultSize={middlePanelSize} 
-            minSize={40}
-            className="bg-gray-50"
-          >
-            <div className="h-full flex flex-col overflow-hidden">
+              <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
+
+              <ResizablePanel 
+                defaultSize={rightPanelSize} 
+                minSize={15} 
+                maxSize={40}
+                className="bg-white border-l"
+              >
+                <AIAssistant 
+                  onApplySuggestion={handleApplyAISuggestion}
+                />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </div>
+
+          <div className="md:hidden flex h-full">
+            <div className="flex-1 flex flex-col w-full">
               <TextEditor 
                 content={content}
                 setContent={setContent}
@@ -131,49 +177,7 @@ const CoursePanel = () => {
                 setDocumentTitle={setDocumentTitle}
               />
             </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle className="bg-gray-200 hover:bg-primary transition-colors" />
-
-          <ResizablePanel 
-            defaultSize={rightPanelSize} 
-            minSize={15} 
-            maxSize={40}
-            className="bg-white border-l"
-          >
-            <AIAssistant 
-              onApplySuggestion={handleApplyAISuggestion}
-            />
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
-
-      <div className="md:hidden flex h-full">
-        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-                        fixed z-30 w-64 h-screen border-r flex flex-col bg-white 
-                        transition-transform duration-300 ease-in-out`}>
-          <ContentUploader 
-            courseId={courseId} 
-            lectureId={lectureId} 
-            documentTitle={documentTitle}
-            onBackClick={handleBackToLectures}
-          />
-
-          <LectureNavigation 
-            lectureId={lectureId} 
-            onCloseSidebar={() => setSidebarOpen(false)}
-          />
-
-          <WorkspaceTools />
-        </div>
-
-        <div className="flex-1 flex flex-col w-full">
-          <TextEditor 
-            content={content}
-            setContent={setContent}
-            documentTitle={documentTitle}
-            setDocumentTitle={setDocumentTitle}
-          />
+          </div>
         </div>
       </div>
     </div>
