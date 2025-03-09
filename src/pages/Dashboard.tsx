@@ -47,7 +47,7 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-blue-100 mb-4">Prepare engaging materials with AI assistance</p>
-                  <Link to="/lecture-prep">
+                  <Link to="/lectures-panel">
                     <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
                       Start Creating <ArrowUpRight className="h-4 w-4 ml-2" />
                     </Button>
