@@ -50,7 +50,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
   const toolItems = [
     {
       icon: PanelLeft,
-      label: "Lectures Panel",
+      label: "Lecture Editor",
       path: "/lectures-panel",
       color: "text-teal-500"
     },
@@ -62,7 +62,7 @@ const SharedCourseSidebar = ({ onCloseSidebar }: SharedCourseSidebarProps) => {
     },
     {
       icon: GraduationCap,
-      label: "Lecture Prep",
+      label: "Teacher Prep",
       path: "/lecture-prep",
       color: "text-indigo-500"
     },

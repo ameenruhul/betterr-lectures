@@ -44,7 +44,7 @@ const WorkspaceTools = ({ onToolClick }: WorkspaceToolsProps = {}) => {
       <div className="grid grid-cols-2 gap-3">
         <WorkspaceToolButton 
           icon={PanelLeft} 
-          label="Lectures Panel" 
+          label="Lecture Editor" 
           onClick={() => handleToolClick("/lectures-panel")}
           path="/lectures-panel"
           iconClassName="text-teal-500"
@@ -57,7 +57,7 @@ const WorkspaceTools = ({ onToolClick }: WorkspaceToolsProps = {}) => {
         />
         <WorkspaceToolButton 
           icon={GraduationCap} 
-          label="Lecture Prep" 
+          label="Teacher Prep" 
           onClick={() => handleToolClick("/lecture-prep")}
           path="/lecture-prep"
         />

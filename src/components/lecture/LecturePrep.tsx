@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   BookMarked, 
@@ -40,7 +39,6 @@ const LecturePrep = () => {
   const [aiResponses, setAIResponses] = useState<{id: string, content: string}[]>([]);
   const [isAIThinking, setIsAIThinking] = useState(false);
   
-  // Simulated content
   const studyMaterials = [
     {
       id: "1",
@@ -135,7 +133,6 @@ const LecturePrep = () => {
   const handleGenerateNotes = () => {
     setIsGenerating(true);
     
-    // Simulate AI generation
     setTimeout(() => {
       setNotes(`# Lecture Preparation Notes
 
@@ -178,7 +175,6 @@ const LecturePrep = () => {
 
     setIsAIThinking(true);
     
-    // Simulate AI response
     setTimeout(() => {
       const newResponse = {
         id: Date.now().toString(),
@@ -210,20 +206,16 @@ Would you like me to expand on any of these points or suggest specific resources
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-white">
-      {/* Header */}
       <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-white">
         <h2 className="text-xl font-semibold flex items-center text-primary mb-2">
           <GraduationCap className="mr-2 h-5 w-5" />
-          Lecture Preparation
+          Teacher Preparation
         </h2>
-        <p className="text-sm text-gray-500">Research, organize, and prepare your teaching materials with AI assistance</p>
+        <p className="text-sm text-gray-500">Research, organize, and prepare yourself with materials and teaching strategies</p>
       </div>
 
-      {/* Content Area */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Panel - Study Materials */}
         <div className="w-1/2 flex flex-col border-r overflow-hidden">
-          {/* Search Bar */}
           <div className="p-4 border-b bg-gray-50">
             <div className="relative">
               <Input
@@ -242,7 +234,6 @@ Would you like me to expand on any of these points or suggest specific resources
             </div>
           </div>
 
-          {/* Materials Tabs */}
           <Tabs defaultValue="materials" className="flex-1 flex flex-col overflow-hidden">
             <TabsList className="flex justify-start px-4 pt-3 border-b">
               <TabsTrigger 
@@ -261,7 +252,6 @@ Would you like me to expand on any of these points or suggest specific resources
               </TabsTrigger>
             </TabsList>
             
-            {/* Study Materials Content */}
             <TabsContent value="materials" className="flex-1 overflow-y-auto p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-medium text-gray-700">Study Materials</h3>
@@ -319,7 +309,6 @@ Would you like me to expand on any of these points or suggest specific resources
               </div>
             </TabsContent>
             
-            {/* Research Updates Content */}
             <TabsContent value="updates" className="flex-1 overflow-y-auto p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-medium text-gray-700">Latest Research in Teaching & Learning</h3>
@@ -373,7 +362,6 @@ Would you like me to expand on any of these points or suggest specific resources
           </Tabs>
         </div>
 
-        {/* Right Panel - Prep Tools */}
         <div className="w-1/2 flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <div className="px-4 pt-4 border-b">
@@ -402,7 +390,6 @@ Would you like me to expand on any of these points or suggest specific resources
               </TabsList>
             </div>
 
-            {/* Key Points Tab */}
             <TabsContent value="keypoints" className="flex-1 p-4 overflow-y-auto">
               <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
@@ -451,7 +438,6 @@ Would you like me to expand on any of these points or suggest specific resources
               </div>
             </TabsContent>
 
-            {/* Notes Tab */}
             <TabsContent value="notes" className="flex-1 flex flex-col p-4 overflow-hidden">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-700">Lecture Notes</h3>
@@ -518,7 +504,6 @@ Would you like me to expand on any of these points or suggest specific resources
               </Button>
             </TabsContent>
 
-            {/* AI Help Tab */}
             <TabsContent value="ai" className="flex-1 flex flex-col p-4 overflow-hidden">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-700">AI Teaching Assistant</h3>
@@ -613,7 +598,6 @@ Would you like me to expand on any of these points or suggest specific resources
           </Tabs>
         </div>
         
-        {/* AI Assistant Sidebar */}
         {showAIAssistant && <AIAssistant />}
       </div>
     </div>

@@ -17,7 +17,7 @@ const LecturePrepPage = () => {
   );
   
   return (
-    <PageLayout title="Lecture Preparation" actionButtons={actionButtons}>
+    <PageLayout title="Teacher Preparation" actionButtons={actionButtons}>
       <LecturePrep />
     </PageLayout>
   );
