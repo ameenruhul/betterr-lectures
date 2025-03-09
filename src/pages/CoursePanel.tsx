@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import CoachMark from "@/components/onboarding/CoachMark";
 import Spotlight from "@/components/onboarding/Spotlight";
+import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
 
 const LecturesPanel = () => {
   const { courseId, lectureId } = useParams();
@@ -27,21 +27,27 @@ const LecturesPanel = () => {
   const [selectedText, setSelectedText] = useState("");
   const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
 
-  // Refs for onboarding
   const aiAssistantRef = useRef<HTMLDivElement>(null);
 
-  // Fixed default panel sizes to avoid warnings
   const [middlePanelSize, setMiddlePanelSize] = useState(70);
   const [rightPanelSize, setRightPanelSize] = useState(30);
 
-  // Scroll to the relevant element when step changes
   useEffect(() => {
     if (isFirstTime) {
+      if (currentStep === 'lecture-editor') {
+        document.querySelector('.ProseMirror')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        const timer = setTimeout(() => {
+          nextStep();
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
+      
       if (currentStep === 'ai-assistant' && aiAssistantRef.current) {
         aiAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
-  }, [currentStep, isFirstTime]);
+  }, [currentStep, isFirstTime, nextStep]);
 
   const handleSave = () => {
     toast({
@@ -65,9 +71,8 @@ const LecturesPanel = () => {
       duration: 2000,
     });
     
-    // If in onboarding and at AI assistant step, complete it
     if (isFirstTime && currentStep === 'ai-assistant') {
-      nextStep(); // This will move to 'complete' step
+      nextStep();
     }
   };
 
@@ -84,7 +89,6 @@ const LecturesPanel = () => {
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
-      {/* Mobile Toggle Button */}
       <div className="md:hidden fixed top-0 left-0 z-20 p-2">
         <Button
           variant="outline"
@@ -96,7 +100,6 @@ const LecturesPanel = () => {
         </Button>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
           className="md:hidden fixed inset-0 bg-black/20 z-10"
@@ -105,7 +108,6 @@ const LecturesPanel = () => {
       )}
 
       <div className="flex h-full w-full">
-        {/* Sidebar - using SharedCourseSidebar instead of the custom implementation */}
         <div 
           className={cn(
             "bg-white border-r transition-all duration-300 z-20 md:static fixed h-full",
@@ -115,7 +117,6 @@ const LecturesPanel = () => {
           <SharedCourseSidebar onCloseSidebar={() => setSidebarOpen(false)} />
         </div>
 
-        {/* Content Area */}
         <div className={cn("flex-1", sidebarOpen ? "md:pl-0" : "")}>
           <div className="hidden md:flex h-full w-full">
             <ResizablePanelGroup
@@ -142,12 +143,21 @@ const LecturesPanel = () => {
                 className="bg-gray-50"
               >
                 <div className="h-full flex flex-col overflow-hidden">
-                  <TextEditor 
-                    content={content}
-                    setContent={setContent}
-                    documentTitle={documentTitle}
-                    setDocumentTitle={setDocumentTitle}
-                  />
+                  <PathwayTooltip 
+                    content="This is your content editor. Create your lecture materials here before using the AI assistant."
+                    position="bottom"
+                    step={5}
+                    className="w-72"
+                    nextStep="ai-assistant"
+                    forceShow={isFirstTime && currentStep === 'lecture-editor'}
+                  >
+                    <TextEditor 
+                      content={content}
+                      setContent={setContent}
+                      documentTitle={documentTitle}
+                      setDocumentTitle={setDocumentTitle}
+                    />
+                  </PathwayTooltip>
                 </div>
               </ResizablePanel>
 
@@ -160,23 +170,18 @@ const LecturesPanel = () => {
                 className="bg-gray-white border-l"
               >
                 <div ref={aiAssistantRef}>
-                  <Spotlight active={isFirstTime && currentStep === 'ai-assistant'}>
+                  <PathwayTooltip 
+                    content="Use the AI assistant to generate content, get suggestions, and enhance your lecture materials."
+                    position="left"
+                    step={6}
+                    className="w-72"
+                    nextStep="complete"
+                    forceShow={isFirstTime && currentStep === 'ai-assistant'}
+                  >
                     <AIAssistant 
                       onApplySuggestion={handleApplyAISuggestion}
                     />
-                    
-                    {/* Onboarding for AI Assistant */}
-                    {isFirstTime && currentStep === 'ai-assistant' && (
-                      <CoachMark
-                        title="AI-Powered Assistance"
-                        description="Use the AI assistant to generate content, get suggestions, and enhance your lecture materials with just a few clicks."
-                        position="left"
-                        onNext={() => nextStep()}
-                        onSkip={skipOnboarding}
-                        isLastStep={true}
-                      />
-                    )}
-                  </Spotlight>
+                  </PathwayTooltip>
                 </div>
               </ResizablePanel>
             </ResizablePanelGroup>

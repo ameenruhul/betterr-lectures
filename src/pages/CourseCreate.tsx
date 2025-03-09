@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +12,7 @@ import { useOnboarding } from "@/contexts/OnboardingContext";
 import CoachMark from "@/components/onboarding/CoachMark";
 import Spotlight from "@/components/onboarding/Spotlight";
 import { useToast } from "@/hooks/use-toast";
+import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
 
 interface CourseFormValues {
   title: string;
@@ -41,7 +41,7 @@ const CourseCreate = () => {
 
   // Effect to scroll to the course details when onboarding reaches that step
   useEffect(() => {
-    if (isFirstTime && currentStep === 'course-details' && courseDetailsRef.current) {
+    if (isFirstTime && currentStep === 'course-create' && courseDetailsRef.current) {
       courseDetailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [currentStep, isFirstTime]);
@@ -70,10 +70,10 @@ const CourseCreate = () => {
           <h1 className="text-3xl font-bold">Create New Course</h1>
           
           {/* Onboarding for Create Course */}
-          {isFirstTime && currentStep === 'create-course' && (
+          {isFirstTime && currentStep === 'course-create' && (
             <CoachMark
               title="Create Your First Course"
-              description="Start by creating a course. Fill out the details to organize your lectures and materials."
+              description="Start by filling out the course details below. After creating your course, you'll be able to add lectures and upload materials."
               position="bottom-left"
               onNext={() => nextStep()}
               onSkip={skipOnboarding}
@@ -82,56 +82,82 @@ const CourseCreate = () => {
         </div>
 
         <div className="grid gap-6">
-          <Spotlight active={isFirstTime && currentStep === 'course-details'}>
-            <Card ref={courseDetailsRef}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  Course Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div ref={titleFieldRef}>
-                      <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Course Title</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Introduction to Computer Science" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
-                    {/* Onboarding for Course Details */}
-                    {isFirstTime && currentStep === 'course-details' && (
-                      <CoachMark
-                        title="Enter Course Details"
-                        description="Provide a title, description, and other details for your course. These will help organize your content."
-                        position="right"
-                        onNext={() => nextStep()}
-                        onSkip={skipOnboarding}
-                      />
-                    )}
-
+          <Card ref={courseDetailsRef}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5" />
+                Course Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div ref={titleFieldRef}>
                     <FormField
                       control={form.control}
-                      name="description"
+                      name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description</FormLabel>
+                          <FormLabel>Course Title</FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Enter course description..."
-                              className="min-h-[100px]"
-                              {...field}
-                            />
+                            <Input placeholder="Introduction to Computer Science" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Enter course description..."
+                            className="min-h-[100px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="level"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Course Level</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select course level" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="undergraduate">Undergraduate</SelectItem>
+                            <SelectItem value="graduate">Graduate</SelectItem>
+                            <SelectItem value="phd">PhD</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="startDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Start Date</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -140,65 +166,35 @@ const CourseCreate = () => {
 
                     <FormField
                       control={form.control}
-                      name="level"
+                      name="endDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Course Level</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select course level" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="undergraduate">Undergraduate</SelectItem>
-                              <SelectItem value="graduate">Graduate</SelectItem>
-                              <SelectItem value="phd">PhD</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <FormLabel>End Date</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+                  </div>
 
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <FormField
-                        control={form.control}
-                        name="startDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Start Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="endDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>End Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div className="flex justify-end">
+                  <div className="flex justify-end">
+                    <PathwayTooltip 
+                      content="Click here to create your course and continue to the next step where you'll add lecture materials."
+                      position="top"
+                      step={2}
+                      className="w-72"
+                      nextStep="upload-syllabus"
+                      forceShow={isFirstTime && currentStep === 'course-create'}
+                    >
                       <Button type="submit">Create Course</Button>
-                    </div>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </Spotlight>
+                    </PathwayTooltip>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>

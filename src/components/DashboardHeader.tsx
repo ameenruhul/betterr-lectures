@@ -14,7 +14,7 @@ import PathwayTooltip from "./onboarding/PathwayTooltip";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 
 export const DashboardHeader = () => {
-  const { isGuidedMode, currentStep } = useOnboarding();
+  const { isGuidedMode, currentStep, isFirstTime } = useOnboarding();
 
   return (
     <div className="border-b bg-white py-4">
@@ -46,12 +46,13 @@ export const DashboardHeader = () => {
           </div>
           <Link to="/courses/create" className="hidden md:flex">
             <PathwayTooltip 
-              content="Begin your teaching journey by creating a new course. This is the first step in the pathway."
+              content="Begin your teaching journey by creating a new course. Click to start the guided tour."
               position="bottom"
               step={1}
               className="w-72"
-              nextStep="create-course"
-              forceShow={currentStep === 'dashboard' && isGuidedMode}
+              nextStep="course-create"
+              navigateTo="/courses/create"
+              forceShow={(currentStep === 'dashboard' || currentStep === 'new-course') && isFirstTime && isGuidedMode}
             >
               <Button className="items-center gap-2">
                 <Plus className="h-4 w-4" />
@@ -110,12 +111,13 @@ export const DashboardHeader = () => {
               </DropdownMenuItem>
               <DropdownMenuItem className="md:hidden">
                 <PathwayTooltip 
-                  content="Begin your teaching journey by creating a new course. This is the first step in the pathway."
+                  content="Begin your teaching journey by creating a new course. Click to start the guided tour."
                   position="right"
                   step={1}
                   className="w-72"
-                  nextStep="create-course"
-                  forceShow={currentStep === 'dashboard' && isGuidedMode}
+                  nextStep="course-create"
+                  navigateTo="/courses/create"
+                  forceShow={(currentStep === 'dashboard' || currentStep === 'new-course') && isFirstTime && isGuidedMode}
                 >
                   <Link to="/courses/create" className="flex items-center w-full">
                     <Plus className="mr-2 h-4 w-4" />

@@ -1,8 +1,9 @@
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface PathwayTooltipProps {
   children: ReactNode;
@@ -13,6 +14,7 @@ interface PathwayTooltipProps {
   step?: number;
   forceShow?: boolean;
   nextStep?: string;
+  navigateTo?: string;
 }
 
 const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
@@ -23,10 +25,13 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
   showArrow = true,
   step,
   forceShow = false,
-  nextStep
+  nextStep,
+  navigateTo
 }) => {
-  const { isGuidedMode, setCurrentStep } = useOnboarding();
+  const { isGuidedMode, currentStep, setCurrentStep } = useOnboarding();
+  const navigate = useNavigate();
 
+  // If not in guided mode and not forcing, just render children
   if (!isGuidedMode && !forceShow) {
     return <>{children}</>;
   }
@@ -38,24 +43,32 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
     'left': 'right-full mr-2 top-1/2 -translate-y-1/2',
   };
 
-  const handleTooltipClick = () => {
+  const handleTooltipClick = useCallback(() => {
     if (nextStep) {
       setCurrentStep(nextStep as any);
     }
-  };
+    
+    if (navigateTo) {
+      navigate(navigateTo);
+    }
+  }, [nextStep, navigateTo, setCurrentStep, navigate]);
+
+  // Determine if the tooltip should be visible
+  const shouldShowTooltip = forceShow || 
+    (isGuidedMode && currentStep && currentStep === nextStep);
 
   return (
     <div className="group relative">
       {children}
       <div
         className={cn(
-          'absolute z-50 p-3 bg-white text-gray-800 text-sm rounded-lg shadow-lg max-w-xs border border-primary/20',
+          'absolute z-50 p-3 bg-white text-gray-800 text-sm rounded-lg shadow-lg max-w-xs border',
           positionClasses[position],
-          forceShow ? 'block' : 'group-hover:block hidden',
-          nextStep && 'cursor-pointer hover:border-primary hover:bg-primary/5',
+          shouldShowTooltip ? 'block' : 'group-hover:block hidden',
+          (nextStep || navigateTo) ? 'cursor-pointer hover:border-primary hover:bg-primary/5 border-primary/20' : 'border-gray-200',
           className
         )}
-        onClick={nextStep ? handleTooltipClick : undefined}
+        onClick={(nextStep || navigateTo) ? handleTooltipClick : undefined}
       >
         <div className="flex items-center gap-2">
           {step && (
@@ -66,7 +79,7 @@ const PathwayTooltip: React.FC<PathwayTooltipProps> = ({
           <div className="flex-1">
             <p className="text-gray-800 leading-tight">{content}</p>
           </div>
-          {nextStep && showArrow && <ArrowRight className="h-4 w-4 text-primary flex-shrink-0" />}
+          {(nextStep || navigateTo) && showArrow && <ArrowRight className="h-4 w-4 text-primary flex-shrink-0" />}
         </div>
       </div>
     </div>

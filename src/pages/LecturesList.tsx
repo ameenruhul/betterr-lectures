@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,8 +27,8 @@ import {
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import CoachMark from "@/components/onboarding/CoachMark";
 import Spotlight from "@/components/onboarding/Spotlight";
+import PathwayTooltip from "@/components/onboarding/PathwayTooltip";
 
-// Mock data for demonstration
 const MOCK_LECTURES = [
   { id: 1, title: "Introduction to the Course", type: "video", duration: "10:15" },
   { id: 2, title: "Key Concepts and Terminology", type: "document", duration: "15 pages" },
@@ -66,37 +65,31 @@ const LecturesList = () => {
   const addLectureButtonRef = useRef<HTMLButtonElement>(null);
   const firstLectureRef = useRef<HTMLDivElement>(null);
 
-  // Filter lectures based on search query
   const filteredLectures = MOCK_LECTURES.filter(lecture => 
     lecture.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Scroll to the relevant element when step changes
   useEffect(() => {
     if (isFirstTime && currentStep === 'upload-syllabus' && addLectureButtonRef.current) {
       addLectureButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [currentStep, isFirstTime]);
 
-  // Function to navigate back to courses
   const handleBackToCourses = () => {
     navigate(`/courses/${courseId}`);
   };
 
-  // Function to handle adding a new lecture
   const handleAddLecture = () => {
     toast({
       title: "Create new lecture",
       description: "This would open a lecture creation dialog"
     });
     
-    // Move to next step in onboarding if needed
     if (isFirstTime && currentStep === 'upload-syllabus') {
       nextStep();
     }
   };
 
-  // Function to delete a lecture
   const handleDeleteLecture = (lectureId: number) => {
     toast({
       title: "Delete lecture",
@@ -104,11 +97,9 @@ const LecturesList = () => {
     });
   };
 
-  // Function to open a lecture
   const handleOpenLecture = (lectureId: number) => {
     navigate(`/courses/${courseId}/lectures/${lectureId}`);
     
-    // Move to next step in onboarding if needed
     if (isFirstTime && currentStep === 'lecture-list') {
       nextStep();
     }
@@ -116,7 +107,6 @@ const LecturesList = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
@@ -129,7 +119,15 @@ const LecturesList = () => {
               <ChevronLeft className="h-4 w-4 mr-2" />
               Back to Course
             </Button>
-            <Spotlight active={isFirstTime && currentStep === 'upload-syllabus'}>
+            
+            <PathwayTooltip 
+              content="Now add your first lecture to the course. This is where you'll upload your materials or create new content."
+              position="bottom"
+              step={3}
+              className="w-72"
+              nextStep="lecture-list"
+              forceShow={isFirstTime && currentStep === 'upload-syllabus'}
+            >
               <Button 
                 onClick={handleAddLecture} 
                 ref={addLectureButtonRef}
@@ -137,30 +135,17 @@ const LecturesList = () => {
                 <Plus className="h-4 w-4 mr-2" />
                 Add Lecture
               </Button>
-              
-              {/* Onboarding for Adding Lectures */}
-              {isFirstTime && currentStep === 'upload-syllabus' && (
-                <CoachMark
-                  title="Add Your First Lecture"
-                  description="Click here to add a new lecture to your course. You can upload existing materials or create content from scratch."
-                  position="bottom"
-                  onNext={() => nextStep()}
-                  onSkip={skipOnboarding}
-                />
-              )}
-            </Spotlight>
+            </PathwayTooltip>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Course Lectures</h1>
           <p className="text-gray-600">Manage and organize your course lectures</p>
         </div>
 
-        {/* Search Bar */}
         <div className="mb-6">
           <Input
             type="search"
@@ -171,7 +156,6 @@ const LecturesList = () => {
           />
         </div>
 
-        {/* Lectures List */}
         <Card className="shadow-sm border-none">
           <CardHeader className="bg-gray-50 rounded-t-lg pb-2">
             <CardTitle className="text-lg font-medium">All Lectures</CardTitle>
@@ -182,14 +166,19 @@ const LecturesList = () => {
           <CardContent className="p-0">
             <div className="divide-y">
               {filteredLectures.map((lecture, index) => (
-                <Spotlight 
+                <div 
                   key={lecture.id}
-                  active={isFirstTime && currentStep === 'lecture-list' && index === 0}
-                  className="block"
+                  ref={index === 0 ? firstLectureRef : null}
+                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
                 >
-                  <div 
-                    ref={index === 0 ? firstLectureRef : null}
-                    className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                  <PathwayTooltip 
+                    content="Select a lecture to open it in the editor. This is where you'll create your content."
+                    position="right"
+                    step={4}
+                    className="w-72"
+                    nextStep="lecture-editor"
+                    navigateTo={`/courses/${courseId}/lectures/${lecture.id}`}
+                    forceShow={isFirstTime && currentStep === 'lecture-list' && index === 0}
                   >
                     <div
                       className="flex-1 flex items-center space-x-4 group cursor-pointer"
@@ -244,9 +233,8 @@ const LecturesList = () => {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                  </div>
+                  </PathwayTooltip>
                   
-                  {/* Onboarding for Lecture List */}
                   {isFirstTime && currentStep === 'lecture-list' && index === 0 && (
                     <CoachMark
                       title="Explore Your Lectures"
@@ -256,7 +244,7 @@ const LecturesList = () => {
                       onSkip={skipOnboarding}
                     />
                   )}
-                </Spotlight>
+                </div>
               ))}
             </div>
           </CardContent>

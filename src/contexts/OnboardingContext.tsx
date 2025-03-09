@@ -3,12 +3,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type OnboardingStep = 
   | 'dashboard'
-  | 'create-course'
-  | 'course-details'
+  | 'new-course'
+  | 'course-create'
   | 'upload-syllabus'
   | 'lecture-list'
-  | 'lecture-panel'
-  | 'workspace-tools'
+  | 'lecture-editor'
   | 'ai-assistant'
   | 'complete';
 
@@ -27,10 +26,12 @@ interface OnboardingContextType {
 
 const STEPS_ORDER: OnboardingStep[] = [
   'dashboard',
-  'create-course',
-  'course-details',
+  'new-course',
+  'course-create',
   'upload-syllabus',
   'lecture-list',
+  'lecture-editor',
+  'ai-assistant',
   'complete'
 ];
 
