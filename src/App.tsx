@@ -16,6 +16,8 @@ import AssignmentSolver from "./pages/AssignmentSolver";
 import StudyGuide from "./pages/StudyGuide";
 import Research from "./pages/Research";
 import { useEffect } from "react";
+import { OnboardingProvider } from "./contexts/OnboardingContext";
+import OnboardingComplete from "./components/onboarding/OnboardingComplete";
 
 function App() {
   useEffect(() => {
@@ -24,28 +26,31 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Auth />} />
-        <Route path="/login" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/courses/create" element={<CourseCreate />} />
-        <Route path="/courses/:id" element={<LecturesPanel />} />
-        <Route path="/courses/:courseId/lectures" element={<LecturesList />} />
-        <Route path="/courses/:courseId/lectures/:lectureId" element={<LecturesPanel />} />
-        <Route path="/lesson-plan" element={<LessonPlan />} />
-        <Route path="/lecture-prep" element={<LecturePrep />} />
-        <Route path="/quiz-builder" element={<QuizBuilder />} />
-        <Route path="/quiz-solver" element={<QuizSolver />} />
-        <Route path="/assignment-generator" element={<AssignmentGenerator />} />
-        <Route path="/assignment-solver" element={<AssignmentSolver />} />
-        <Route path="/study-guide" element={<StudyGuide />} />
-        <Route path="/research" element={<Research />} />
-        <Route path="/lectures-panel" element={<LecturesPanel />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Toaster />
-    </Router>
+    <OnboardingProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Auth />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/courses/create" element={<CourseCreate />} />
+          <Route path="/courses/:id" element={<LecturesPanel />} />
+          <Route path="/courses/:courseId/lectures" element={<LecturesList />} />
+          <Route path="/courses/:courseId/lectures/:lectureId" element={<LecturesPanel />} />
+          <Route path="/lesson-plan" element={<LessonPlan />} />
+          <Route path="/lecture-prep" element={<LecturePrep />} />
+          <Route path="/quiz-builder" element={<QuizBuilder />} />
+          <Route path="/quiz-solver" element={<QuizSolver />} />
+          <Route path="/assignment-generator" element={<AssignmentGenerator />} />
+          <Route path="/assignment-solver" element={<AssignmentSolver />} />
+          <Route path="/study-guide" element={<StudyGuide />} />
+          <Route path="/research" element={<Research />} />
+          <Route path="/lectures-panel" element={<LecturesPanel />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Toaster />
+        <OnboardingComplete />
+      </Router>
+    </OnboardingProvider>
   );
 }
 

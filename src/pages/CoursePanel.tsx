@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import ContentUploader from "@/components/lecture/ContentUploader";
@@ -15,6 +15,9 @@ import {
   ResizableHandle 
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
+import { useOnboarding } from "@/contexts/OnboardingContext";
+import CoachMark from "@/components/onboarding/CoachMark";
+import Spotlight from "@/components/onboarding/Spotlight";
 
 const LecturesPanel = () => {
   const { courseId, lectureId } = useParams();
@@ -24,10 +27,26 @@ const LecturesPanel = () => {
   const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedText, setSelectedText] = useState("");
+  const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
+
+  // Refs for onboarding
+  const workspaceToolsRef = useRef<HTMLDivElement>(null);
+  const aiAssistantRef = useRef<HTMLDivElement>(null);
 
   // Fixed default panel sizes to avoid warnings
   const [middlePanelSize, setMiddlePanelSize] = useState(70);
   const [rightPanelSize, setRightPanelSize] = useState(30);
+
+  // Scroll to the relevant element when step changes
+  useEffect(() => {
+    if (isFirstTime) {
+      if (currentStep === 'workspace-tools' && workspaceToolsRef.current) {
+        workspaceToolsRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (currentStep === 'ai-assistant' && aiAssistantRef.current) {
+        aiAssistantRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [currentStep, isFirstTime]);
 
   const handleBackToLectures = () => {
     if (courseId) {
@@ -58,6 +77,11 @@ const LecturesPanel = () => {
       description: "Content has been updated with AI suggestions",
       duration: 2000,
     });
+    
+    // If in onboarding and at AI assistant step, complete it
+    if (isFirstTime && currentStep === 'ai-assistant') {
+      nextStep(); // This will move to 'complete' step
+    }
   };
 
   const handlePanelResize = (sizes: number[]) => {
@@ -69,6 +93,13 @@ const LecturesPanel = () => {
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  // For workspace tools onboarding step
+  const handleWorkspaceToolClick = () => {
+    if (isFirstTime && currentStep === 'workspace-tools') {
+      nextStep();
+    }
   };
 
   return (
@@ -114,7 +145,22 @@ const LecturesPanel = () => {
               onCloseSidebar={() => setSidebarOpen(false)}
             />
 
-            <WorkspaceTools />
+            <div ref={workspaceToolsRef}>
+              <Spotlight active={isFirstTime && currentStep === 'workspace-tools'}>
+                <WorkspaceTools onToolClick={handleWorkspaceToolClick} />
+                
+                {/* Onboarding for Workspace Tools */}
+                {isFirstTime && currentStep === 'workspace-tools' && (
+                  <CoachMark
+                    title="Explore Powerful Tools"
+                    description="Discover specialized tools for lecture preparation, quiz building, and more to enhance your teaching materials."
+                    position="right"
+                    onNext={() => nextStep()}
+                    onSkip={skipOnboarding}
+                  />
+                )}
+              </Spotlight>
+            </div>
           </div>
         </div>
 
@@ -160,11 +206,27 @@ const LecturesPanel = () => {
                 defaultSize={rightPanelSize} 
                 minSize={20} 
                 maxSize={40}
-                className="bg-white border-l"
+                className="bg-gray-white border-l"
               >
-                <AIAssistant 
-                  onApplySuggestion={handleApplyAISuggestion}
-                />
+                <div ref={aiAssistantRef}>
+                  <Spotlight active={isFirstTime && currentStep === 'ai-assistant'}>
+                    <AIAssistant 
+                      onApplySuggestion={handleApplyAISuggestion}
+                    />
+                    
+                    {/* Onboarding for AI Assistant */}
+                    {isFirstTime && currentStep === 'ai-assistant' && (
+                      <CoachMark
+                        title="AI-Powered Assistance"
+                        description="Use the AI assistant to generate content, get suggestions, and enhance your lecture materials with just a few clicks."
+                        position="left"
+                        onNext={() => nextStep()}
+                        onSkip={skipOnboarding}
+                        isLastStep={true}
+                      />
+                    )}
+                  </Spotlight>
+                </div>
               </ResizablePanel>
             </ResizablePanelGroup>
           </div>

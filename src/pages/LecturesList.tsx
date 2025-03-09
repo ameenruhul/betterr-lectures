@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +25,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useOnboarding } from "@/contexts/OnboardingContext";
+import CoachMark from "@/components/onboarding/CoachMark";
+import Spotlight from "@/components/onboarding/Spotlight";
 
 // Mock data for demonstration
 const MOCK_LECTURES = [
@@ -58,11 +61,22 @@ const LecturesList = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
+  const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
+  
+  const addLectureButtonRef = useRef<HTMLButtonElement>(null);
+  const firstLectureRef = useRef<HTMLDivElement>(null);
 
   // Filter lectures based on search query
   const filteredLectures = MOCK_LECTURES.filter(lecture => 
     lecture.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Scroll to the relevant element when step changes
+  useEffect(() => {
+    if (isFirstTime && currentStep === 'upload-syllabus' && addLectureButtonRef.current) {
+      addLectureButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [currentStep, isFirstTime]);
 
   // Function to navigate back to courses
   const handleBackToCourses = () => {
@@ -75,6 +89,11 @@ const LecturesList = () => {
       title: "Create new lecture",
       description: "This would open a lecture creation dialog"
     });
+    
+    // Move to next step in onboarding if needed
+    if (isFirstTime && currentStep === 'upload-syllabus') {
+      nextStep();
+    }
   };
 
   // Function to delete a lecture
@@ -83,6 +102,16 @@ const LecturesList = () => {
       title: "Delete lecture",
       description: `Would delete lecture #${lectureId}`
     });
+  };
+
+  // Function to open a lecture
+  const handleOpenLecture = (lectureId: number) => {
+    navigate(`/courses/${courseId}/lectures/${lectureId}`);
+    
+    // Move to next step in onboarding if needed
+    if (isFirstTime && currentStep === 'lecture-list') {
+      nextStep();
+    }
   };
 
   return (
@@ -100,10 +129,26 @@ const LecturesList = () => {
               <ChevronLeft className="h-4 w-4 mr-2" />
               Back to Course
             </Button>
-            <Button onClick={handleAddLecture}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Lecture
-            </Button>
+            <Spotlight active={isFirstTime && currentStep === 'upload-syllabus'}>
+              <Button 
+                onClick={handleAddLecture} 
+                ref={addLectureButtonRef}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Lecture
+              </Button>
+              
+              {/* Onboarding for Adding Lectures */}
+              {isFirstTime && currentStep === 'upload-syllabus' && (
+                <CoachMark
+                  title="Add Your First Lecture"
+                  description="Click here to add a new lecture to your course. You can upload existing materials or create content from scratch."
+                  position="bottom"
+                  onNext={() => nextStep()}
+                  onSkip={skipOnboarding}
+                />
+              )}
+            </Spotlight>
           </div>
         </div>
       </div>
@@ -136,65 +181,82 @@ const LecturesList = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y">
-              {filteredLectures.map((lecture) => (
-                <div 
+              {filteredLectures.map((lecture, index) => (
+                <Spotlight 
                   key={lecture.id}
-                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                  active={isFirstTime && currentStep === 'lecture-list' && index === 0}
+                  className="block"
                 >
-                  <Link 
-                    to={`/courses/${courseId}/lectures/${lecture.id}`}
-                    className="flex-1 flex items-center space-x-4 group"
+                  <div 
+                    ref={index === 0 ? firstLectureRef : null}
+                    className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                      <LectureTypeIcon type={lecture.type} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-medium text-gray-900 group-hover:text-primary transition-colors">
-                        {lecture.title}
-                      </h3>
-                      <div className="flex items-center text-sm text-gray-500 space-x-2">
-                        <span className="capitalize">{lecture.type}</span>
-                        <span>•</span>
-                        <span>{lecture.duration}</span>
-                      </div>
-                    </div>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    <div
+                      className="flex-1 flex items-center space-x-4 group cursor-pointer"
+                      onClick={() => handleOpenLecture(lecture.id)}
                     >
-                      <Play className="h-4 w-4 mr-1 text-primary" />
-                      Open
-                    </Button>
-                  </Link>
-                  <div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreVertical className="h-4 w-4 text-gray-500" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Copy className="h-4 w-4 mr-2" />
-                          Duplicate
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                          className="text-red-600" 
-                          onClick={() => handleDeleteLecture(lecture.id)}
-                        >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                        <LectureTypeIcon type={lecture.type} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base font-medium text-gray-900 group-hover:text-primary transition-colors">
+                          {lecture.title}
+                        </h3>
+                        <div className="flex items-center text-sm text-gray-500 space-x-2">
+                          <span className="capitalize">{lecture.type}</span>
+                          <span>•</span>
+                          <span>{lecture.duration}</span>
+                        </div>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Play className="h-4 w-4 mr-1 text-primary" />
+                        Open
+                      </Button>
+                    </div>
+                    <div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreVertical className="h-4 w-4 text-gray-500" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Copy className="h-4 w-4 mr-2" />
+                            Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            className="text-red-600" 
+                            onClick={() => handleDeleteLecture(lecture.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
-                </div>
+                  
+                  {/* Onboarding for Lecture List */}
+                  {isFirstTime && currentStep === 'lecture-list' && index === 0 && (
+                    <CoachMark
+                      title="Explore Your Lectures"
+                      description="Click on a lecture to open it in the editor. From there, you can create and organize content."
+                      position="right"
+                      onNext={() => nextStep()}
+                      onSkip={skipOnboarding}
+                    />
+                  )}
+                </Spotlight>
               ))}
             </div>
           </CardContent>
