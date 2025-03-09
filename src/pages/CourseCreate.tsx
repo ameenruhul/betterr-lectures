@@ -23,6 +23,7 @@ const CourseCreate = () => {
   const { currentStep, isFirstTime, nextStep, skipOnboarding } = useOnboarding();
   const courseDetailsRef = useRef<HTMLDivElement>(null);
   const titleFieldRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -62,6 +63,13 @@ const CourseCreate = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
+    }
+  };
+
+  const handleBrowseClick = () => {
+    // Programmatically click the hidden file input when Browse Files button is clicked
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -200,17 +208,17 @@ const CourseCreate = () => {
                             id="syllabus-upload"
                             accept=".pdf,.doc,.docx,.txt"
                             onChange={handleFileChange}
+                            ref={fileInputRef}
                           />
-                          <label htmlFor="syllabus-upload">
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="bg-white hover:bg-primary hover:text-white transition-all duration-300"
-                              type="button"
-                            >
-                              Browse Files
-                            </Button>
-                          </label>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="bg-white hover:bg-primary hover:text-white transition-all duration-300"
+                            type="button"
+                            onClick={handleBrowseClick}
+                          >
+                            Browse Files
+                          </Button>
                         </>
                       )}
                     </div>
