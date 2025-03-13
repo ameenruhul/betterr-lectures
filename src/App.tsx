@@ -1,36 +1,37 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import CourseCreate from "./pages/CourseCreate";
-import LecturesPanel from "./pages/CoursePanel";
-import LecturesList from "./pages/LecturesList";
-import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
-import { Toaster } from "./components/ui/Toaster";
-import LessonPlan from "./pages/LessonPlan";
-import LecturePrep from "./pages/LecturePrep";
-import QuizBuilder from "./pages/QuizBuilder";
-import QuizSolver from "./pages/QuizSolver";
-import AssignmentGenerator from "./pages/AssignmentGenerator";
-import AssignmentSolver from "./pages/AssignmentSolver";
-import StudyGuide from "./pages/StudyGuide";
-import Research from "./pages/Research";
-import Landing from "./pages/Landing";
-import { useEffect } from "react";
-import { OnboardingProvider } from "./contexts/OnboardingContext";
-import OnboardingComplete from "./components/onboarding/OnboardingComplete";
-import Reminders from "./pages/tools/Reminders";
-import MindMaps from "./pages/tools/MindMaps";
-import StickyNotes from "./pages/tools/StickyNotes";
-import LectureNotes from "./pages/tools/LectureNotes";
-import ConceptMapper from "./pages/tools/ConceptMapper";
-import ClassroomJournal from "./pages/tools/ClassroomJournal";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';
+import Auth from './pages/Auth';
+import Dashboard from './pages/Dashboard';
+import CourseCreate from './pages/CourseCreate';
+import LecturesPanel from './pages/CoursePanel';
+import LecturesList from './pages/LecturesList';
+import NotFound from './pages/NotFound';
+import { Toaster } from './components/ui/Toaster';
+import LessonPlan from './pages/LessonPlan';
+import LecturePrep from './pages/LecturePrep';
+import QuizBuilder from './pages/QuizBuilder';
+import QuizSolver from './pages/QuizSolver';
+import AssignmentGenerator from './pages/AssignmentGenerator';
+import AssignmentSolver from './pages/AssignmentSolver';
+import StudyGuide from './pages/StudyGuide';
+import Research from './pages/Research';
+import Landing from './pages/Landing';
+import { useEffect } from 'react';
+import { OnboardingProvider } from './contexts/OnboardingContext';
+import OnboardingComplete from './components/onboarding/OnboardingComplete';
+import Reminders from './pages/tools/Reminders';
+import MindMaps from './pages/tools/MindMaps';
+import StickyNotes from './pages/tools/StickyNotes';
+import LectureNotes from './pages/tools/LectureNotes';
+import ConceptMapper from './pages/tools/ConceptMapper';
+import ClassroomJournal from './pages/tools/ClassroomJournal';
 
 // Account and Billing pages
-import AccountPage from "./pages/account";
-import ProfilePage from "./pages/account/profile";
-import BillingPage from "./pages/account/billing";
-import PaymentHistoryPage from "./pages/account/payment-history";
+import AccountPage from './pages/account';
+import ProfilePage from './pages/account/profile';
+import BillingPage from './pages/account/billing';
+import PaymentHistoryPage from './pages/account/payment-history';
 
 function App() {
   useEffect(() => {
@@ -51,20 +52,20 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Auth />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/courses/create" element={<CourseCreate />} />
-          <Route path="/courses/:id" element={<LecturesPanel />} />
-          <Route path="/courses/:courseId/lectures" element={<LecturesList />} />
-          <Route path="/courses/:courseId/lectures/:lectureId" element={<LecturesPanel />} />
-          <Route path="/lesson-plan" element={<LessonPlan />} />
-          <Route path="/lecture-prep" element={<LecturePrep />} />
-          <Route path="/quiz-builder" element={<QuizBuilder />} />
-          <Route path="/quiz-solver" element={<QuizSolver />} />
-          <Route path="/assignment-generator" element={<AssignmentGenerator />} />
-          <Route path="/assignment-solver" element={<AssignmentSolver />} />
-          <Route path="/study-guide" element={<StudyGuide />} />
-          <Route path="/research" element={<Research />} />
-          <Route path="/lectures-panel" element={<LecturesPanel />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/courses/create" element={<ProtectedRoute><CourseCreate /></ProtectedRoute>} />
+          <Route path="/courses/:id" element={<ProtectedRoute><LecturesPanel /></ProtectedRoute>} />
+          <Route path="/courses/:courseId/lectures" element={<ProtectedRoute><LecturesList /></ProtectedRoute>} />
+          <Route path="/courses/:courseId/lectures/:lectureId" element={<ProtectedRoute><LecturesPanel /></ProtectedRoute>} />
+          <Route path="/lesson-plan" element={<ProtectedRoute><LessonPlan /></ProtectedRoute>} />
+          <Route path="/lecture-prep" element={<ProtectedRoute><LecturePrep /></ProtectedRoute>} />
+          <Route path="/quiz-builder" element={<ProtectedRoute><QuizBuilder /></ProtectedRoute>} />
+          <Route path="/quiz-solver" element={<ProtectedRoute><QuizSolver /></ProtectedRoute>} />
+          <Route path="/assignment-generator" element={<ProtectedRoute><AssignmentGenerator /></ProtectedRoute>} />
+          <Route path="/assignment-solver" element={<ProtectedRoute><AssignmentSolver /></ProtectedRoute>} />
+          <Route path="/study-guide" element={<ProtectedRoute><StudyGuide /></ProtectedRoute>} />
+          <Route path="/research" element={<ProtectedRoute><Research /></ProtectedRoute>} />
+          <Route path="/lectures-panel" element={<ProtectedRoute><LecturesPanel /></ProtectedRoute>} />
           
           {/* Account and Billing Routes */}
           <Route path="/account" element={<AccountPage />}>

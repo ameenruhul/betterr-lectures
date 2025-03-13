@@ -32,15 +32,21 @@ const Auth = () => {
     e.preventDefault();
     try {
       if (isLogin) {
-        await authApi.login({
+        const response = await authApi.login({
           username: formData.email,
           password: formData.password,
         });
-        toast({
-          title: "Login Successful",
-          description: "Redirecting to dashboard...",
-        });
-        navigate('/dashboard');
+        if (response && response.token) {
+          localStorage.setItem('token', response.token);
+          toast({
+            title: "Login Successful",
+            description: "Redirecting to dashboard...",
+          });
+          // Force a small delay to ensure token is stored
+          setTimeout(() => navigate('/dashboard'), 100);
+        } else {
+          throw new Error('Invalid login response');
+        }
       } else {
         await authApi.register({
           name: formData.name,
