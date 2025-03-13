@@ -1,6 +1,7 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import CourseCreate from './pages/CourseCreate';
@@ -50,8 +51,9 @@ function App() {
     <OnboardingProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Auth />} />
+          <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Auth /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><Auth /></PublicRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/courses/create" element={<ProtectedRoute><CourseCreate /></ProtectedRoute>} />
           <Route path="/courses/:id" element={<ProtectedRoute><LecturesPanel /></ProtectedRoute>} />
