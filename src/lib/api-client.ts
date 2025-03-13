@@ -14,7 +14,6 @@ const API_BASE_URL = 'http://127.0.0.1:8080';
 
 export const authApi = {
   login: async (credentials: LoginDto) => {
-    console.log('Login request payload:', credentials);
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
@@ -26,14 +25,11 @@ export const authApi = {
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error('Login error response:', error);
       throw new Error(error.message || 'Login failed');
     }
     
     const data = await response.json();
-    console.log('Login success response:', data);
     if (!data.data?.accessToken) {
-      console.error('No access token in response data:', data);
       throw new Error('No access token received from server');
     }
     return { token: data.data.accessToken };
