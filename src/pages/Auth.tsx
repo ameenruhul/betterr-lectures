@@ -1,26 +1,72 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { EyeIcon, EyeOffIcon, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { authApi } from '@/lib/api-client';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    username: '',
+    password: '',
+  });
   const { toast } = useToast();
+  const navigate = useNavigate();
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.id]: e.target.value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: isLogin ? "Login Successful" : "Registration Successful",
-      description: "Redirecting to dashboard...",
-    });
-    // In a real app, you would handle authentication here
-    window.location.href = "/dashboard";
+    try {
+      if (isLogin) {
+        await authApi.login({
+          username: formData.email,
+          password: formData.password,
+        });
+        toast({
+          title: "Login Successful",
+          description: "Redirecting to dashboard...",
+        });
+        navigate('/dashboard');
+      } else {
+        await authApi.register({
+          name: formData.name,
+          email: formData.email,
+          username: formData.email, // Using email as username
+          password: formData.password,
+        });
+        toast({
+          title: "Registration Successful",
+          description: "Please login with your credentials",
+        });
+        setIsLogin(true); // Switch to login form after successful registration
+        setFormData({ // Reset form data
+          name: '',
+          email: '',
+          username: '',
+          password: '',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Authentication failed",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleGoogleSignIn = () => {
@@ -54,6 +100,8 @@ const Auth = () => {
                     <User className="absolute left-3 top-3 h-5 w-5 text-ai-violet" />
                     <Input
                       id="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       placeholder="John Doe"
                       className="pl-10 border-ai-violet/20 focus-visible:ring-ai-magenta/30"
                       required
@@ -69,6 +117,8 @@ const Auth = () => {
                   <Input
                     id="email"
                     type="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="name@example.com"
                     className="pl-10 border-ai-violet/20 focus-visible:ring-ai-magenta/30"
                     required
@@ -93,6 +143,8 @@ const Auth = () => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={handleChange}
                     className="pl-10 pr-10 border-ai-violet/20 focus-visible:ring-ai-magenta/30"
                     placeholder="••••••••"
                     required
