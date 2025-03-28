@@ -25,6 +25,8 @@ interface ProfileData {
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedData, setEditedData] = useState<ProfileData | null>(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -34,10 +36,10 @@ const ProfilePage = () => {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        console.log(response);
         const data = await response.json();
         if (data.status === 200) {
           setProfileData(data.data);
+          setEditedData(data.data);
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -48,6 +50,33 @@ const ProfilePage = () => {
 
     fetchProfileData();
   }, []);
+
+  const handleInputChange = (field: keyof ProfileData, value: string) => {
+    setEditedData(prev => prev ? { ...prev, [field]: value } : null);
+  };
+
+  const handleSubmit = async () => {
+    if (!editedData) return;
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile/info`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedData),
+      });
+
+      const data = await response.json();
+      if (data.status === 200) {
+        setProfileData(editedData);
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -85,8 +114,9 @@ const ProfilePage = () => {
                 <Input 
                   id="fullName" 
                   placeholder="John Doe" 
-                  value={profileData?.name || ''}
-                  readOnly
+                  value={editedData?.name || ''}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  readOnly={!isEditing}
                 />
               </div>
               
@@ -96,8 +126,9 @@ const ProfilePage = () => {
                   id="email" 
                   type="email" 
                   placeholder="johndoe@example.com" 
-                  value={profileData?.email || ''}
-                  readOnly
+                  value={editedData?.email || ''}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  readOnly={!isEditing}
                 />
               </div>
               
@@ -106,8 +137,9 @@ const ProfilePage = () => {
                 <Input 
                   id="institution" 
                   placeholder="University of Technology" 
-                  value={profileData?.institution || ''}
-                  readOnly
+                  value={editedData?.institution || ''}
+                  onChange={(e) => handleInputChange('institution', e.target.value)}
+                  readOnly={!isEditing}
                 />
               </div>
             </div>
@@ -121,13 +153,24 @@ const ProfilePage = () => {
               id="bio" 
               className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm"
               placeholder="Tell us about yourself, your teaching experience, and areas of expertise..."
-              value={profileData?.about || ''}
-              readOnly
+              value={editedData?.about || ''}
+              onChange={(e) => handleInputChange('about', e.target.value)}
+              readOnly={!isEditing}
             />
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <Button>Edit Profile</Button>
+        <CardFooter className="flex justify-end gap-4">
+          {isEditing ? (
+            <>
+              <Button variant="outline" onClick={() => {
+                setIsEditing(false);
+                setEditedData(profileData);
+              }}>Cancel</Button>
+              <Button onClick={handleSubmit}>Save Changes</Button>
+            </>
+          ) : (
+            <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+          )}
         </CardFooter>
       </Card>
     </div>
