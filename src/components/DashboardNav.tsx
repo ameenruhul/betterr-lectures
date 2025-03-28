@@ -8,7 +8,7 @@ export const DashboardNav = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="h-screen flex-none w-64 bg-accent shadow-md hidden md:block">
+    <div className="h-screen flex-none w-64 bg-white shadow-md hidden md:block">
       <div className="h-full flex flex-col">
         {/* Logo */}
         <div className="p-6 border-b">

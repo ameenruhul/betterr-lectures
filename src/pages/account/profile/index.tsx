@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { 
   Card, 
   CardContent, 
@@ -13,9 +13,46 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PencilLine, Upload } from "lucide-react";
+import { PencilLine } from "lucide-react";
+
+interface ProfileData {
+  name: string;
+  email: string;
+  institution: string;
+  about: string;
+}
 
 const ProfilePage = () => {
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile/info`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        console.log(response);
+        const data = await response.json();
+        if (data.status === 200) {
+          setProfileData(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -30,7 +67,7 @@ const ProfilePage = () => {
             <div className="relative">
               <Avatar className="h-24 w-24">
                 <AvatarImage alt="User avatar" src="/placeholder.svg" />
-                <AvatarFallback>TE</AvatarFallback>
+                <AvatarFallback>{profileData?.name?.split(' ').map(n => n[0]).join('') || 'U'}</AvatarFallback>
               </Avatar>
               <Button 
                 size="sm" 
@@ -43,25 +80,35 @@ const ProfilePage = () => {
             </div>
             
             <div className="flex-1 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" placeholder="John" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" placeholder="Doe" />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input 
+                  id="fullName" 
+                  placeholder="John Doe" 
+                  value={profileData?.name || ''}
+                  readOnly
+                />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="johndoe@example.com" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="johndoe@example.com" 
+                  value={profileData?.email || ''}
+                  readOnly
+                />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="institution">Institution</Label>
-                <Input id="institution" placeholder="University of Technology" />
+                <Input 
+                  id="institution" 
+                  placeholder="University of Technology" 
+                  value={profileData?.institution || ''}
+                  readOnly
+                />
               </div>
             </div>
           </div>
@@ -74,11 +121,13 @@ const ProfilePage = () => {
               id="bio" 
               className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm"
               placeholder="Tell us about yourself, your teaching experience, and areas of expertise..."
+              value={profileData?.about || ''}
+              readOnly
             />
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button>Edit Profile</Button>
         </CardFooter>
       </Card>
     </div>
