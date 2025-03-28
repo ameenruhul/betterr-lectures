@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PencilLine } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ProfileData {
   name: string;
@@ -23,6 +24,7 @@ interface ProfileData {
 }
 
 const ProfilePage = () => {
+  const { toast } = useToast();
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -72,9 +74,24 @@ const ProfilePage = () => {
       if (data.status === 200) {
         setProfileData(editedData);
         setIsEditing(false);
+        toast({
+          title: "Success",
+          description: "Your profile has been updated successfully.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to update profile. Please try again.",
+        });
       }
     } catch (error) {
       console.error('Error updating profile:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An error occurred while updating your profile.",
+      });
     }
   };
 
